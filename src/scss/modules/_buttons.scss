@@ -1,0 +1,63 @@
+.btn {
+  padding: 8px 40px;
+  border: 0;
+  color: $white;
+  cursor: pointer;
+  border-radius: 14px;
+  &:hover,
+  &:focus {
+    outline: none;
+    color: $white;
+  }
+  &.btn-harbor {
+    background: $primary;
+    &:hover {
+      background-color: #06629b;
+      outline: $primary;
+    }
+  }
+  &.btn-harbor-secondary {
+    background: $secondary;
+    &:hover {
+      background-color: #efb00d;
+      outline: $secondary;
+    }
+  }
+  &.btn-harbor-outline {
+    background: #fff;
+    border: 1px solid $primary;
+    color: $primary;
+    &:hover {
+      background-color: $primary;
+      outline: $primary;
+      color: $white;
+    }
+  }
+
+  &.btn-cancel {
+    background: rgba(51, 51, 51, 0.38);
+  }
+  &.btn-save {
+    background: #95d232;
+  }
+  &.btn-delete {
+    background: #c1206e;
+  }
+}
+.btn-holder {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+.btn-primary {
+  color: #fff;
+  background-color: $primary;
+  border-color: #1861ac;
+}
+a {
+  color: #0366d6;
+}
+
+code {
+  color: #e01a76;
+}

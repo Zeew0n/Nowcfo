@@ -1,0 +1,22 @@
+.main-page {
+    display: flex;
+    flex-direction: row;
+    padding-top: 70px;
+}
+.harbor-container {
+    padding: 0 15px;
+    @include mq(md) {
+        padding: 0 60px;
+    }
+}
+.main-content {
+    padding: 40px 15px;
+    @include mq(md) {
+        margin-left: auto;
+        width: calc(100% - 300px);
+        padding: 40px 60px;
+    }
+}
+.content {
+    margin-top: 20px;
+}

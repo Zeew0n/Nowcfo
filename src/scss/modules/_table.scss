@@ -1,0 +1,75 @@
+.table-responsive {
+    margin-left: -20px;
+    margin-right: -20px;
+}
+.table-harbor {
+    min-width: 280px;
+    width: 100%;
+    overflow: hidden;
+    border-bottom: none;
+    margin-bottom: 20px;
+    thead{
+        background: #3173A7;
+    }
+    td,
+    th {
+        border-bottom: 1px solid rgba(51, 51, 51, 0.2);
+        width: 100%;
+        display: block;
+        color: #fff;
+        &:before {
+            color: $color-text;
+        }
+        @include mq(lg) {
+            width: auto;
+            display: table-cell;
+        }
+        &:first-child {
+            padding-left: 20px;
+        }
+        &:first-child {
+            padding-right: 20px;
+        }
+    }
+
+    th {
+        padding: 20px 2px;
+        font-weight: bold;
+        font-size: 18px;
+        text-align: left;
+        display: none;
+        @include mq(lg) {
+            width: auto;
+            display: table-cell;
+        }
+    }
+
+    td {
+        font-size: 16px;
+        padding: 20px 2px;
+        position: relative;
+        &:first-child {
+            &:before {
+                width: 100%;
+            }
+        }
+        &:before {
+            content: attr(data-th) ": ";
+            font-weight: bold;
+            width: 170px; // magic number :( adjust according to your own content
+            display: inline-block;
+
+            @include mq(lg) {
+                display: none;
+            }
+        }
+    }
+    .icon-holder {
+        color: inherit;
+        text-decoration: none;
+    }
+    .icon {
+        margin-right: 10px;
+        font-size: 18px;
+    }
+}

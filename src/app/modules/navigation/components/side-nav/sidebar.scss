@@ -1,0 +1,56 @@
+@import "src/scss/style.scss";
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100; /* Behind the navbar */
+    background: #6e6e6e;
+    width: 300px;
+    padding: 30px;
+    padding-top: 140px;
+    z-index: 1;
+    .navbar-brand{
+        margin-bottom: 40px;
+    }
+    .nav-link {
+        font-weight: 500;
+        color: #fff;
+        font-size: 16px;
+        padding: 16px 0;
+        display: flex;
+        &.active {
+            font-weight: bold;
+        
+        }
+        .feather {
+            margin-right: 4px;
+            color: #999;
+        }
+        .icon:before {
+            color: #fff;
+        }
+    }
+    ul {
+        .icon {
+            margin-right: 15px;
+            font-size: 18px;
+        }
+    }
+}
+
+.sidebar-sticky {
+    position: relative;
+    top: 0;
+    height: calc(100vh - 48px);
+    padding-top: 0.5rem;
+    overflow-x: hidden;
+    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+}
+
+.sidebar-heading {
+    font-size: 16px;
+    text-transform: uppercase;
+    color: #b2b2b2;
+}

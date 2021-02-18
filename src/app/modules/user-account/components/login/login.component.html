@@ -1,0 +1,25 @@
+<div class="auth-page">
+	<div class="auth-container">
+		<div class="logo">
+			<img src="assets/images/nowcfo.png" alt="logo" />
+		</div>
+		<form class="auth-form form-signin" [formGroup]="loginForm">
+			<div class="form-group">
+				<div class="has-float-label">
+					<input type="email" placeholder="email@example.com" id="inputEmail" formControlName="userName" required autofocus/>
+					<span>Username/ Email</span>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="has-float-label">
+					<input type="password" placeholder="Password" id="inputPassword" formControlName="password" required/>
+					<span>Password</span>
+				</div>
+			</div>
+			<button class="btn btn-harbor btn-block" type="button" (click)="onSubmit()" [disabled]="!loginForm.valid">Login</button>
+			<!-- <button class="btn btn-harbor btn-block" type="button" [routerLink]="['/home']" [disabled]="!loginForm.valid">Login</button> -->
+
+			<a href="/forgot-password" class="forgot-pwd">Forgot Password?</a>
+		</form>
+	</div>
+</div>

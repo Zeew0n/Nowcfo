@@ -1,0 +1,73 @@
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+
+
+
+  <div class="container-fluid">
+
+
+
+    <button class="btn btn-lg btn-outline-primary" (click)="open(content)">Launch demo modal</button> -->
+
+    <!-- Modal -->
+    <!-- <ng-template #content let-modal>
+            <div class="modal-header">
+              <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+              <button type="button" class="close" data-dismiss="modal" (click)="modal.close('Close Button Clicked')" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <form role="form" [formGroup]="internalCompanyForm" (ngSubmit)="onSubmit(internalCompanyForm)">
+              <div class="modal-body">
+                <div class="row">
+                  <div class="form-group">
+                    <label for="name"> Internal Company Name </label>
+                    <input formControlName="name" placeholder="Company Name" required>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="form-group">
+                    <label for="isActive"> Is Active</label>
+                    <select fromControlName="isActive">
+                      <option selected="selected" value="true">True</option>
+                      <option value="false">false</option>
+                    </select>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="form-group">
+                      <label for="lastUpdate"> Last Update </label>
+                      <input formControlName="lastUpdate" type="date">
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="form-group">
+                        <label for="createDate"> Create Date </label>
+                        <input formControlName="createDate" type="date">
+                        </div>
+                      </div>
+                    </div>
+              <div class="modal-footer">
+                <div class="row">
+                  <div class="col-12">
+                    <button type="submit" class="btn btn-primary" [disabled]="!internalCompanyForm.valid">
+                      <i class="fa fa-floppy-o" *ngIf="!isSubmitting"></i>
+                      <i class="fa fa-spinner fa-spin fa-1x fa-fw" *ngIf="isSubmitting"></i> Submit
+                    </button>&nbsp;
+                    <button type="button" class="btn btn-info" (click)="modal.close('Close Button Clicked')">
+                      <i class="fa fa-times"></i> Cancel
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+      </ng-template>
+  </div> -->
+
+  <div class="container-fluid">
+    <app-internal-company-list></app-internal-company-list>
+  </div>

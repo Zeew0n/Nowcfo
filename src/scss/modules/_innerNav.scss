@@ -1,0 +1,27 @@
+.inner-nav {
+    margin-bottom: 20px;
+    li {
+        display: inline-block;
+        margin-right: 10px;
+        font-size: 14px;
+        @include mq(md) {
+            margin-right: 20px;
+        }
+        @include mq(lg) {
+            margin-right: 40px;
+            font-size: 20px;
+        }
+        a {
+            padding: 2px 2px 10px;
+            color: #333333;
+            border-bottom: 4px solid transparent;
+            text-decoration: none;
+            &.active,
+            &:hover {
+                border-bottom: 4px solid $primary;
+                color: $primary;
+                font-weight: bold;
+            }
+        }
+    }
+}
