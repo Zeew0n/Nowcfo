@@ -13,24 +13,31 @@
             <table class="table table-harbor">
                 <thead>
                     <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Action</th>
+                      <th scope="col">S.N</th>
+                      <th scope="col">UserName</th>
+                      <th scope="col">Email</th>
+                      <th scope="col">Phone Number</th>
+                      <th scope="col">Role</th>
+                      <th scope="col">Status</th>
+                      <th scope="col">Action</th>
                     </tr>
-                </thead>
+                  </thead>
                 <tbody>
-                    <tr>
-                        <td>Joni Mitchell</td>
-                        <td data-th="UpdateDate ">joni.mitchell@nowcfo.com</td>
-                        <td data-th="CreateDate ">Active</td>
+                    <tr *ngFor="let userinformation of userinformations;let i = index">
+                        <td>{{i+1}}</td>
+                        <td data-th="IsActive ">{{userinformation.userName}}</td>
+                        <td data-th="UpdateDate ">{{userinformation.email}}</td>
+                        <td data-th="CreateDate ">{{userinformation.phoneNumber}}</td>
+                        <td data-th="IsActive ">{{userinformation.role}}</td>
+                        <td data-th="IsActive ">{{userinformation.status}}</td>
                         <td data-th="Actions">
-                            <a class="icon-holder" href="javascript:void(0)" title="edit"><i
-                                    class="icon icon-pencil-create"></i></a>
-                            <a class="icon-holder" href="javascript:void(0)" title="delete"><i
-                                    class="icon icon-circle-block"></i></a>
+                          <a (click)="EditData(content, userinformation)"  class="icon-holder" *ngIf="hasAdmin" href="javascript:void(0)" title="edit"><i
+                              class="icon icon-pencil-create"></i></a>
+                          <span *ngIf="hasAdmin">|</span>
+                          <a class="icon-holder" (click)="Delete(userinformation.id)" href="javascript:void(0)" title="delete"><i
+                              class="icon icon-circle-block" *ngIf="hasAdmin"></i></a>
                         </td>
-                    </tr>
+                      </tr>
                 </tbody>
             </table>
         </div>
@@ -38,7 +45,11 @@
             <h3 class="modal-title">Create New User</h3>
             <form class="form-cfo">
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Name">
+                    <input type="text" formControlName="userName"  class="form-control" placeholder="username">
+                </div>
+
+                <div class="form-group">
+                    <input type="password" formControlName="password"  class="form-control" placeholder="password">
                 </div>
                 <div class="row">
                     <div class="col-sm-6">
@@ -53,31 +64,38 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Address">
+                    <input type="text" class="form-control" formControlName="Address"   placeholder="Address">
                 </div>
                 <div class="row">
-                    <div class="col-sm-4">
+                    <div class="col-sm-6">
                         <div class="form-group">
-                            <input type="text" class="form-control" placeholder="City">
+                            <input type="text" class="form-control" formControlName="City"    placeholder="City">
                         </div>
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-6">
                         <div class="form-group">
-                            <select class="form-control">
-                                <option disabled>State</option>
-                                <option value=1>Bagmati</option>
-                            </select>
+                            <input type="text" class="form-control" formcontrolName="Zip" placeholder="Zip Code">
                         </div>
                     </div>
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Zip Code">
-                        </div>
-                    </div>
+                    
+                   
                 </div>
+                <div class="form-group">
+                    <select formControlName="roleId" class="form-control" (change)="changerole($event)">
+                      <option disabled>Select Role</option>
+                   
+                      <option *ngFor="let role of roles" value={{role.roleId}}>{{role.roleName}}</option>
+                    </select>
+                  </div>
+
+                <!-- <button type="submit" class="btn btn-primary">{{EventValue}}</button>
+                <button type="button" class="btn btn-info" (click)="modal.close('Close Button Clicked')">
+                  <i class="fa fa-times"></i> Cancel
+                </button> -->
+<div class="float-right">
                 <button type="submit" class="btn btn-green mr-3">Save</button>
-                <button type="button" class="btn btn-gray" (click)="modal.close('Close Button Clicked')"> Cancel
-                </button>
+                <button type="button" class="btn btn-gray" (click)="modal.close('Close Button Clicked')"> Cancel  </button>
+            </div>
             </form>
         </ng-template>
     </div>
