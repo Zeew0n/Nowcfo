@@ -7,7 +7,7 @@ const routes: Routes = [
     {
       path: '',
       children: [
-        {path: '', component: InternalCompanyListComponent, canActivate: [AuthGuard]}
+        {path: '', component: InternalCompanyListComponent}
       ]
     }
   ];

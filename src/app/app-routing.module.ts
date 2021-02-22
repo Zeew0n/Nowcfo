@@ -26,7 +26,7 @@ export const routes: Routes = [
         path: '',
         component: AppLayoutComponent,
         children: [
-            { path: '', component: HomePageComponent, pathMatch: 'full', canActivate: [AuthGuard] },
+            { path: '', component: HomePageComponent, pathMatch: 'full' },
             {
                 path: 'home',
                 loadChildren: () => import('./modules/home/home.module').then(m => m.HomeModule)
@@ -37,16 +37,15 @@ export const routes: Routes = [
                 loadChildren: () => import('./modules/internalcompany/internal-company.module').then(m => m.InternalCompanyModule)
                 //canActivate: [AuthGuard]
             },
-            
-            {
-                path: 'users-management',
-                loadChildren: () => import('./modules/users/users.module').then(m => m.UsersModule),
-                canActivate: [AuthGuard] 
-            },
             {
                 path: 'user-profile',
-                loadChildren: () => import('./modules/profile/profile.module').then(m => m.Profile),
-                canActivate: [AuthGuard] 
+                loadChildren: () => import('./modules/profile/profile.module').then(m => m.Profile)
+               // canActivate: [AuthGuard] 
+            },
+
+            {
+                path: 'user-information',
+                loadChildren: () => import('./modules/userinformation/userinformation.module').then(m => m.UserInformationModule)
             },
            
         ]

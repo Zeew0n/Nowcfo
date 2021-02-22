@@ -1,0 +1,84 @@
+<div class="">
+    <div class="btn-container">
+        <button type="button" class="btn btn-green" (click)="open(content)">
+            New User
+        </button>
+    </div>
+
+    <div class="content">
+        <div class="title-container">
+            <h1 class="page-title">Users</h1>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-harbor">
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Joni Mitchell</td>
+                        <td data-th="UpdateDate ">joni.mitchell@nowcfo.com</td>
+                        <td data-th="CreateDate ">Active</td>
+                        <td data-th="Actions">
+                            <a class="icon-holder" href="javascript:void(0)" title="edit"><i
+                                    class="icon icon-pencil-create"></i></a>
+                            <a class="icon-holder" href="javascript:void(0)" title="delete"><i
+                                    class="icon icon-circle-block"></i></a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <ng-template #content let-modal>
+            <h3 class="modal-title">Create New User</h3>
+            <form class="form-cfo">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Name">
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <input type="text" formControlName="Email" class="form-control" placeholder="Email" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <input type="text" formControlName="Phone" class="form-control" placeholder="Phone">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Address">
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="City">
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <select class="form-control">
+                                <option disabled>State</option>
+                                <option value=1>Bagmati</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Zip Code">
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-green mr-3">Save</button>
+                <button type="button" class="btn btn-gray" (click)="modal.close('Close Button Clicked')"> Cancel
+                </button>
+            </form>
+        </ng-template>
+    </div>
+</div>
