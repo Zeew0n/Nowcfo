@@ -16,6 +16,7 @@ export class SideNavComponent {
     hasUser: boolean = true;
     hasAdmin: boolean = false;
     hasSuperAdmin: boolean = false;
+    sidebarInner : boolean =false;
 
     constructor(
         private fb: FormBuilder,

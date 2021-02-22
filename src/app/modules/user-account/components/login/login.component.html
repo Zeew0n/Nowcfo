@@ -16,8 +16,8 @@
 					<span>Password</span>
 				</div>
 			</div>
-			<button class="btn btn-harbor btn-block" type="button" (click)="onSubmit()" [disabled]="!loginForm.valid">Login</button>
-			<!-- <button class="btn btn-harbor btn-block" type="button" [routerLink]="['/home']" [disabled]="!loginForm.valid">Login</button> -->
+			<!-- <button class="btn btn-harbor btn-block" type="button" (click)="onSubmit()" [disabled]="!loginForm.valid">Login</button> -->
+			<button class="btn btn-harbor btn-block" type="button" [routerLink]="['/home']" [disabled]="!loginForm.valid">Login</button>
 
 			<a href="/forgot-password" class="forgot-pwd">Forgot Password?</a>
 		</form>
