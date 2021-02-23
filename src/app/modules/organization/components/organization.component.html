@@ -1,0 +1,97 @@
+<div class="">
+    <div class="btn-container">
+        <button type="button" class="btn btn-green" (click)="open(content)">
+            New User
+        </button>
+    </div>
+
+    <div class="content">
+        <div class="title-container">
+            <h1 class="page-title">Organization</h1>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-harbor">
+                <thead>
+                    <tr>
+                      <th scope="col">S.N</th>
+                      <th scope="col">Organization Name</th>
+                      <th scope="col">IsHead</th>
+                      <th scope="col">ParentOrganizationId</th>
+                      <th scope="col">Actions</th>
+                    </tr>
+                  </thead>
+                <tbody>
+                    <tr *ngFor="let userinformation of userinformations;let i = index">
+                        <td>{{i+1}}</td>
+                        <td data-th="Organization Name ">{{userinformation.organizationName}}</td>
+                        <td data-th="IsHead ">{{userinformation.isHeadOrganization}}</td>
+                        <td data-th="ParentOrganizationId">{{userinformation.parentOrganizationId}}</td>
+                        <td data-th="Actions">
+                          <a (click)="EditData(content, userinformation)"  class="icon-holder"  href="javascript:void(0)" title="edit"><i
+                              class="icon icon-pencil-create"></i></a>
+                          <span></span>
+                          <a class="icon-holder" (click)="Delete(userinformation.id)" href="javascript:void(0)" title="delete"><i
+                              class="icon icon-circle-block" ></i></a>
+                        </td>
+                      </tr>
+                </tbody>
+            </table>
+        </div>
+        <ng-template #content let-modal>
+            <div class="container">
+
+            <h3 class="modal-title"  *ngIf="!isEdit">Create New Organization Unit</h3>
+            <h3 class="modal-title"  *ngIf="isEdit">Update Organization Unit</h3>
+
+            <form class="form-cfo" [formGroup]="OrganizationForm" (ngSubmit)="onSubmit()">
+                <!-- <div class="form-group">
+                    <input type="text" formControlName="organizationName"  class="form-control" placeholder="Organization Name">
+                </div> -->
+
+
+              
+
+  
+<!-- 
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <input type="text" class="form-control" formControlName="zipCode" placeholder="Zip Code">
+                        </div>
+                    </div> -->
+                    
+                   
+                <!-- <div class="form-group">
+                    <select formControlName="parentOrganizationId" class="form-control" (change)="changeorganization($event)">
+                      <option disabled>Select Parent Organization</option>
+                   
+                      <option *ngFor="let organization of organizations" value={{organization.}} selected="UserForm.value.roleId===role.roleId">{{role.roleName}}</option>
+                    </select>
+                
+
+                  </div> -->
+
+              
+            <div class="float-right">
+                <button type="submit" class="btn btn-green mr-3"> {{EventValue}}</button>
+                <button type="button" class="btn btn-gray" (click)="modal.close('Close Button Clicked')"> Cancel  </button>
+            </div>
+            </form>
+        </div>
+        </ng-template>
+
+
+        <ng-template #deletecontent let-modal>
+            <div class="container">
+
+            <h3 class="modal-title">This action is permanent. 
+                Are you sure you want to delete 
+                this organizational unit?</h3>
+            <div class="float-right">
+                <button type="submit" class="btn btn-green mr-3"> {{EventValue}}</button>
+                <button type="button" class="btn btn-gray" (click)="modal.close('Close Button Clicked')"> Cancel  </button>
+            </div>
+        </div>
+        </ng-template>
+
+    </div>
+</div>
