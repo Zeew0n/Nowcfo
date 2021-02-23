@@ -64,6 +64,7 @@ export class UserInformationComponent{
 
       ngOnInit()
      {
+      //  this.UserForm.controls.password.setValidators(null);
         this.getUsers();
         this.initializeuserinformationForm();
         this.getRoles();
@@ -209,7 +210,7 @@ export class UserInformationComponent{
         }
             else
             {
-              if (this.UserForm.valid)
+              if (!this.UserForm.valid)
                   {
                     const model = new UserInformationModel();
                     debugger;
@@ -220,6 +221,8 @@ export class UserInformationComponent{
                         model.firstName= createForm.lastName;
                         model.lastName= createForm.lastName;
                         model.city= createForm.city;
+                        model.userName= createForm.userName;
+                        model.email= createForm.email;
                        // model.state= createForm.state;
                         model.zipCode=createForm.zipCode;
                         model.id = this.selectuserinformation.id;
@@ -241,6 +244,8 @@ export class UserInformationComponent{
            
 
     }
+
+
         private getDismissReason(reason: any): string {
             if (reason === ModalDismissReasons.ESC) {
                 return 'by pressing ESC';
@@ -250,6 +255,8 @@ export class UserInformationComponent{
                 return `with: ${reason}`;
             }
         }
+
+
         resetFrom()
         {
             this.UserForm.reset();
@@ -272,7 +279,7 @@ export class UserInformationComponent{
              firstName: userinformation.firstName,
              lastName: userinformation.lastName,
              email: userinformation.email,
-             roleId:userinformation.role,
+             roleId:userinformation.roleId,
              phoneNumber:userinformation.phoneNumber,
              address:userinformation.address,
              city: userinformation.city,
@@ -292,4 +299,6 @@ export class UserInformationComponent{
         });
       }
      
+  
+
 }
