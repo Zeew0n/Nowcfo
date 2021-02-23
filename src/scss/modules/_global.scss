@@ -16,6 +16,10 @@
         width: calc(100% - 300px);
         padding: 40px 60px;
     }
+    &.main-content-slide{
+        width:calc(100% - 600px);
+        padding: 40px 20px;
+    }
 }
 .content {
     margin-top: 20px;

@@ -8,11 +8,13 @@ export class UserInformationModel extends BaseEntity {
   email: string;
   confirmEmail: string;
   phoneNumber: string;
+  address:string;
+  city:string;
+  state:string;
+  zipCode: string;
   roleId: string;
   role: string;
   status: string;
-  tenantId: string;
-  organizationName:string;
   password: string;
   confirmPassword:string;
   isActive: boolean;

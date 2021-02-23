@@ -15,6 +15,12 @@
                     <tr>
                       <th scope="col">S.N</th>
                       <th scope="col">UserName</th>
+                      <th scope="col">First Name</th>
+                      <th scope="col">Last Name</th>
+
+                      <th scope="col">Address</th>
+                      <th scope="col">City</th>
+                      <th scope="col">Zip</th>
                       <th scope="col">Email</th>
                       <th scope="col">Phone Number</th>
                       <th scope="col">Role</th>
@@ -25,56 +31,88 @@
                 <tbody>
                     <tr *ngFor="let userinformation of userinformations;let i = index">
                         <td>{{i+1}}</td>
-                        <td data-th="IsActive ">{{userinformation.userName}}</td>
-                        <td data-th="UpdateDate ">{{userinformation.email}}</td>
-                        <td data-th="CreateDate ">{{userinformation.phoneNumber}}</td>
+                        <td data-th="UserName ">{{userinformation.userName}}</td>
+                        <td data-th="First Name ">{{userinformation.firstName}}</td>
+                        <td data-th="Last Name">{{userinformation.lastName}}</td>
+                        <td data-th="Address ">{{userinformation.address}}</td>
+                        <td data-th="City">{{userinformation.city}}</td>
+                        <td data-th="Zip ">{{userinformation.zipCode}}</td>
+                        <td data-th="Email ">{{userinformation.email}}</td>
+                        <td data-th="Phone Number ">{{userinformation.phoneNumber}}</td>
                         <td data-th="IsActive ">{{userinformation.role}}</td>
                         <td data-th="IsActive ">{{userinformation.status}}</td>
                         <td data-th="Actions">
-                          <a (click)="EditData(content, userinformation)"  class="icon-holder" *ngIf="hasAdmin" href="javascript:void(0)" title="edit"><i
+                          <a (click)="EditData(content, userinformation)"  class="icon-holder"  href="javascript:void(0)" title="edit"><i
                               class="icon icon-pencil-create"></i></a>
-                          <span *ngIf="hasAdmin">|</span>
+                          <span></span>
                           <a class="icon-holder" (click)="Delete(userinformation.id)" href="javascript:void(0)" title="delete"><i
-                              class="icon icon-circle-block" *ngIf="hasAdmin"></i></a>
+                              class="icon icon-circle-block" ></i></a>
                         </td>
                       </tr>
                 </tbody>
             </table>
         </div>
         <ng-template #content let-modal>
-            <h3 class="modal-title">Create New User</h3>
-            <form class="form-cfo">
+            <div class="container">
+
+            <h3 class="modal-title"  *ngIf="!isEdit">Create New User</h3>
+            <h3 class="modal-title"  *ngIf="isEdit">Update User</h3>
+
+            <form class="form-cfo" [formGroup]="UserForm" (ngSubmit)="onSubmit()">
                 <div class="form-group">
                     <input type="text" formControlName="userName"  class="form-control" placeholder="username">
                 </div>
 
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <input type="text" class="form-control" formControlName="firstName"    placeholder="First Name">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <input type="text" class="form-control" formControlName="lastName" placeholder="Last Name">
+                        </div>
+                    </div>
+                    
+                   
+                </div>
+
                 <div class="form-group">
-                    <input type="password" formControlName="password"  class="form-control" placeholder="password">
+                    <input type="password" formControlName="password" *ngIf="!isEdit" class="form-control" placeholder="password">
                 </div>
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <input type="text" formControlName="Email" class="form-control" placeholder="Email" />
+                            <input type="text" formControlName="email"  class="form-control" placeholder="Email" />
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <input type="text" formControlName="Phone" class="form-control" placeholder="Phone">
+                            <input type="text" formControlName="phoneNumber" class="form-control" placeholder="Phone">
                         </div>
                     </div>
                 </div>
                 <div class="form-group">
-                    <input type="text" class="form-control" formControlName="Address"   placeholder="Address">
+                    <input type="text" class="form-control" formControlName="address"   placeholder="Address">
                 </div>
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <input type="text" class="form-control" formControlName="City"    placeholder="City">
+                            <input type="text" class="form-control" formControlName="city"    placeholder="City">
                         </div>
                     </div>
+
+                    <!-- <div class="col-sm-6">
+                        <div class="form-group">
+                            <input type="text" class="form-control" formControlName="state"    placeholder="City">
+                        </div>
+                    </div> -->
+
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <input type="text" class="form-control" formcontrolName="Zip" placeholder="Zip Code">
+                            <input type="text" class="form-control" formControlName="zipCode" placeholder="Zip Code">
                         </div>
                     </div>
                     
@@ -92,11 +130,12 @@
                 <button type="button" class="btn btn-info" (click)="modal.close('Close Button Clicked')">
                   <i class="fa fa-times"></i> Cancel
                 </button> -->
-<div class="float-right">
-                <button type="submit" class="btn btn-green mr-3">Save</button>
+            <div class="float-right">
+                <button type="submit" class="btn btn-green mr-3"> {{EventValue}}</button>
                 <button type="button" class="btn btn-gray" (click)="modal.close('Close Button Clicked')"> Cancel  </button>
             </div>
             </form>
+        </div>
         </ng-template>
     </div>
 </div>

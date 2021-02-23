@@ -29,13 +29,6 @@ export class UserInformationComponent{
     isUpdate=false;
     selectuserinformation;
 
-
-    
-    //roleId: string='';
-   // roleName: string='';
-
-
-
     constructor(
         private fb: FormBuilder,
         private  modalService: NgbModal,
@@ -45,12 +38,11 @@ export class UserInformationComponent{
         private authService: AuthenticationService,
         private route: ActivatedRoute) {
          }
+
         /* Form Declarations */
         UserForm: FormGroup;
         EventValue: any = 'Save';
         //isActive: boolean;
-        //updatedDate: Date;
-        //createdDate: Date;
         hasUser: boolean = false;
         hasAdmin: boolean = false;
         hasSuperAdmin: boolean = false;
@@ -60,18 +52,21 @@ export class UserInformationComponent{
         userName = new FormControl();
         email = new FormControl();
         phoneNumber = new FormControl('', [Validators.required]);
-        password = new FormControl();
+        firstName = new FormControl('', [Validators.required]);
+        lastName = new FormControl('', [Validators.required]);
+        password = new FormControl('', [Validators.required]);
+        address= new FormControl('', [Validators.required]);
+        city= new FormControl('', [Validators.required]);
+        //state= new FormControl('', [Validators.required]);
+        zipCode= new FormControl('', [Validators.required]);
+
         roleId = new FormControl(true, [Validators.required]);
-       // tenantId= new FormControl();
 
       ngOnInit()
      {
-        this.getIC();
-        //console.log(a);
+        this.getUsers();
         this.initializeuserinformationForm();
         this.getRoles();
-       // this.getTenants();
-        //this.simpleItems = ['User', 'Admin'];
     }
 
     private checkPermissions() {
@@ -98,7 +93,7 @@ export class UserInformationComponent{
     
     get f() { return this.UserForm.controls; }
 
-    getIC() {
+    getUsers() {
         this.userInformationService.GetAllUsers().subscribe(result => {
             this.userinformations = result;
         }, error => console.error);
@@ -115,17 +110,18 @@ export class UserInformationComponent{
 
         initializeuserinformationForm() {
         this.UserForm = new FormGroup({
-           // userId: this.userId,
             userName : this.userName,
+            firstName:this.firstName,
+            lastName:this.lastName,
             password:this.password,
             email : this.email,
             phoneNumber : this.phoneNumber,
+            address:this.address,
+            city:this.city,
+            //state:this.state,
+            zipCode:this.zipCode,
             roleId : this.roleId
         });
-    }
-
-    changeWebsite(e) {
-      console.log(e.target.value);
     }
 
 
@@ -142,12 +138,12 @@ export class UserInformationComponent{
         this.userInformationService.DeleteUser(id).subscribe(result =>
             {
 
-               if ( confirm (' Are you sure to delete this record ')){
+               if ( confirm (' Are you sure to delete this record? ')){
                if (result == null)
                {
                 this.modalService.dismissAll();
                 this.toastr.success('User Delete Successfully.', 'Success!');
-                this.getIC();
+                this.getUsers();
                }
                else{
                 this.toastr.success('Something went Wrong.', 'Error!');
@@ -183,19 +179,25 @@ export class UserInformationComponent{
                 const model = new UserInformationModel();
                 debugger;
                 model.userName= createForm.userName;
+                model.firstName= createForm.firstName;
+                model.lastName= createForm.lastName;
                 model.email= createForm.email;
-               // model.confirmEmail= createForm.confirmEmail;
+                //model.confirmEmail= createForm.confirmEmail;
                 model.password= createForm.password;
-               // model.confirmPassword= createForm.confirmPassword;
+                //model.confirmPassword= createForm.confirmPassword;
                 model.roleId= createForm.roleId;
                 model.phoneNumber= createForm.phoneNumber;
+                model.address= createForm.address;
+                model.city= createForm.city;
+               // model.state= createForm.state;
+                model.zipCode=createForm.zipCode;
 
                 this.userInformationService.CreateUser(model).subscribe(
                 (res) => {
                     this.submitted = true;
                     this.toastr.success('User Added Successfully.', 'Success!');
                     this.modalService.dismissAll();
-                    this.getIC();
+                    this.getUsers();
                 },
                 error => {
                     console.log(error);
@@ -211,22 +213,21 @@ export class UserInformationComponent{
                   {
                     const model = new UserInformationModel();
                     debugger;
-                        //model.userName= createForm.userName;
-                        //model.firstName= createForm.firstName;
-                        //model.lastName= createForm.lastName;
-                       // model.email= createForm.email;
-                       // model.confirmEmail= createForm.confirmEmail;
-                        //model.password= createForm.password;
-                        //model.confirmPassword= createForm.confirmPassword;
+
                         model.roleId= createForm.roleId;
-                        //model.tenantId= createForm.tenantId
                         model.phoneNumber= createForm.phoneNumber;
+                        model.address= createForm.address;
+                        model.firstName= createForm.lastName;
+                        model.lastName= createForm.lastName;
+                        model.city= createForm.city;
+                       // model.state= createForm.state;
+                        model.zipCode=createForm.zipCode;
                         model.id = this.selectuserinformation.id;
                       this.userInformationService.updateUser(model).subscribe(
                        (res) => {
                          this.toastr.success('User Updated Successfully.', 'Success!');
                          this.modalService.dismissAll();
-                         this.getIC();
+                         this.getUsers();
 
                        },
                        error => {
@@ -262,38 +263,26 @@ export class UserInformationComponent{
         {
           this.isUpdate = true;
           this.isEdit=true;
-
           this.selectuserinformation = userinformation;
           debugger;
           console.log(userinformation);
-            //this.resetFrom();
             this.EventValue ='Update';
             this.UserForm.patchValue({
              userName: userinformation.userName,
+             firstName: userinformation.firstName,
+             lastName: userinformation.lastName,
              email: userinformation.email,
              roleId:userinformation.role,
              phoneNumber:userinformation.phoneNumber,
+             address:userinformation.address,
+             city: userinformation.city,
+             //state:userinformation.state,
+             zipCode:userinformation.zipCode,
+
 
             });
-            this.modalService.open(content,{size:'md',backdrop:'static'});
-            // this.userId = userId;
-            // this.getuserinformationById(userId, content);
+            this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', windowClass: 'modal-cfo' });
        }      
-       
-       getuserinformationById(userid: string, content) {
-          
-         this.userInformationService.GetUserById(userid).subscribe(
-          (res: UserInformationModel) => {
-            this.isEdit = true;
-            this.EventValue ='Update';
-            //this.displayFormData(res);
-            this.openModal(content);
-          },
-          error => {
-            this.toastr.error(error.error.errorMessage !== undefined ?
-              error.error.errorMessage : 'User Create failed', 'Error!');
-          });
-      }
 
       private openModal(content: any) {
          this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', windowClass: 'modal-cfo' }).result.then((result) => {
@@ -304,49 +293,3 @@ export class UserInformationComponent{
       }
      
 }
-
-
-
-//     roles: RoleModel[];
-
-//     isSubmitting: boolean; // Form submission variable
-//     closeResult = ''; // close result for modal
-//     submitted = false;
-//     userId: string = '';
-//     isEdit: boolean = false;
-//     selectedSimpleItem = 'User';
-//     websiteList: any = ['User', 'Admin']
-//     simpleItems = [];
-//     isUpdate = false;
-//     selectuserinformation;
-//     constructor(
-//         private modalService: NgbModal) { }
-//     open(content) {
-//         this.isUpdate = false;
-//         this.isEdit = false;
-//         this.userId = '';
-//         this.openModal(content);
-//     }
-
-//     onSubmit() {
-//         debugger;
-//     }
-//     private getDismissReason(reason: any): string {
-//         if (reason === ModalDismissReasons.ESC) {
-//             return 'by pressing ESC';
-//         } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-//             return 'by clicking on a backdrop';
-//         } else {
-//             return `with: ${reason}`;
-//         }
-//     }
-
-//     private openModal(content: any) {
-//         this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', windowClass: 'modal-cfo' }).result.then((result) => {
-//             this.closeResult = `Closed with: ${result}`;
-//         }, (reason) => {
-//             this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-//         });
-//     }
-
-// }
