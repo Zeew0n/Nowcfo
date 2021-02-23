@@ -32,6 +32,7 @@ import { UserProfile } from './modules/profile/components/user-profile/user-prof
 import { HomePageComponent } from './modules/home/components/home-page/home-page.component';
 import { ConfirmSignupComponent } from './modules/user-account/components/confirm-signup/confirm-signup.component';
 import { ResetPasswordComponent } from './modules/user-account/components/reset-password/reset-password.component';
+import { UserInformationComponent } from './modules/userinformation/components/userinformation.component';
 
 const ngxUiLoaderConfig: NgxUiLoaderConfig = {
   bgsColor: 'red',
@@ -58,6 +59,7 @@ export function tokenGetter() {
     ForgotPasswordComponent,
     ConfirmSignupComponent,
     ResetPasswordComponent,
+    UserInformationComponent
 
     //UsersManagement
   ],
