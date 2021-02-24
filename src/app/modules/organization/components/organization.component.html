@@ -1,13 +1,13 @@
 <div class="">
     <div class="btn-container">
         <button type="button" class="btn btn-green" (click)="open(content)">
-            New User
+            New Organization
         </button>
     </div>
 
     <div class="content">
         <div class="title-container">
-            <h1 class="page-title">Organization</h1>
+            <h1 class="page-title">Organizations</h1>
         </div>
         <div class="table-responsive">
             <table class="table table-harbor">
@@ -17,20 +17,21 @@
                       <th scope="col">Organization Name</th>
                       <th scope="col">IsHead</th>
                       <th scope="col">ParentOrganizationId</th>
-                      <th scope="col">Actions</th>
+                      <th scope="col">Action</th>
                     </tr>
                   </thead>
                 <tbody>
-                    <tr *ngFor="let userinformation of userinformations;let i = index">
+                    <tr *ngFor="let organization of organizations;let i = index">
                         <td>{{i+1}}</td>
-                        <td data-th="Organization Name ">{{userinformation.organizationName}}</td>
-                        <td data-th="IsHead ">{{userinformation.isHeadOrganization}}</td>
-                        <td data-th="ParentOrganizationId">{{userinformation.parentOrganizationId}}</td>
+                        <td data-th="UserName ">{{organization.organizationName}}</td>
+                        <td data-th="First Name ">{{organization.isHeadOrganization}}</td>
+                        <td data-th="Last Name">{{organization.parentOrganizationId}}</td>
+ 
                         <td data-th="Actions">
-                          <a (click)="EditData(content, userinformation)"  class="icon-holder"  href="javascript:void(0)" title="edit"><i
+                          <a (click)="EditData(content, organization)"  class="icon-holder"  href="javascript:void(0)" title="edit"><i
                               class="icon icon-pencil-create"></i></a>
                           <span></span>
-                          <a class="icon-holder" (click)="Delete(userinformation.id)" href="javascript:void(0)" title="delete"><i
+                          <a class="icon-holder" (click)="Delete(organization.id)" href="javascript:void(0)" title="delete"><i
                               class="icon icon-circle-block" ></i></a>
                         </td>
                       </tr>
@@ -40,37 +41,50 @@
         <ng-template #content let-modal>
             <div class="container">
 
-            <h3 class="modal-title"  *ngIf="!isEdit">Create New Organization Unit</h3>
-            <h3 class="modal-title"  *ngIf="isEdit">Update Organization Unit</h3>
+            <h3 class="modal-title"  *ngIf="!isEdit">Create New Organization</h3>
+            <h3 class="modal-title"  *ngIf="isEdit">Update Organization</h3>
 
             <form class="form-cfo" [formGroup]="OrganizationForm" (ngSubmit)="onSubmit()">
-                <!-- <div class="form-group">
+                <div class="form-group">
                     <input type="text" formControlName="organizationName"  class="form-control" placeholder="Organization Name">
-                </div> -->
+                </div>
 
-
-              
-
-  
-<!-- 
-                    <div class="col-sm-6">
+                <div class="row">
+                    <!-- <div class="col-sm-6">
                         <div class="form-group">
-                            <input type="text" class="form-control" formControlName="zipCode" placeholder="Zip Code">
+                            <input type="text" class="form-control" formControlName="isHeadOrganization"    placeholder="ISHEAD">
                         </div>
                     </div> -->
                     
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+    <input type="checkbox" id="checkboxId" value="1" formControlName="isHeadOrganization" />
+                        </div>
+                    </div>
+                    
                    
-                <!-- <div class="form-group">
-                    <select formControlName="parentOrganizationId" class="form-control" (change)="changeorganization($event)">
-                      <option disabled>Select Parent Organization</option>
-                   
-                      <option *ngFor="let organization of organizations" value={{organization.}} selected="UserForm.value.roleId===role.roleId">{{role.roleName}}</option>
-                    </select>
+                </div>
+
                 
+                
+             
+                <div class="form-group">
+                    <select formControlName="parentOrganizationId" class="form-control" (change)="changeorganization($event)">
+                      <option disabled>Select Organization</option>
+                   
+                      <option *ngFor="let organization of organizations" value={{organization.organizationId}} selected="OrganizationForm.value.organizationId===organization.organizationId">{{organization.organizationName}}</option>
+                    </select>
+                    <!-- {{roles|json}}
+                    {{UserForm.value.roleId}} -->
+                    <!-- {{role.roleName}}{{UserForm.value.roleId===role.roleId}} -->
 
-                  </div> -->
+                  </div>
 
-              
+                <!-- <button type="submit" class="btn btn-primary">{{EventValue}}</button>
+                <button type="button" class="btn btn-info" (click)="modal.close('Close Button Clicked')">
+                  <i class="fa fa-times"></i> Cancel
+                </button> -->
             <div class="float-right">
                 <button type="submit" class="btn btn-green mr-3"> {{EventValue}}</button>
                 <button type="button" class="btn btn-gray" (click)="modal.close('Close Button Clicked')"> Cancel  </button>

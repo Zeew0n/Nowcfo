@@ -31,6 +31,7 @@ export class OrganizationComponent{
     organizationId: string = '';
     isEdit: boolean = false;
     isUpdate=false;
+    
     selectorganization;
 
     constructor(
@@ -162,8 +163,9 @@ export class OrganizationComponent{
           {
                 const model = new OrganizationModel();
                 debugger;
-                model.organizationName= createForm.userName;
+                model.organizationName= createForm.organizationName;
                 model.isHeadOrganization= createForm.isHeadOrganization;
+              
                 model.parentOrganizationId= createForm.parentOrganizationId;
 
                 this.organizationService.CreateOrganization(model).subscribe(
@@ -183,8 +185,8 @@ export class OrganizationComponent{
         }
             else
             {
-              if (!this.OrganizationForm.valid)
-                  {
+              // if (!this.OrganizationForm.valid)
+              //     {
                     const model = new OrganizationModel();
                     debugger;
 
@@ -204,7 +206,7 @@ export class OrganizationComponent{
                            error.error.errorMessage : 'Organization Update failed', 'Error!');
                        });
                        
-                   }
+                  // }
 
         }
            
