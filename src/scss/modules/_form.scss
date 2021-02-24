@@ -7,8 +7,9 @@
         height: 40px;
         outline: 0;
         width: 100%;
-		border-radius: 12px;
-        border: 1px solid #6E6E6E;;
+        border-radius: 12px;
+        border: 1px solid #6E6E6E;
+        ;
         font-size: 13px;
         background: transparent;
         color: #404041;
@@ -17,6 +18,51 @@
             outline: 0;
         }
     }
+
+    .custom-checkbox {
+        height: 30px;
+        position: relative;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+
+        input[type="checkbox"] {
+            height: 100%;
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            top: 0;
+            opacity: 0;
+            z-index: 99;
+
+            &:checked~span:before {
+                content: "\f14a";
+                color: #3173A7;
+            }
+        }
+
+        span {
+            padding-left: 25px;
+            font-family: FontAwesome;
+            color: #6E6E6E;
+            font-size: 14px;
+            font-weight: 500;
+
+            &:before {
+                content: "\f096";
+                font-size: 24px;
+                position: absolute;
+                left: 0;
+                top: 0;
+                color: #6E6E6E;
+                line-height: 1.4;
+            }
+        }
+    }
+
+
+
 
     input:-webkit-autofill,
     input:-webkit-autofill:hover,
