@@ -42,6 +42,11 @@ export const routes: Routes = [
                 path: 'user-information',
                 loadChildren: () => import('./modules/userinformation/userinformation.module').then(m => m.UserInformationModule)
             },
+
+            {
+                path: 'organization-information',
+                loadChildren: () => import('./modules/organization/organization.module').then(m => m.OrganizationModule)
+            },
            
         ]
     },
