@@ -9,6 +9,7 @@ import AuthenticationService from '../../user-account/services/authentication.se
 import { UserInformationModel } from 'src/app/models/userinformation.model';
 @Component({
     selector: 'app-userinformation-list',
+    styleUrls:['userinformation.component.scss'],
     templateUrl: './userinformation.component.html',
 })
 
@@ -50,7 +51,7 @@ export class UserInformationComponent{
 
 
         userName = new FormControl();
-        email = new FormControl();
+        email = new FormControl('',Validators.email);
         phoneNumber = new FormControl('', [Validators.required]);
         firstName = new FormControl('', [Validators.required]);
         lastName = new FormControl('', [Validators.required]);

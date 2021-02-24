@@ -56,7 +56,7 @@ export class OrganizationService extends HttpGenericCrudService<OrganizationMode
 
 
       UpdateOrganization(id,data: OrganizationModel) {
-        return this.httpClient.put('organization/update?id='+id, data);
+        return this.httpClient.put('organization/update/'+id, data);
       }
 
 }
