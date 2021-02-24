@@ -60,7 +60,7 @@
 
             <form class="form-cfo" [formGroup]="UserForm" (ngSubmit)="onSubmit()">
                 <div class="form-group">
-                    <input type="text" formControlName="userName"  class="form-control" placeholder="username">
+                    <input type="text" formControlName="userName"  class="form-control test" placeholder="username" [ngClass]="{'invalid-input': UserForm.touched && UserForm.controls.userName.errors}">
                 </div>
 
                 <div class="row">
@@ -85,15 +85,23 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <input type="text" formControlName="email"  class="form-control" placeholder="Email" />
+                            <input type="text" formControlName="email"  class="form-control" placeholder="Email" [ngClass]="{'invalid-input': UserForm.controls.email.touched && UserForm.controls.email.errors?.email}"/>
+                            <div *ngIf="UserForm.controls.email.errors?.email" class="custom-feedback">Email is invalid</div>
+
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <input type="text" formControlName="phoneNumber" class="form-control" placeholder="Phone">
+                            <input type="text" formControlName="phoneNumber" class="form-control" placeholder="Phone" [ngClass]="{'invalid-input': UserForm.controls.phoneNumber.touched && UserForm.controls.phoneNumber.errors}">
+                            <div *ngIf="UserForm.controls.phoneNumber.touched && UserForm.controls.phoneNumber.errors?.required" class="error-msg">Phone number is required</div>
                         </div>
                     </div>
                 </div>
+                {{UserForm.value|json}}
+                {{UserForm.controls.phoneNumber.errors|json}}
+                {{UserForm.controls.address.errors|json}}
+                {{UserForm.controls.city.errors|json}}
+                <!-- {{UserForm.value|json}} -->
                 <div class="form-group">
                     <input type="text" class="form-control" formControlName="address"   placeholder="Address">
                 </div>
@@ -135,7 +143,7 @@
                   <i class="fa fa-times"></i> Cancel
                 </button> -->
             <div class="float-right">
-                <button type="submit" class="btn btn-green mr-3"> {{EventValue}}</button>
+                <button type="submit" class="btn btn-green mr-3" [disabled]="UserForm.invalid"> {{EventValue}}</button>
                 <button type="button" class="btn btn-gray" (click)="modal.close('Close Button Clicked')"> Cancel  </button>
             </div>
             </form>

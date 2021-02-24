@@ -10,7 +10,6 @@ import { OrganizationRoutingModule } from './organization.routing';
 @NgModule({
     imports: [
         CommonModule,
-        
         OrganizationRoutingModule,
         FormsModule,
         NgSelectModule,

@@ -16,4 +16,3 @@ const routes: Routes = [
     exports: [RouterModule]
 })
 export class UserInformationRoutingModule { }
-//export const internalComList = [InternalCompanyListComponent, InternalCompanyPageComponent]
