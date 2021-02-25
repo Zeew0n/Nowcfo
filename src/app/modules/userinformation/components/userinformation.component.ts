@@ -41,7 +41,7 @@ export class UserInformationComponent{
          }
 
         /* Form Declarations */
-        UserForm: FormGroup;
+        userForm: FormGroup;
         EventValue: any = 'Save';
         //isActive: boolean;
         hasUser: boolean = false;
@@ -50,7 +50,8 @@ export class UserInformationComponent{
 
 
 
-        userName = new FormControl();
+
+        userName = new FormControl('', [Validators.required]);
         email = new FormControl('',Validators.email);
         phoneNumber = new FormControl('', [Validators.required]);
         firstName = new FormControl('', [Validators.required]);
@@ -65,7 +66,7 @@ export class UserInformationComponent{
 
       ngOnInit()
      {
-      //  this.UserForm.controls.password.setValidators(null);
+      //  this.userForm.controls.password.setValidators(null);
         this.getUsers();
         this.initializeuserinformationForm();
         this.getRoles();
@@ -93,7 +94,7 @@ export class UserInformationComponent{
     }
 
     
-    get f() { return this.UserForm.controls; }
+    get f() { return this.userForm.controls; }
 
     getUsers() {
         this.userInformationService.GetAllUsers().subscribe(result => {
@@ -111,7 +112,7 @@ export class UserInformationComponent{
 
 
         initializeuserinformationForm() {
-        this.UserForm = new FormGroup({
+        this.userForm = new FormGroup({
             userName : this.userName,
             firstName:this.firstName,
             lastName:this.lastName,
@@ -171,12 +172,12 @@ export class UserInformationComponent{
     onSubmit() {
     debugger;
 
-    const createForm = this.UserForm.value;
+    const createForm = this.userForm.value;
     console.log(createForm)
 
         if (!this.isUpdate) {
 
-          if (this.UserForm.valid)
+          if (this.userForm.valid)
           {
                 const model = new UserInformationModel();
                 debugger;
@@ -211,7 +212,7 @@ export class UserInformationComponent{
         }
             else
             {
-              if (!this.UserForm.valid)
+              if (!this.userForm.valid)
                   {
                     const model = new UserInformationModel();
                     debugger;
@@ -260,7 +261,7 @@ export class UserInformationComponent{
 
         resetFrom()
         {
-            this.UserForm.reset();
+            this.userForm.reset();
             this.EventValue = 'Save';
             this.submitted = false;
             this.userinformation == null;
@@ -275,7 +276,7 @@ export class UserInformationComponent{
           debugger;
           console.log(userinformation);
             this.EventValue ='Update';
-            this.UserForm.patchValue({
+            this.userForm.patchValue({
              userName: userinformation.userName,
              firstName: userinformation.firstName,
              lastName: userinformation.lastName,
