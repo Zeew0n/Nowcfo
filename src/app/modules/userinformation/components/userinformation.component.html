@@ -58,84 +58,90 @@
             <h3 class="modal-title"  *ngIf="!isEdit">Create New User</h3>
             <h3 class="modal-title"  *ngIf="isEdit">Update User</h3>
 
-            <form class="form-cfo" [formGroup]="UserForm" (ngSubmit)="onSubmit()">
+            <form class="form-cfo" [formGroup]="userForm" (ngSubmit)="onSubmit()">
                 <div class="form-group">
-                    <input type="text" formControlName="userName"  class="form-control" placeholder="username">
+                    <input type="text" formControlName="userName"  class="form-control" placeholder="username" [ngClass]="{'invalid-input': userForm.controls.userName.touched && userForm.controls.userName.errors}">
+                    <div *ngIf="userForm.controls.userName.touched && userForm.controls.userName.errors?.required" class="error-msg ">userName is invalid</div>
+
                 </div>
 
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <input type="text" class="form-control" formControlName="firstName"    placeholder="First Name">
+                            <input type="text" class="form-control" formControlName="firstName" placeholder="First Name" [ngClass]="{'invalid-input': userForm.controls.firstName.touched && userForm.controls.firstName.errors}">
+                            <div *ngIf="userForm.controls.firstName.touched && userForm.controls.firstName.errors?.required" class="error-msg">firstName is invalid</div>
                         </div>
                     </div>
 
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <input type="text" class="form-control" formControlName="lastName" placeholder="Last Name">
+                            <input type="text" class="form-control" formControlName="lastName" placeholder="Last Name" [ngClass]="{'invalid-input': userForm.controls.lastName.touched && userForm.controls.lastName.errors}">
+                            <div *ngIf="userForm.controls.lastName.touched && userForm.controls.lastName.errors?.required" class="error-msg">lastName is invalid</div>
                         </div>
                     </div>
-                    
-                   
                 </div>
 
                 <div class="form-group">
-                    <input type="password" formControlName="password" *ngIf="!isEdit" class="form-control" placeholder="password">
+                    <input type="password" formControlName="password" *ngIf="!isEdit" class="form-control" placeholder="password" [ngClass]="{'invalid-input': userForm.controls.password.touched && userForm.controls.phoneNumber.errors}">
+                    <div *ngIf="userForm.controls.password.touched && userForm.controls.password.errors?.required" class="error-msg">lastName is invalid</div>
                 </div>
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <input type="text" formControlName="email"  class="form-control" placeholder="Email" />
+                            <input type="text" formControlName="email"  class="form-control" placeholder="Email" [ngClass]="{'invalid-input': userForm.controls.email.touched && userForm.controls.email.errors}"/>
+                            <div *ngIf="userForm.controls.email.touched && userForm.controls.email.errors?.required" class="error-msg">Email is invalid</div>
+
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <input type="text" formControlName="phoneNumber" class="form-control" placeholder="Phone">
+                            <input type="text" formControlName="phoneNumber" class="form-control" placeholder="Phone" [ngClass]="{'invalid-input': userForm.controls.phoneNumber.touched && userForm.controls.phoneNumber.errors}">
+                            <div *ngIf="userForm.controls.phoneNumber.touched && userForm.controls.phoneNumber.errors?.required" class="error-msg">Phone number is required</div>
                         </div>
                     </div>
                 </div>
+                <!-- {{userForm.value|json}}
+                {{userForm.controls.phoneNumber.errors|json}}
+                {{userForm.controls.address.errors|json}}
+                {{userForm.controls.city.errors|json}} -->
+                <!-- {{userForm.value|json}} -->
                 <div class="form-group">
-                    <input type="text" class="form-control" formControlName="address"   placeholder="Address">
+                    <input type="text" class="form-control" formControlName="address"   placeholder="Address" [ngClass]="{'invalid-input': userForm.controls.address.touched && userForm.controls.address.errors}">
+                    <div *ngIf="userForm.controls.address.touched && userForm.controls.address.errors?.required" class="error-msg">address  is required</div>
                 </div>
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <input type="text" class="form-control" formControlName="city"    placeholder="City">
+                            <input type="text" class="form-control" formControlName="city"    placeholder="City" [ngClass]="{'invalid-input': userForm.controls.city.touched && userForm.controls.city.errors}">
+                            <div *ngIf="userForm.controls.city.touched && userForm.controls.city.errors?.required" class="error-msg">city is required</div>
                         </div>
                     </div>
 
                     <!-- <div class="col-sm-6">
                         <div class="form-group">
                             <input type="text" class="form-control" formControlName="state"    placeholder="City">
+                            <div *ngIf="userForm.controls.state.touched && userForm.controls.state.errors?.required" class="error-msg">state is required</div>
                         </div>
                     </div> -->
 
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <input type="text" class="form-control" formControlName="zipCode" placeholder="Zip Code">
+                            <input type="text" class="form-control" formControlName="zipCode" placeholder="Zip Code" [ngClass]="{'invalid-input': userForm.controls.zipCode.touched && userForm.controls.zipCode.errors}">
+                            <div *ngIf="userForm.controls.zipCode.touched && userForm.controls.zipCode.errors?.required" class="error-msg">zipCode is required</div>
                         </div>
                     </div>
                     
-                   
                 </div>
                 <div class="form-group">
-                    <select formControlName="roleId" class="form-control" (change)="changerole($event)">
-                      <option disabled>Select Role</option>
-                   
-                      <option *ngFor="let role of roles" value={{role.roleId}} selected="UserForm.value.roleId===role.roleId">{{role.roleName}}</option>
-                    </select>
-                    <!-- {{roles|json}}
-                    {{UserForm.value.roleId}} -->
-                    <!-- {{role.roleName}}{{UserForm.value.roleId===role.roleId}} -->
-
+                     <ng-select [items]="roles" 
+                                bindLabel="roleName" 
+                                bindValue="roleId" formControlName="roleId"
+                                >
+                     </ng-select>
+                     <!-- {{userForm.value|json}} -->
                   </div>
-
-                <!-- <button type="submit" class="btn btn-primary">{{EventValue}}</button>
-                <button type="button" class="btn btn-info" (click)="modal.close('Close Button Clicked')">
-                  <i class="fa fa-times"></i> Cancel
-                </button> -->
             <div class="float-right">
-                <button type="submit" class="btn btn-green mr-3"> {{EventValue}}</button>
+                <button type="submit" class="btn btn-green mr-3" [disabled]="userForm.invalid"> {{EventValue}}</button>
                 <button type="button" class="btn btn-gray" (click)="modal.close('Close Button Clicked')"> Cancel  </button>
             </div>
             </form>

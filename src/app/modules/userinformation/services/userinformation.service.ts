@@ -27,11 +27,6 @@ export class UserInformationService extends HttpGenericCrudService<UserInformati
         return httpOptions;
     }
 
-    private readonly Ref_TENANTID = 'tenant_id';
-
-
-    tenantId = localStorage.getItem(this.Ref_TENANTID);
-
     GetAllUsers(): Observable<UserInformationModel[]> {
         return this.httpClient.get<UserInformationModel[]>('user/listallusers')
     }
@@ -62,18 +57,8 @@ export class UserInformationService extends HttpGenericCrudService<UserInformati
     }
 
 
-    // getCompanyById(companyId: string): Observable<InternalCompanyModel> {
-        
-    //     return this.httpClient.get<InternalCompanyModel>(`InternalCompany/detailcompany/${companyId}`);
-    //   }
-
-
       updateUser(data: UserInformationModel) {
         return this.httpClient.put('user/update', data);
       }
-
-    // POSTED(data){
-    //     return this.httpClient.post('internalcompany/', data);
-    // }
 
 }

@@ -34,6 +34,7 @@ import { ConfirmSignupComponent } from './modules/user-account/components/confir
 import { ResetPasswordComponent } from './modules/user-account/components/reset-password/reset-password.component';
 import { UserInformationComponent } from './modules/userinformation/components/userinformation.component';
 import { OrganizationComponent } from './modules/organization/components/organization.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 const ngxUiLoaderConfig: NgxUiLoaderConfig = {
   bgsColor: 'red',
@@ -79,6 +80,7 @@ export function tokenGetter() {
     NgxUiLoaderModule.forRoot(ngxUiLoaderConfig),
     NgxUiLoaderRouterModule,
     UserAccountModule,
+    NgSelectModule,
     //MembershipRoutingModule,
     ToastrModule.forRoot({
       timeOut: 3000,
