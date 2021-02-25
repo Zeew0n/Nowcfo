@@ -13,106 +13,102 @@
             <table class="table table-harbor">
                 <thead>
                     <tr>
-                      <th scope="col">S.N</th>
-                      <th scope="col">Organization Name</th>
-                      <th scope="col">IsHead</th>
-                      <th scope="col">ParentOrganizationId</th>
-                      <th scope="col">Action</th>
+                        <th scope="col">S.N</th>
+                        <th scope="col">Organization Name</th>
+                        <th scope="col">IsHead</th>
+                        <th scope="col">ParentOrganizationId</th>
+                        <th scope="col">Action</th>
                     </tr>
-                  </thead>
+                </thead>
                 <tbody>
                     <tr *ngFor="let organization of organizations;let i = index">
                         <td>{{i+1}}</td>
                         <td data-th="UserName ">{{organization.organizationName}}</td>
                         <td data-th="First Name ">{{organization.isHeadOrganization}}</td>
                         <td data-th="Last Name">{{organization.parentOrganizationId}}</td>
- 
+
                         <td data-th="Actions">
-                          <a (click)="EditData(content, organization)"  class="icon-holder"  href="javascript:void(0)" title="edit"><i
-                              class="icon icon-pencil-create"></i></a>
-                          <span></span>
-                          <a class="icon-holder" (click)="openDeleteModal(organization.organizationId,deletecontent )" href="javascript:void(0)" title="delete"><i
-                              class="icon icon-circle-block" ></i></a>
+                            <a (click)="EditData(content, organization)" class="icon-holder" href="javascript:void(0)"
+                                title="edit"><i class="icon icon-pencil-create"></i></a>
+                            <span></span>
+                            <a class="icon-holder" (click)="Delete(organization.organizationId)" href="javascript:void(0)"
+                                title="delete"><i class="icon icon-circle-block"></i></a>
                         </td>
-                      </tr>
+                    </tr>
                 </tbody>
             </table>
         </div>
         <ng-template #content let-modal>
             <div class="container">
 
-            <h3 class="modal-title"  *ngIf="!isEdit">Create New Organization</h3>
-            <h3 class="modal-title"  *ngIf="isEdit">Update Organization</h3>
+                <h3 class="modal-title" *ngIf="!isEdit">Create New Organization</h3>
+                <h3 class="modal-title" *ngIf="isEdit">Update Organization</h3>
 
-            <form class="form-cfo" [formGroup]="OrganizationForm" (ngSubmit)="onSubmit()">
-                <div class="form-group">
-                    <input type="text" formControlName="organizationName"  class="form-control" placeholder="Organization Name" [ngClass]="{'invalid-input':true}">
-                </div>
+                <form class="form-cfo" [formGroup]="OrganizationForm" (ngSubmit)="onSubmit()">
+                    <div class="form-group">
+                        <input type="text" formControlName="organizationName" class="form-control"
+                            placeholder="Organization Name">
+                    </div>
 
-                <div class="row">
-                    <!-- <div class="col-sm-6">
+                    <div class="row">
+                        <!-- <div class="col-sm-6">
                         <div class="form-group">
                             <input type="text" class="form-control" formControlName="isHeadOrganization"    placeholder="ISHEAD">
                         </div>
                     </div> -->
-                    
-
-                    <div class="col-sm-6">
-                        <div class="form-group" >
-    <input type="checkbox" id="checkboxId" value="1" formControlName="isHeadOrganization" />
+                        <div class="col-sm-6">
+                            <div class="custom-checkbox">
+                                <input type="checkbox" id="checkboxId" value="1" formControlName="isHeadOrganization" />
+                                <span>Supervisor</span>
+                                
+                            </div>
+                            <div class="custom-checkbox">
+                                <input type="checkbox" id="checkboxId" value="1" formControlName="isHeadOrganization" />
+                                <span>Supervisor</span>
+                            </div>
                         </div>
                     </div>
-                    {{OrganizationForm.value.isHeadOrganization}}
-                    
-                   
-                </div>
+                    <div class="form-group">
+                        <select formControlName="parentOrganizationId" class="form-control"
+                            (change)="changeorganization($event)">
+                            <option disabled>Select Organization</option>
 
-                
-                
-             
-                <div class="form-group" >
-                     <!--Using items input-->
-                     <ng-select *ngIf="OrganizationForm.value.isHeadOrganization" [items]="organizations" 
-                                bindLabel="organizationName" 
-                                bindValue="organizationId" formControlName="parentOrganizationId"
-                                >
-                     </ng-select>
-                     {{OrganizationForm.value|json}}
-                    <!-- <select formControlName="parentOrganizationId" class="form-control" (change)="changeorganization($event)" *ngIf="OrganizationForm.value.isHeadOrganization">
-                      <option disabled>Select Organization</option>
-                   
-                      <option *ngFor="let organization of organizations" value={{organization.organizationId}} selected="OrganizationForm.value.organizationId===organization.organizationId">{{organization.organizationName}}</option>
-                    </select> -->
-                    <!-- {{roles|json}}
+                            <option *ngFor="let organization of organizations" value={{organization.organizationId}}
+                                selected="OrganizationForm.value.organizationId===organization.organizationId">
+                                {{organization.organizationName}}</option>
+                        </select>
+                        <!-- {{roles|json}}
                     {{UserForm.value.roleId}} -->
-                    <!-- {{role.roleName}}{{UserForm.value.roleId===role.roleId}} -->
+                        <!-- {{role.roleName}}{{UserForm.value.roleId===role.roleId}} -->
 
-                  </div>
+                    </div>
 
-                <!-- <button type="submit" class="btn btn-primary">{{EventValue}}</button>
+                    <!-- <button type="submit" class="btn btn-primary">{{EventValue}}</button>
                 <button type="button" class="btn btn-info" (click)="modal.close('Close Button Clicked')">
                   <i class="fa fa-times"></i> Cancel
                 </button> -->
-            <div class="float-right">
-                <button type="submit" class="btn btn-green mr-3"> {{EventValue}}</button>
-                <button type="button" class="btn btn-gray" (click)="modal.close('Close Button Clicked')"> Cancel  </button>
+                    <div class="float-right">
+                        <button type="submit" class="btn btn-green mr-3"> {{EventValue}}</button>
+                        <button type="button" class="btn btn-gray" (click)="modal.close('Close Button Clicked')"> Cancel
+                        </button>
+                    </div>
+                </form>
             </div>
-            </form>
-        </div>
         </ng-template>
 
 
         <ng-template #deletecontent let-modal>
             <div class="container">
 
-            <h3 class="modal-title">This action is permanent. 
-                Are you sure you want to delete 
-                this organizational unit?</h3>
-            <div class="float-right">
-                <button type="submit" class="btn btn-green mr-3" (click)="Delete()"> {{EventValue}}</button>
-                <button type="button" class="btn btn-gray" (click)="modal.close('Close Button Clicked')"> Cancel  </button>
+                <h3 class="modal-title">This action is permanent.
+                    Are you sure you want to delete
+                    this organizational unit?</h3>
+                <div class="float-right">
+                    <button type="submit" class="btn btn-green mr-3"> {{EventValue}}</button>
+                    <button type="button" class="btn btn-gray" (click)="modal.close('Close Button Clicked')"> Cancel
+                    </button>
+                </div>
             </div>
-        </div>
         </ng-template>
 
     </div>
