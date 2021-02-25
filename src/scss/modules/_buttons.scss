@@ -20,6 +20,17 @@
             outline: #73A242;
         }
     }
+    &.btn-white {
+        background: transparent;
+        border: 1px solid #fff;
+        color: #fff;
+
+        &:hover {
+            outline: #fff;
+            background: #fff;
+            color: #2c2c2c;
+        }
+    }
 	&.btn-gray {
         background: transparent;
         border: 1px solid #6E6E6E;
@@ -30,7 +41,7 @@
         }
     }
 
-    &.btn-harbor-secondary {
+    &.btn-cfo-secondary {
         background: $secondary;
 
         &:hover {
@@ -39,7 +50,7 @@
         }
     }
 
-    &.btn-harbor-outline {
+    &.btn-cfo-outline {
         background: #fff;
         border: 1px solid $primary;
         color: $primary;
