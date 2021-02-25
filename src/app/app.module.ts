@@ -35,6 +35,7 @@ import { ResetPasswordComponent } from './modules/user-account/components/reset-
 import { UserInformationComponent } from './modules/userinformation/components/userinformation.component';
 import { OrganizationComponent } from './modules/organization/components/organization.component';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { EmployeeComponent } from './modules/employee/components/employee.component';
 
 const ngxUiLoaderConfig: NgxUiLoaderConfig = {
   bgsColor: 'red',
@@ -62,9 +63,8 @@ export function tokenGetter() {
     ConfirmSignupComponent,
     ResetPasswordComponent,
     UserInformationComponent,
-    OrganizationComponent
-
-    //UsersManagement
+    OrganizationComponent,
+    EmployeeComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
