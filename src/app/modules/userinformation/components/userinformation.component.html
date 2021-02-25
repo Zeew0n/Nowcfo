@@ -62,7 +62,6 @@
                 <div class="form-group">
                     <input type="text" formControlName="userName"  class="form-control" placeholder="username" [ngClass]="{'invalid-input': userForm.controls.userName.touched && userForm.controls.userName.errors}">
                     <div *ngIf="userForm.controls.userName.touched && userForm.controls.userName.errors?.required" class="error-msg ">userName is invalid</div>
-
                 </div>
 
                 <div class="row">
@@ -91,20 +90,19 @@
                             <input type="text" formControlName="email"  class="form-control" placeholder="Email" [ngClass]="{'invalid-input': userForm.controls.email.touched && userForm.controls.email.errors}"/>
                             <div *ngIf="userForm.controls.email.touched && userForm.controls.email.errors?.required" class="error-msg">Email is invalid</div>
 
+
+
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
+
                             <input type="text" formControlName="phoneNumber" class="form-control" placeholder="Phone" [ngClass]="{'invalid-input': userForm.controls.phoneNumber.touched && userForm.controls.phoneNumber.errors}">
                             <div *ngIf="userForm.controls.phoneNumber.touched && userForm.controls.phoneNumber.errors?.required" class="error-msg">Phone number is required</div>
                         </div>
                     </div>
                 </div>
-                <!-- {{userForm.value|json}}
-                {{userForm.controls.phoneNumber.errors|json}}
-                {{userForm.controls.address.errors|json}}
-                {{userForm.controls.city.errors|json}} -->
-                <!-- {{userForm.value|json}} -->
+
                 <div class="form-group">
                     <input type="text" class="form-control" formControlName="address"   placeholder="Address" [ngClass]="{'invalid-input': userForm.controls.address.touched && userForm.controls.address.errors}">
                     <div *ngIf="userForm.controls.address.touched && userForm.controls.address.errors?.required" class="error-msg">address  is required</div>
@@ -142,6 +140,7 @@
                   </div>
             <div class="float-right">
                 <button type="submit" class="btn btn-green mr-3" [disabled]="userForm.invalid"> {{EventValue}}</button>
+
                 <button type="button" class="btn btn-gray" (click)="modal.close('Close Button Clicked')"> Cancel  </button>
             </div>
             </form>

@@ -9,6 +9,7 @@ import { OrganizationModel } from 'src/app/models/organization.model';
 @Component({
     selector: 'app-organization-list',
     styleUrls: ['organization.component.scss'],
+
     templateUrl: './organization.component.html',
 })
 

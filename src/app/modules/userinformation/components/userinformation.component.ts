@@ -50,6 +50,7 @@ export class UserInformationComponent{
 
 
 
+
         userName = new FormControl('', [Validators.required]);
         email = new FormControl('',Validators.email);
         phoneNumber = new FormControl('', [Validators.required]);
