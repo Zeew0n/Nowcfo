@@ -78,8 +78,8 @@ export class HttpGenericCrudService<T > {
     /*
      * This is the standard setup for http delete 
      */ 
-    public DeleteEntity(id: string): Observable<any> {
-        return this.httpClient.delete<any>(`${this.endPoint}/${id}`, this.getCommonOptions());
+    public DeleteEntity(id: any): Observable<any> {
+        return this.httpClient.delete<any>(`${this.endPoint}${id}`, this.getCommonOptions());
     }
 
 }
