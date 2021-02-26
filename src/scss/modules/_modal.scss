@@ -71,3 +71,29 @@
         top: -150px !important;
     }
 }
+
+.modal-delete {
+    .modal-title {
+        color: #6E6E6E;
+        font-size: 18px;
+        font-weight: 700;
+        font-family: $font-family--primary;
+    }
+
+    .alert {
+        display: flex;
+        width: 30px;
+        height: 40px;
+        border-radius: 50%;
+        border: 2px solid #BE4528;
+        margin: 0 auto;
+        margin-bottom: 20px;
+        align-items: center;
+        justify-content: center;
+        color: #BE4528;
+    }
+
+    .btn-container {
+        justify-content: space-around;
+    }
+}

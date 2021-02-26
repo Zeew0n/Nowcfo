@@ -41,6 +41,16 @@
         }
     }
 
+    &.btn-red {
+        background: transparent;
+        border: 1px solid #BE4528;
+        color: #BE4528;
+
+        &:hover {
+            outline: #BE4528;
+        }
+    }
+
     &.btn-cfo-secondary {
         background: $secondary;
 
