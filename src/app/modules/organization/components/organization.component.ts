@@ -80,7 +80,7 @@ export class OrganizationComponent {
   }
 
   Delete() {
-    this.organizationService.DeleteEntity(this.selectedOrgId).subscribe(
+    this.organizationService.DeleteOrganization(this.selectedOrgId).subscribe(
       (result) => {
         if (result == null) {
           this.modalService.dismissAll();

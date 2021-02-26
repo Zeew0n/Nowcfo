@@ -38,7 +38,7 @@
               <span></span>
               <a
                 class="icon-holder"
-                (click)="openDeleteModal(deletecontent, organization.organizationId)"
+                (click)="Delete()"
                 href="javascript:void(0)"
                 title="delete"
                 ><i class="icon icon-circle-block"></i
@@ -68,30 +68,42 @@
           </div>
 
           <div class="row">
+            <!-- <div class="col-sm-6">
+                        <div class="form-group">
+                            <input type="text" class="form-control" formControlName="isHeadOrganization"    placeholder="ISHEAD">
+                        </div>
+                    </div> -->
             <div class="col-sm-6">
-              <div  class="custom-checkbox">
+              <div class="custom-checkbox">
                 <input
                   type="checkbox"
                   id="checkboxId"
                   value="1"
                   formControlName="isHeadOrganization"
                 />
-                <span>has Head?</span>
+                <span>Is HeadOrganization</span>
               </div>
              
             </div>
           </div>
           <div class="form-group">
-            <ng-select *ngIf="OrganizationForm.value.isHeadOrganization"
-              [items]="organizations"
-              bindLabel="organizationName"
-              bindValue="organizationId"
-              formControlName="parentOrganizationId"
-              placeholder="Select Organization"
-              class="cfo-select"
+            <ng-select [items]="organizations" 
+            bindLabel="organizationName" 
+            bindValue="organizationId" formControlName="organizationId"
+            placeholder="Select Organization"
+            class="cfo-select"
             >
-            </ng-select>
+ </ng-select>
+            
+            <!-- {{roles|json}}
+                    {{UserForm.value.roleId}} -->
+            <!-- {{role.roleName}}{{UserForm.value.roleId===role.roleId}} -->
           </div>
+
+          <!-- <button type="submit" class="btn btn-primary">{{EventValue}}</button>
+                <button type="button" class="btn btn-info" (click)="modal.close('Close Button Clicked')">
+                  <i class="fa fa-times"></i> Cancel
+                </button> -->
           <div class="float-right">
             <button type="submit" class="btn btn-green mr-3">
               {{ EventValue }}
@@ -115,7 +127,7 @@
           organizational unit?
         </h3>
         <div class="float-right">
-          <button type="submit" (click)="Delete()" class="btn btn-green mr-3">
+          <button type="submit" class="btn btn-green mr-3">
             {{ EventValue }}
           </button>
           <button

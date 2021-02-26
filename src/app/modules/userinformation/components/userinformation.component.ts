@@ -23,6 +23,7 @@ import { RoleModel } from 'src/app/models/role.model';
 import { UserInformationService } from '../services/userinformation.service';
 import AuthenticationService from '../../user-account/services/authentication.service';
 import { UserInformationModel } from 'src/app/models/userinformation.model';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 @Component({
   selector: 'app-userinformation-list',
   styleUrls: ['userinformation.component.scss'],
@@ -49,9 +50,9 @@ export class UserInformationComponent {
     private modalService: NgbModal,
     private toastr: ToastrService,
     private userInformationService: UserInformationService,
-
     private authService: AuthenticationService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private loader: NgxUiLoaderService
   ) {}
 
   /* Form Declarations */
@@ -96,7 +97,7 @@ export class UserInformationComponent {
       this.hasAdmin = false;
     }
 
-    if (role == 'SuperAdmin') {
+    if (role === 'SuperAdmin') {
       this.hasSuperAdmin = true;
     } else {
       this.hasSuperAdmin = false;
@@ -178,7 +179,7 @@ export class UserInformationComponent {
 
   onSubmit() {
     debugger;
-
+    this.loader.start();
     const createForm = this.userForm.value;
     console.log(createForm);
 
@@ -203,6 +204,7 @@ export class UserInformationComponent {
         this.userInformationService.CreateUser(model).subscribe(
           (res) => {
             this.submitted = true;
+            this.loader.stop();
             this.toastr.success('User Added Successfully.', 'Success!');
             this.modalService.dismissAll();
             this.getUsers();
@@ -210,6 +212,7 @@ export class UserInformationComponent {
           (error) => {
             console.log(error);
             this.isSubmitting = false;
+            this.loader.stop();
             this.modalService.dismissAll();
             this.toastr.error(error.error.errorMessage, 'Error!');
           }
@@ -235,6 +238,7 @@ export class UserInformationComponent {
           (res) => {
             this.toastr.success('User Updated Successfully.', 'Success!');
             this.modalService.dismissAll();
+            this.loader.stop();
             this.getUsers();
           },
           (error) => {
@@ -244,6 +248,7 @@ export class UserInformationComponent {
                 : 'User Update failed',
               'Error!'
             );
+            this.loader.stop();
           }
         );
       }
@@ -264,7 +269,7 @@ export class UserInformationComponent {
     this.userForm.reset();
     this.EventValue = 'Save';
     this.submitted = false;
-    this.userinformation == null;
+    this.userinformation = null;
   }
 
   EditData(content, userinformation: any) {
@@ -288,6 +293,7 @@ export class UserInformationComponent {
     });
     this.modalService.open(content, {
       ariaLabelledBy: 'modal-basic-title',
+      backdrop: false,
       windowClass: 'modal-cfo',
     });
   }
@@ -296,6 +302,7 @@ export class UserInformationComponent {
     this.modalService
       .open(content, {
         ariaLabelledBy: 'modal-basic-title',
+        backdrop: false,
         windowClass: 'modal-cfo',
       })
       .result.then(

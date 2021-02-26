@@ -58,6 +58,7 @@
                 <h3 class="modal-title" *ngIf="!isEdit">Create New User</h3>
                 <h3 class="modal-title" *ngIf="isEdit">Update User</h3>
 
+
                 <form class="form-cfo" [formGroup]="userForm" (ngSubmit)="onSubmit()">
                     <div class="form-group">
                         <input type="text" formControlName="userName" class="form-control" placeholder="username"
@@ -75,7 +76,9 @@
                                 <div *ngIf="userForm.controls.firstName.touched && userForm.controls.firstName.errors?.required"
                                     class="error-msg">firstName is invalid</div>
                             </div>
+
                         </div>
+
 
                         <div class="col-sm-6">
                             <div class="form-group">
@@ -123,14 +126,17 @@
                                     <div class="can-toggle__switch" data-checked="Salary" data-unchecked="Hourly"></div>
                                 </label>
                             </div>
+
                         </div>
                     </div>
+
 
                     <div class="form-group">
                         <input type="text" class="form-control" formControlName="address" placeholder="Address"
                             [ngClass]="{'invalid-input': userForm.controls.address.touched && userForm.controls.address.errors}">
                         <div *ngIf="userForm.controls.address.touched && userForm.controls.address.errors?.required"
                             class="error-msg">address is required</div>
+
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
@@ -149,6 +155,7 @@
                         </div>
                     </div> -->
 
+
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <input type="text" class="form-control" formControlName="zipCode" placeholder="Zip Code"
@@ -156,9 +163,11 @@
                                 <div *ngIf="userForm.controls.zipCode.touched && userForm.controls.zipCode.errors?.required"
                                     class="error-msg">zipCode is required</div>
                             </div>
+
                         </div>
 
                     </div>
+
                     <div class="form-group">
                         <ng-select [items]="roles" bindLabel="roleName" bindValue="roleId" formControlName="roleId" class="cfo-select">
                         </ng-select>
