@@ -8,21 +8,14 @@ import { OrganizationService } from '../services/organization.service';
 import { OrganizationModel } from 'src/app/models/organization.model';
 @Component({
     selector: 'app-organization-list',
-    styleUrls: ['organization.component.scss'],
-
+    styleUrls:['organization.component.scss'],
     templateUrl: './organization.component.html',
 })
 
 export class OrganizationComponent{
-  selectedCar: number;
-  deleteId;
-  cars = [
-      { id: 1, name: 'Volvo' },
-      { id: 2, name: 'Saab' },
-      { id: 3, name: 'Opel' },
-      { id: 4, name: 'Audi' },
-  ];
+
     organization: OrganizationModel = new OrganizationModel();
+    //for list of Organizations
     //for list of Organizations
     organizations: OrganizationModel[];
 
@@ -33,7 +26,6 @@ export class OrganizationComponent{
     isSubmitting: boolean; // Form submission variable
     closeResult = ''; // close result for modal
     submitted = false;
-    showParentOrganization:boolean=false;
 
 
 
@@ -124,30 +116,27 @@ export class OrganizationComponent{
       console.log(e.target.value);
     }
     
-openDeleteModal(id, modalContent){
-  this.deleteId = id;
-  this.modalService.open(modalContent, { ariaLabelledBy: 'modal-basic-title', windowClass: 'modal-cfo' });
-}
 
-    Delete()
+
+    Delete(id)
     {
-      
       debugger
       console.log("Hello Ashok!")
-        this.organizationService.DeleteOrganization(this.deleteId).subscribe(result =>
+        this.organizationService.DeleteOrganization(id).subscribe(result =>
             {
 
-              //  if ( confirm (' Are you sure to delete this record? ')){
-              //  if (result == null)
-              //  {
+               if ( confirm (' Are you sure to delete this record? ')){
+               if (result == null)
+               {
                 this.modalService.dismissAll();
                 this.toastr.success('Organization Delete Successfully.', 'Success!');
                 this.getOrganizations();
-              //  }
-              //  else{
-              //   this.toastr.success('Something went Wrong.', 'Error!');
-              //  }
-            // }
+               }
+               else{
+                this.toastr.success('Something went Wrong.', 'Error!');
+               }
+            }
+            
 
             },
             error => {
@@ -207,7 +196,7 @@ openDeleteModal(id, modalContent){
                         model.parentOrganizationId= createForm.parentOrganizationId;
                         model.organizationName= createForm.organizationName;
                         model.isHeadOrganization= createForm.isHeadOrganization;
-                        model.id = this.selectorganization.organizationId;
+                        model.id = this.selectorganization.id;
                       this.organizationService.UpdateOrganization(model.id,model).subscribe(
                        (res) => {
                          this.toastr.success('Organization Updated Successfully.', 'Success!');
@@ -257,7 +246,6 @@ openDeleteModal(id, modalContent){
           console.log(organization);
             this.EventValue ='Update';
             this.OrganizationForm.patchValue({
-              organizationId: organization.organizationId,
              organizationName: organization.organizationName,
              isHeadOrganization: organization.isHeadOrganization,
              parentOrganizationId: organization.parentOrganizationId,

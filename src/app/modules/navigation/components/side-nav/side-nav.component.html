@@ -32,18 +32,32 @@
 					Org Manager
 				</a>
 			</li>
+
+			<li class="nav-item">
+				<a class="nav-link" [routerLink]="['/home']" routerLinkActive="active">
+					<i class="icon icon-user"></i>
+					Org Roles
+				</a>
+			</li>
+
+			<li class="nav-item">
+				<a class="nav-link" [routerLink]="['/employee-information']" routerLinkActive="active">
+					<i class="icon icon-user"></i>
+					Employee Management
+				</a>
+			</li>
 		</ul>
 		<span class="admin-text">Admin</span>
 		<ul class="nav flex-column">
 			<li class="nav-item">
 				<a class="nav-link" [routerLink]="['/user-information']" routerLinkActive="active">
 					<i class="icon icon-user"></i>
-					Users <span class="sr-only">(current)</span>
+					Users 
 				</a>
 			</li>
 
 			<li class="nav-item">
-				<a class="nav-link" [routerLink]="['/user-list']" routerLinkActive="active">
+				<a class="nav-link" [routerLink]="['/home']" routerLinkActive="active">
 					<i class="icon icon-user"></i>
 					Portal Settings
 				</a>
