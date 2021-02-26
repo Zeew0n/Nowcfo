@@ -41,7 +41,7 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
   bgsPosition: POSITION.bottomCenter,
   bgsSize: 40,
   fgsType: SPINNER.rectangleBounce,
-  logoUrl: '../assets/images/logo.svg',
+  // logoUrl: '../assets/images/logo.svg',
   logoPosition: 'center-center',
   logoSize: 250,
   pbColor: '#ffffff',
