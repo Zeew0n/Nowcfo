@@ -33,8 +33,8 @@ export const routes: Routes = [
                // canActivate: [AuthGuard] 
             },
             {
-                path: 'user-profile',
-                loadChildren: () => import('./modules/profile/profile.module').then(m => m.Profile)
+                path: 'emp-roles',
+                loadChildren: () => import('./modules/employeeroles/employeerole.module').then(m => m.EmployeeRoleModule)
                // canActivate: [AuthGuard] 
             },
 
