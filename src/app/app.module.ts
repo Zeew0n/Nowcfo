@@ -27,7 +27,7 @@ import { TokenInterceptor } from './services/_interceptors/token.interceptor';
 import { AppLoginComponent } from './_layouts/app-login/app-login.component';
 import {NgxPaginationModule} from 'ngx-pagination';
 import { ForgotPasswordComponent } from './modules/user-account/components/forgot-password/forgot-password.component';
-import { UserProfile } from './modules/profile/components/user-profile/user-profile.component';
+//import { UserProfile } from './modules/profile/components/user-profile/user-profile.component';
 //import { UsersManagement } from './modules/users/components/users-management/users-management.component';
 import { HomePageComponent } from './modules/home/components/home-page/home-page.component';
 import { ConfirmSignupComponent } from './modules/user-account/components/confirm-signup/confirm-signup.component';
@@ -36,6 +36,7 @@ import { UserInformationComponent } from './modules/userinformation/components/u
 import { OrganizationComponent } from './modules/organization/components/organization.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { EmployeeComponent } from './modules/employee/components/employee.component';
+import { EmployeeRoleComponent } from './modules/employeeroles/components/employeerole.component';
 
 const ngxUiLoaderConfig: NgxUiLoaderConfig = {
   bgsColor: 'red',
@@ -64,7 +65,8 @@ export function tokenGetter() {
     ResetPasswordComponent,
     UserInformationComponent,
     OrganizationComponent,
-    EmployeeComponent
+    EmployeeComponent,
+    EmployeeRoleComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

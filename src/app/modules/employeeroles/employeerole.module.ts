@@ -1,24 +1,22 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 import { ToastrModule } from 'ngx-toastr';
-import { UserProfile } from './components/user-profile/user-profile.component';
-import { ProfileRoutingModule } from './profile-routing.module';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { BrowserModule } from '@angular/platform-browser';
+import { EmployeeRoleRoutingModule } from './employee-role-routing.module';
 
 @NgModule({
-    declarations: [
-        UserProfile
-    ],
     imports: [
         CommonModule,
-        ProfileRoutingModule,
+        EmployeeRoleRoutingModule,
         FormsModule,
+        NgSelectModule,
         ReactiveFormsModule,
         ToastrModule,
-        NgSelectModule
     ],
+    declarations: [ ],
     providers: []
 })
-export class Profile { }
+export class EmployeeRoleModule { }
