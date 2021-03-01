@@ -1,6 +1,6 @@
 <div class="">
   <div class="btn-container">
-    <button type="button" class="btn btn-green" (click)="open(content)">
+    <button type="button" class="btn btn-green" (click)="openCreateModal(content)">
       New Organization
     </button>
   </div>
@@ -29,7 +29,7 @@
 
             <td data-th="Actions">
               <a
-                (click)="EditData(content, organization)"
+                (click)="openEditModal(content, organization)"
                 class="icon-holder"
                 href="javascript:void(0)"
                 title="edit"
@@ -38,7 +38,7 @@
               <span></span>
               <a
                 class="icon-holder"
-                (click)="Delete()"
+                (click)="openDeleteModal(deletecontent,organization.organizationId)"
                 href="javascript:void(0)"
                 title="delete"
                 ><i class="icon icon-circle-block"></i
@@ -55,49 +55,47 @@
 
         <form
           class="form-cfo"
-          [formGroup]="OrganizationForm"
-          (ngSubmit)="onSubmit()"
-        >
+          [formGroup]="OrganizationForm">
+          <pre>{{OrganizationForm.value | json}}</pre>
+          <pre>{{OrganizationForm.controls.parentOrganizationId.errors | json}}</pre>
           <div class="form-group">
             <input
               type="text"
               formControlName="organizationName"
               class="form-control"
               placeholder="Organization Name"
-            />
+              [ngClass]="{'invalid-input': OrganizationForm.controls.organizationName.touched && OrganizationForm.controls.organizationName.errors}">
+            <div *ngIf="OrganizationForm.controls.organizationName.touched && OrganizationForm.controls.organizationName.errors?.required"
+                            class="error-msg ">Organization is required</div>
           </div>
 
           <div class="row">
-            <!-- <div class="col-sm-6">
-                        <div class="form-group">
-                            <input type="text" class="form-control" formControlName="isHeadOrganization"    placeholder="ISHEAD">
-                        </div>
-                    </div> -->
             <div class="col-sm-6">
               <div class="custom-checkbox">
                 <input
                   type="checkbox"
                   id="checkboxId"
                   value="1"
-                  formControlName="isHeadOrganization"
-                />
-                <span>Is HeadOrganization</span>
+                  formControlName="isHeadOrganization" (change)="checkValue($event)"/>
+                <span class="">Has Parent ?</span>
               </div>
              
             </div>
           </div>
-          <div class="form-group">
+          <div class="form-group" *ngIf="OrganizationForm.value.isHeadOrganization">
             <ng-select [items]="organizations" 
             bindLabel="organizationName" 
-            bindValue="organizationId" formControlName="organizationId"
-            placeholder="Select Organization"
+            bindValue="organizationId" formControlName="parentOrganizationId"
+            placeholder="Select Parent Organization"
             class="cfo-select"
-            >
- </ng-select>
             
-            <!-- {{roles|json}}
-                    {{UserForm.value.roleId}} -->
-            <!-- {{role.roleName}}{{UserForm.value.roleId===role.roleId}} -->
+            [ngClass]="{'invalid-input': OrganizationForm.value.isHeadOrganization && OrganizationForm.controls.isHeadOrganization.errors?.required }">
+            </ng-select>
+            
+            <div *ngIf="OrganizationForm.controls.parentOrganizationId.errors?.required"
+                            class="error-msg ">Parent Organization is required</div>
+                          
+                         
           </div>
 
           <!-- <button type="submit" class="btn btn-primary">{{EventValue}}</button>
@@ -105,8 +103,8 @@
                   <i class="fa fa-times"></i> Cancel
                 </button> -->
           <div class="float-right">
-            <button type="submit" class="btn btn-green mr-3">
-              {{ EventValue }}
+            <button type="submit" class="btn btn-green mr-3" (click)="onSubmit()">
+              {{ EventValue }} 
             </button>
             <button
               type="button"
@@ -127,7 +125,7 @@
           organizational unit?
         </h3>
         <div class="float-right">
-          <button type="submit" class="btn btn-green mr-3">
+          <button type="submit" (click)="Delete()" class="btn btn-green mr-3">
             {{ EventValue }}
           </button>
           <button
