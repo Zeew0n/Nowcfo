@@ -53,7 +53,7 @@ export class OrganizationComponent {
     this.OrganizationForm = new FormGroup({
       organizationId: new FormControl(''),
       organizationName: new FormControl('', [Validators.required]),
-      isHeadOrganization: new FormControl(''),
+      hasParent: new FormControl(''),
       parentOrganizationId: new FormControl(''),
     });
   }
@@ -117,7 +117,7 @@ export class OrganizationComponent {
         const model = new OrganizationModel();
 
         model.organizationName = createForm.organizationName;
-        model.isHeadOrganization = createForm.isHeadOrganization;
+        model.hasParent = createForm.hasParent;
         model.parentOrganizationId = createForm.parentOrganizationId;
 
         this.organizationService.CreateOrganization(model).subscribe(
@@ -140,9 +140,9 @@ export class OrganizationComponent {
         const model = new OrganizationModel();
 
         model.organizationName = createForm.organizationName;
-        model.isHeadOrganization = createForm.isHeadOrganization;
+        model.hasParent = createForm.hasParent;
         model.id = this.selectorganization.organizationId;
-        if (model.isHeadOrganization) {
+        if (model.hasParent) {
           model.parentOrganizationId = createForm.parentOrganizationId;
         }
         this.organizationService.UpdateOrganization(model.id, model).subscribe(
@@ -193,10 +193,10 @@ export class OrganizationComponent {
     this.OrganizationForm.patchValue({
       OrganizationId: organization.OrganizationId,
       organizationName: organization.organizationName,
-      isHeadOrganization: organization.isHeadOrganization,
+      hasParent: organization.hasParent,
       parentOrganizationId: organization.parentOrganizationId,
     });
-    if (this.selectorganization.isHeadOrganization) {
+    if (this.selectorganization.hasParent) {
       this.OrganizationForm.controls.parentOrganizationId.setValidators([
         Validators.required,
       ]);
