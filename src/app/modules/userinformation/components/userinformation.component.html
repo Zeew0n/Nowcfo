@@ -118,7 +118,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
+                    <!-- <div class="row">
                         <div class="col-sm-6">
                             <div class="can-toggle">
                                 <input id="a" type="checkbox">
@@ -128,7 +128,7 @@
                             </div>
 
                         </div>
-                    </div>
+                    </div> -->
 
 
                     <div class="form-group">
@@ -169,7 +169,7 @@
                     </div>
 
                     <div class="form-group">
-                        <ng-select [items]="roles" bindLabel="roleName" bindValue="roleId" formControlName="roleId" class="cfo-select">
+                        <ng-select [items]="roles" bindLabel="roleName" bindValue="roleId"  placeholder="Select Role" formControlName="roleId" class="cfo-select">
                         </ng-select>
                         <!-- {{userForm.value|json}} -->
                     </div>
@@ -193,7 +193,7 @@
                 </div>
                 <h3 class="modal-title">This action is permanent.
                     Are you sure you want to delete
-                    this organizational unit?</h3>
+                    this User</h3>
                 <div class="btn-container">
                     <button type="submit" class="btn btn-red mr-3"> Delete</button>
                     <button type="button" class="btn btn-gray" (click)="modal.close('Close Button Clicked')"> Cancel

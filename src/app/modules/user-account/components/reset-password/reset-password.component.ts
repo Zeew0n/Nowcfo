@@ -33,6 +33,8 @@ export class ResetPasswordComponent implements OnInit {
     loginCheck: boolean;
     userId: string = '';
     token: string = '';
+    isDisabled=true;
+
     isTokenValid: boolean = false; //Form submission variable
 
     constructor(public fb: FormBuilder,
@@ -54,7 +56,6 @@ export class ResetPasswordComponent implements OnInit {
             this.token=params.token;
             this.UpdatePasswordForm.patchValue({
                 userName: params.uname,
-                //token: params.token,
             });
             this.forgetPasswordService.verifyToken(params.uid, params.token)
                 .subscribe(() => {

@@ -58,8 +58,7 @@ export class LoginComponent implements OnInit {
               localStorage.clear();
               localStorage.setItem('auth_token', res.jwToken);
               localStorage.setItem('role_name', res.roleName)
-              localStorage.setItem('refresh_token', res.refreshToken);
-              localStorage.setItem('tenant_id', res.tenantId);
+              //localStorage.setItem('refresh_token', res.refreshToken);
               this.toastr.success('Login Successful.', 'Success!');
               console.log(res);
               this.router.navigateByUrl('home');

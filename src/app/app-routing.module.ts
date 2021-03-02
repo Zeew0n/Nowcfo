@@ -13,7 +13,7 @@ export const routes: Routes = [
     { path: 'signup', component: SignupComponent },
     { path: 'forgot-password', component: ForgotPasswordComponent },
     {
-        path: 'updatepassword/:uid/:uname/:token',
+        path: 'updatepassword/:uid/:email/:uname/:token',
         component: ResetPasswordComponent
     },
 

@@ -37,6 +37,17 @@ export class EmployeeComponent {
   organizations: OrganizationModel[];
   supervisors: EmployeeModel[];
 
+//Added for dropdown
+  title = 'dropdowmcheckbox';
+  myForm:FormGroup;
+  disabled=false;
+  showFilter=false;
+  limitSelection=false;
+  cities:any=[];
+  selectedItems:any=[];
+  dropdownSettings:any={};
+
+
   isSubmitting: boolean; // Form submission variable
   closeResult = ''; // close result for modal
   submitted = false;
@@ -59,9 +70,7 @@ export class EmployeeComponent {
     private authService: AuthenticationService,
     private route: ActivatedRoute
   ) {
-    // this.employeeForm = this.fb.group({
-    //   checkArray: this.fb.array([], [Validators.required])
-    // })
+
   }
 
   /* Form Declarations */
@@ -86,7 +95,6 @@ export class EmployeeComponent {
   pay = new FormControl(true, [Validators.required]);
   overTimeRate = new FormControl(true, [Validators.required]);
 
-  // checkArray: this.array([], [Validators.required])
 
   ngOnInit() {
     this.getEmployees();
@@ -94,6 +102,27 @@ export class EmployeeComponent {
     this.getDesignations();
     this.getSuperVisors();
     this.initializeemployeeForm();
+
+    this.cities=[
+      {item_id:1,item_text:'Dehli'},
+      {item_id:2,item_text:'Noida'},
+      {item_id:3,item_text:'Bangalore'},
+      {item_id:4,item_text:'Pune'},
+      {item_id:5,item_text:'chennai'},
+      {item_id:6,item_text:'Mumbai'},
+    ];
+    this.selectedItems=[{ item_id:4,item_text:'pune'},{item_id:6,item_text:'Mumbai'}];
+    this.dropdownSettings={
+      singleSelection:false,
+      idField:'item_id',
+      textField:'item_text',
+      selectAllText:'select All',
+      unSelectAllText:'Unselect All',
+      itemsShowLimit:1,
+      allowSearchFilter:this.showFilter
+    };  
+
+    
   }
 
   checkIsSupervisor(event) {
@@ -160,6 +189,17 @@ export class EmployeeComponent {
       (error) => console.error
     );
   }
+
+
+
+  onItemSelect(item:any){
+    console.log('onItemSelect', item);
+  }
+  onSelectAll(item:any){
+    console.log('onSelectAll', item);
+  }
+
+  
 
   initializeemployeeForm() {
     this.employeeForm = new FormGroup({

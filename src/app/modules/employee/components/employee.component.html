@@ -102,7 +102,17 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <input type="text" class="form-control" formControlName="phoneNumber"
-                                    placeholder="Phone Number" />
+                                    placeholder="Phone Number" [ngClass]="{
+                    'invalid-input':
+                      employeeForm.controls.phoneNumber.touched &&
+                      employeeForm.controls.phoneNumber.errors
+                  }" />
+                                <div *ngIf="
+                    employeeForm.controls.phoneNumber.touched &&
+                    employeeForm.controls.phoneNumber.errors?.required
+                  " class="error-msg">
+                                    Phone Number is Required!
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -110,21 +120,53 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <input type="text" class="form-control" formControlName="address"
-                                    placeholder="Address" />
+                                <input type="text" class="form-control" formControlName="address" placeholder="Address"
+                                    [ngClass]="{
+                    'invalid-input':
+                      employeeForm.controls.address.touched &&
+                      employeeForm.controls.address.errors?.email
+                  }" />
+
+                                <div *ngIf="
+                    employeeForm.controls.address.touched &&
+                    employeeForm.controls.address.errors?.required
+                  " class="error-msg">
+                                    Address is Required!
+                                </div>
                             </div>
                         </div>
 
                         <div class="col-sm-6">
-                            <div class="form-group">
-                                <input type="text" class="form-control" formControlName="city" placeholder="City" />
-                            </div>
+                            <!-- <div class="form-group">
+                                <input type="text" class="form-control" formControlName="city" placeholder="City"
+                                    [ngClass]="{
+                    'invalid-input':
+                      employeeForm.controls.city.touched &&
+                      employeeForm.controls.city.errors?.email
+                  }" />
+                                <div *ngIf="
+                    employeeForm.controls.city.touched &&
+                    employeeForm.controls.city.errors?.required
+                  " class="error-msg">
+                                    City is Required!
+                                </div>
+                            </div> -->
                         </div>
 
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <input type="text" class="form-control" formControlName="zipCode"
-                                    placeholder="zipCode" />
+                                <input type="text" class="form-control" formControlName="zipCode" placeholder="zipCode"
+                                    [ngClass]="{
+                    'invalid-input':
+                      employeeForm.controls.zipCode.touched &&
+                      employeeForm.controls.zipCode.errors?.email
+                  }" />
+                                <div *ngIf="
+                    employeeForm.controls.zipCode.touched &&
+                    employeeForm.controls.zipCode.errors?.required
+                  " class="error-msg">
+                                    ZipCode is Required!
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -151,7 +193,18 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <input type="text" class="form-control" formControlName="pay" placeholder="Pay" />
+                                <input type="text" class="form-control" formControlName="pay" placeholder="Pay"
+                                    [ngClass]="{
+                    'invalid-input':
+                      employeeForm.controls.pay.touched &&
+                      employeeForm.controls.pay.errors?.pay
+                  }" />
+                                <div *ngIf="
+                    employeeForm.controls.pay.touched &&
+                    employeeForm.controls.pay.errors?.required
+                  " class="error-msg">
+                                    Pay Scale is Required!
+                                </div>
                             </div>
                         </div>
 
@@ -182,6 +235,18 @@
                             placeholder="Select SuperVisor" bindLabel="employeeName" bindValue="employeeId"
                             formControlName="superVisorId">
                         </ng-select>
+                    </div>
+
+                    <div class="form-group">
+                      <ng-multiselect-dropdown
+  name="city"
+  [placeholder]="'select city'"
+  [data]="cities"
+  formControlName="city"
+  [disabled]="disabled"
+  [settings]="dropdownSettings"
+  (onSelect)=onItemSelect($event)>
+</ng-multiselect-dropdown>
                     </div>
 
                     <div class="float-right">

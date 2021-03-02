@@ -30,21 +30,21 @@ export class EmployeeService extends HttpGenericCrudService<EmployeeModel>{
     }
 
     GetAllEmployees(): Observable<EmployeeModel[]> {
-        return this.httpClient.get<EmployeeModel[]>('employee/listallemployees')
+        return this.httpClient.get<EmployeeModel[]>('employee')
     }
 
 
     GetAllDesignations(): Observable<DesignationModel[]> {
-        return this.httpClient.get<DesignationModel[]>('designation/listallDesignations');
+        return this.httpClient.get<DesignationModel[]>('designation');
     }
 
     GetAllSuperVisors(): Observable<EmployeeModel[]> {
-        return this.httpClient.get<EmployeeModel[]>('employee/listallemployees');
+        return this.httpClient.get<EmployeeModel[]>('employee');
     }
 
 
     GetAllOrganizations(): Observable<OrganizationModel[]> {
-        return this.httpClient.get<OrganizationModel[]>('organization/listallorganizations');
+        return this.httpClient.get<OrganizationModel[]>('organization');
     }
 
 
