@@ -65,4 +65,5 @@ export class EmployeeService extends HttpGenericCrudService<EmployeeModel>{
         return this.httpClient.put('employee/'+id, data);
       }
 
+      
 }
