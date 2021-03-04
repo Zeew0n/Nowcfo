@@ -63,6 +63,8 @@ export default class AuthenticationService extends HttpGenericCrudService<AppUse
         return localStorage.getItem(this.JWT_TOKEN);
     }
 
+    
+
 
     getUserRole() {
         return localStorage.getItem(this.Ref_ROLE);
