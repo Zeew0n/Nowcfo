@@ -36,6 +36,19 @@ export class EmployeeComponent {
   designations: DesignationModel[];
   organizations: OrganizationModel[];
   supervisors: EmployeeModel[];
+  dropdownEmailAttachmentSettings:any={};
+
+  //Added for dropdown
+  title = 'dropdowmcheckbox';
+  disabled = false;
+  showFilter = false;
+  limitSelection = false;
+  cities: any = [];
+  selectedItems: any = [];
+  dropdownSettings: any = {};
+
+  emailAttachmentList: Array<any>=[];
+
 
   isSubmitting: boolean; // Form submission variable
   closeResult = ''; // close result for modal
@@ -59,9 +72,7 @@ export class EmployeeComponent {
     private authService: AuthenticationService,
     private route: ActivatedRoute
   ) {
-    // this.employeeForm = this.fb.group({
-    //   checkArray: this.fb.array([], [Validators.required])
-    // })
+
   }
 
   /* Form Declarations */
@@ -85,15 +96,27 @@ export class EmployeeComponent {
   payType = new FormControl(true, [Validators.required]);
   pay = new FormControl(true, [Validators.required]);
   overTimeRate = new FormControl(true, [Validators.required]);
+  orgPermissionId= new FormControl();
 
-  // checkArray: this.array([], [Validators.required])
 
   ngOnInit() {
+    debugger
     this.getEmployees();
     this.getOrganizations();
     this.getDesignations();
     this.getSuperVisors();
     this.initializeemployeeForm();
+
+    this.dropdownEmailAttachmentSettings = {
+      singleSelection: false,
+      idField: 'item_id',
+      textField: 'item_text',
+      selectAllText: 'Select All',
+      unSelectAllText: 'UnSelect All',
+      itemsShowLimit: 3,
+      allowSearchFilter: true
+    };
+
   }
 
   checkIsSupervisor(event) {
@@ -155,11 +178,23 @@ export class EmployeeComponent {
   getOrganizations() {
     this.employeeService.GetAllOrganizations().subscribe(
       (result) => {
+        console.log(result);
         this.organizations = result;
+        const count = result.length;
+        if (count > 0) {
+          this.emailAttachmentList = [];
+          for (let i = 0; i < count; i++) {
+            const element = result[i];
+            this.emailAttachmentList.push({ item_id: element.organizationId, item_text: element.organizationName });
+          }
+        }
       },
       (error) => console.error
     );
   }
+
+
+
 
   initializeemployeeForm() {
     this.employeeForm = new FormGroup({
@@ -176,11 +211,13 @@ export class EmployeeComponent {
       payType: this.payType,
       pay: this.pay,
       overTimeRate: this.overTimeRate,
+      orgPermissionId:this.orgPermissionId
+      
     });
   }
 
   Delete(id) {
-    debugger;
+
     console.log('Hello Ashok!');
     this.employeeService.DeleteEmployee(id).subscribe(
       (result) => {
@@ -211,7 +248,6 @@ export class EmployeeComponent {
   }
 
   onSubmit() {
-    debugger;
 
     const createForm = this.employeeForm.value;
     console.log(createForm);
@@ -234,6 +270,7 @@ export class EmployeeComponent {
         model.payType = createForm.payType;
         model.pay = createForm.pay;
         model.overTimeRate = createForm.overTimeRate;
+        model.employeepermissions= createForm.orgPermissionId?.map(x=>x.item_id)
 
         this.employeeService.CreateEmployee(model).subscribe(
           (res) => {

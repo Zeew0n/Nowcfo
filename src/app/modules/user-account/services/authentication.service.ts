@@ -84,7 +84,10 @@ export default class AuthenticationService extends HttpGenericCrudService<AppUse
 
     clearStorageToken() {
         localStorage.clear();
-        this.router.navigate(['login']);
+        // this.router.navigate(['/login']);
+
+        this.router.navigateByUrl('login');
+
     }
 
 }

@@ -58,7 +58,6 @@ export class UserInformationComponent {
   /* Form Declarations */
   userForm: FormGroup;
   EventValue: any = 'Save';
-  //isActive: boolean;
   hasUser: boolean = false;
   hasAdmin: boolean = false;
   hasSuperAdmin: boolean = false;
@@ -68,16 +67,14 @@ export class UserInformationComponent {
   phoneNumber = new FormControl('', [Validators.required]);
   firstName = new FormControl('', [Validators.required]);
   lastName = new FormControl('', [Validators.required]);
-  password = new FormControl('', [Validators.required]);
+  //password = new FormControl('', [Validators.required]);
+  password = new FormControl();
   address = new FormControl('', [Validators.required]);
   city = new FormControl('', [Validators.required]);
-  //state= new FormControl('', [Validators.required]);
   zipCode = new FormControl('', [Validators.required]);
-
   roleId = new FormControl(true, [Validators.required]);
 
   ngOnInit() {
-    //  this.userForm.controls.password.setValidators(null);
     this.getUsers();
     this.initializeuserinformationForm();
     this.getRoles();
@@ -136,7 +133,6 @@ export class UserInformationComponent {
       phoneNumber: this.phoneNumber,
       address: this.address,
       city: this.city,
-      //state:this.state,
       zipCode: this.zipCode,
       roleId: this.roleId,
     });
@@ -148,7 +144,6 @@ export class UserInformationComponent {
 
   Delete(id) {
     debugger;
-    console.log('Hello Ashok!');
     this.userInformationService.DeleteUser(id).subscribe(
       (result) => {
         if (confirm(' Are you sure to delete this record? ')) {
@@ -191,14 +186,11 @@ export class UserInformationComponent {
         model.firstName = createForm.firstName;
         model.lastName = createForm.lastName;
         model.email = createForm.email;
-        //model.confirmEmail= createForm.confirmEmail;
         model.password = createForm.password;
-        //model.confirmPassword= createForm.confirmPassword;
         model.roleId = createForm.roleId;
         model.phoneNumber = createForm.phoneNumber;
         model.address = createForm.address;
         model.city = createForm.city;
-        // model.state= createForm.state;
         model.zipCode = createForm.zipCode;
 
         this.userInformationService.CreateUser(model).subscribe(
@@ -219,7 +211,7 @@ export class UserInformationComponent {
         );
       }
     } else {
-      if (!this.userForm.valid) {
+      if (this.userForm.valid) {
         const model = new UserInformationModel();
         debugger;
 
@@ -231,7 +223,6 @@ export class UserInformationComponent {
         model.city = createForm.city;
         model.userName = createForm.userName;
         model.email = createForm.email;
-        // model.state= createForm.state;
         model.zipCode = createForm.zipCode;
         model.id = this.selectuserinformation.id;
         this.userInformationService.updateUser(model).subscribe(
@@ -288,7 +279,6 @@ export class UserInformationComponent {
       phoneNumber: userinformation.phoneNumber,
       address: userinformation.address,
       city: userinformation.city,
-      //state:userinformation.state,
       zipCode: userinformation.zipCode,
     });
     this.modalService.open(content, {

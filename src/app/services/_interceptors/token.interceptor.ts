@@ -35,25 +35,7 @@ export class TokenInterceptor implements HttpInterceptor {
       });
     }
     return next.handle(request);
-
-
-
-    //
-    // request = this.addRequestUri(request);
-    // const token = this.authService.getJwtToken();
-    // if (token) {
-    //   request = this.addToken(request, token);
-    // }
-    // return next.handle(request).pipe(catchError(error => {
-    //   if (error instanceof HttpErrorResponse && error.status === 401) {
-    //     return this.handle401Error(request, next);
-    //   } else if (error instanceof HttpErrorResponse && error.status === 403) {
-    //     this.toastr.error("You don't have access for this operation please contact superadmin.", "Error!");
-    //     return throwError(error);
-    //   } else {
-    //     return throwError(error);
-    //   }
-    // }));
+    
   }
 
   private handle401Error(request: HttpRequest<any>, next: HttpHandler) {

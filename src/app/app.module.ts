@@ -83,7 +83,6 @@ export function tokenGetter() {
     NgxUiLoaderRouterModule,
     UserAccountModule,
     NgSelectModule,
-    //MembershipRoutingModule,
     ToastrModule.forRoot({
       timeOut: 3000,
       positionClass: 'toast-bottom-right',
@@ -102,6 +101,7 @@ export function tokenGetter() {
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
   ],
+
   //Comment  
   bootstrap: [AppComponent],
 })
