@@ -36,16 +36,18 @@ export class EmployeeComponent {
   designations: DesignationModel[];
   organizations: OrganizationModel[];
   supervisors: EmployeeModel[];
+  dropdownEmailAttachmentSettings:any={};
 
-//Added for dropdown
+  //Added for dropdown
   title = 'dropdowmcheckbox';
-  myForm:FormGroup;
-  disabled=false;
-  showFilter=false;
-  limitSelection=false;
-  cities:any=[];
-  selectedItems:any=[];
-  dropdownSettings:any={};
+  disabled = false;
+  showFilter = false;
+  limitSelection = false;
+  cities: any = [];
+  selectedItems: any = [];
+  dropdownSettings: any = {};
+
+  emailAttachmentList: Array<any>=[];
 
 
   isSubmitting: boolean; // Form submission variable
@@ -94,35 +96,27 @@ export class EmployeeComponent {
   payType = new FormControl(true, [Validators.required]);
   pay = new FormControl(true, [Validators.required]);
   overTimeRate = new FormControl(true, [Validators.required]);
+  orgPermissionId= new FormControl();
 
 
   ngOnInit() {
+    debugger
     this.getEmployees();
     this.getOrganizations();
     this.getDesignations();
     this.getSuperVisors();
     this.initializeemployeeForm();
 
-    this.cities=[
-      {item_id:1,item_text:'Dehli'},
-      {item_id:2,item_text:'Noida'},
-      {item_id:3,item_text:'Bangalore'},
-      {item_id:4,item_text:'Pune'},
-      {item_id:5,item_text:'chennai'},
-      {item_id:6,item_text:'Mumbai'},
-    ];
-    this.selectedItems=[{ item_id:4,item_text:'pune'},{item_id:6,item_text:'Mumbai'}];
-    this.dropdownSettings={
-      singleSelection:false,
-      idField:'item_id',
-      textField:'item_text',
-      selectAllText:'select All',
-      unSelectAllText:'Unselect All',
-      itemsShowLimit:1,
-      allowSearchFilter:this.showFilter
-    };  
+    this.dropdownEmailAttachmentSettings = {
+      singleSelection: false,
+      idField: 'item_id',
+      textField: 'item_text',
+      selectAllText: 'Select All',
+      unSelectAllText: 'UnSelect All',
+      itemsShowLimit: 3,
+      allowSearchFilter: true
+    };
 
-    
   }
 
   checkIsSupervisor(event) {
@@ -184,7 +178,16 @@ export class EmployeeComponent {
   getOrganizations() {
     this.employeeService.GetAllOrganizations().subscribe(
       (result) => {
+        console.log(result);
         this.organizations = result;
+        const count = result.length;
+        if (count > 0) {
+          this.emailAttachmentList = [];
+          for (let i = 0; i < count; i++) {
+            const element = result[i];
+            this.emailAttachmentList.push({ item_id: element.organizationId, item_text: element.organizationName });
+          }
+        }
       },
       (error) => console.error
     );
@@ -192,14 +195,6 @@ export class EmployeeComponent {
 
 
 
-  onItemSelect(item:any){
-    console.log('onItemSelect', item);
-  }
-  onSelectAll(item:any){
-    console.log('onSelectAll', item);
-  }
-
-  
 
   initializeemployeeForm() {
     this.employeeForm = new FormGroup({
@@ -216,11 +211,13 @@ export class EmployeeComponent {
       payType: this.payType,
       pay: this.pay,
       overTimeRate: this.overTimeRate,
+      orgPermissionId:this.orgPermissionId
+      
     });
   }
 
   Delete(id) {
-    debugger;
+
     console.log('Hello Ashok!');
     this.employeeService.DeleteEmployee(id).subscribe(
       (result) => {
@@ -251,7 +248,6 @@ export class EmployeeComponent {
   }
 
   onSubmit() {
-    debugger;
 
     const createForm = this.employeeForm.value;
     console.log(createForm);
@@ -274,6 +270,7 @@ export class EmployeeComponent {
         model.payType = createForm.payType;
         model.pay = createForm.pay;
         model.overTimeRate = createForm.overTimeRate;
+        model.employeepermissions= createForm.orgPermissionId?.map(x=>x.item_id)
 
         this.employeeService.CreateEmployee(model).subscribe(
           (res) => {

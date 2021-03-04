@@ -50,19 +50,19 @@ export class EmployeeService extends HttpGenericCrudService<EmployeeModel>{
 
     CreateEmployee(data)
     {
-       
-        return this.httpClient.post('employee/create', data);
+       console.log(data);
+        return this.httpClient.post('employee', data);
     }
 
 
     DeleteEmployee(id)
     {
-        return this.httpClient.delete('employee/delete/'+id);
+        return this.httpClient.delete('employee'+id);
     }
 
 
       updateEmployee(id,data: EmployeeModel) {
-        return this.httpClient.put('employee/update/'+id, data);
+        return this.httpClient.put('employee/'+id, data);
       }
 
 }
