@@ -102,8 +102,7 @@ export function tokenGetter() {
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
   ],
-
-  //Comment  
+  
   bootstrap: [AppComponent],
 })
 export class AppModule {}

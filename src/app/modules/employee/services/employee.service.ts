@@ -38,8 +38,8 @@ export class EmployeeService extends HttpGenericCrudService<EmployeeModel>{
         return this.httpClient.get<DesignationModel[]>('designation');
     }
 
-    GetAllSuperVisors(): Observable<EmployeeModel[]> {
-        return this.httpClient.get<EmployeeModel[]>('employee');
+    GetAllSuperVisors(id): Observable<EmployeeModel[]> {
+        return this.httpClient.get<EmployeeModel[]>('employee/listallsupervisors/'+id);
     }
 
 

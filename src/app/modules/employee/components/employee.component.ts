@@ -36,7 +36,7 @@ export class EmployeeComponent {
   designations: DesignationModel[];
   organizations: OrganizationModel[];
   supervisors: EmployeeModel[];
-  dropdownEmailAttachmentSettings:any={};
+  dropdownEmailAttachmentSettings: any = {};
 
   //Added for dropdown
   title = 'dropdowmcheckbox';
@@ -47,7 +47,7 @@ export class EmployeeComponent {
   selectedItems: any = [];
   dropdownSettings: any = {};
 
-  emailAttachmentList: Array<any>=[];
+  emailAttachmentList: Array<any> = [];
 
 
   isSubmitting: boolean; // Form submission variable
@@ -93,18 +93,17 @@ export class EmployeeComponent {
   designationId = new FormControl('', [Validators.required]);
   superVisorId = new FormControl('');
   isSupervisor = new FormControl('');
-  payType = new FormControl(true, [Validators.required]);
+  payType = new FormControl(false);
   pay = new FormControl(true, [Validators.required]);
   overTimeRate = new FormControl(true, [Validators.required]);
-  orgPermissionId= new FormControl();
+  orgPermissionId = new FormControl();
 
 
   ngOnInit() {
-    debugger
     this.getEmployees();
     this.getOrganizations();
     this.getDesignations();
-    this.getSuperVisors();
+    //this.getSuperVisors();
     this.initializeemployeeForm();
 
     this.dropdownEmailAttachmentSettings = {
@@ -121,6 +120,7 @@ export class EmployeeComponent {
 
   checkIsSupervisor(event) {
     console.log('test');
+    //this.getSuperVisors(id);
   }
 
   private checkPermissions() {
@@ -166,10 +166,11 @@ export class EmployeeComponent {
     );
   }
 
-  getSuperVisors() {
-    this.employeeService.GetAllSuperVisors().subscribe(
+  getSuperVisors(id) {
+    this.employeeService.GetAllSuperVisors(id.value).subscribe(
       (result) => {
         this.supervisors = result;
+        console.log('test', this.supervisors);
       },
       (error) => console.error
     );
@@ -211,8 +212,7 @@ export class EmployeeComponent {
       payType: this.payType,
       pay: this.pay,
       overTimeRate: this.overTimeRate,
-      orgPermissionId:this.orgPermissionId
-      
+      orgPermissionId: this.orgPermissionId
     });
   }
 
@@ -248,6 +248,7 @@ export class EmployeeComponent {
   }
 
   onSubmit() {
+    debugger
 
     const createForm = this.employeeForm.value;
     console.log(createForm);
@@ -255,7 +256,6 @@ export class EmployeeComponent {
     if (!this.isUpdate) {
       if (this.employeeForm.valid) {
         const model = new EmployeeModel();
-        debugger;
         model.employeeName = createForm.employeeName;
         model.email = createForm.email;
         model.phoneNumber = createForm.phoneNumber;
@@ -267,10 +267,29 @@ export class EmployeeComponent {
         model.designationId = createForm.designationId;
         model.isSupervisor = createForm.isSupervisor;
         model.superVisorId = createForm.superVisorId;
-        model.payType = createForm.payType;
         model.pay = createForm.pay;
+        model.payType == createForm.payType?true:false;
         model.overTimeRate = createForm.overTimeRate;
-        model.employeepermissions= createForm.orgPermissionId?.map(x=>x.item_id)
+        model.employeepermissions = createForm.orgPermissionId?.map(x => x.item_id)
+
+        // const model = {
+        //   employeeName: createForm.employeeName,
+        //   email: createForm.email,
+        //   phoneNumber: createForm.phoneNumber,
+        //   address: createForm.address,
+        //   city: createForm.city,
+        //   zipCode: createForm.zipCode,
+        //   organizationId: createForm.organizationId,
+        //   designationId: createForm.designationId,
+        //   isSupervisor: createForm.isSupervisor,
+        //   superVisorId: createForm.superVisorId,
+        //   payType: createForm.payType ? true : false,
+        //   pay: createForm.pay,
+        //   overTimeRate: createForm.overTimeRate,
+        //   employeepermissions: createForm.orgPermissionId?.map(x => x.item_id)
+        // };
+
+        // debugger
 
         this.employeeService.CreateEmployee(model).subscribe(
           (res) => {
@@ -279,7 +298,7 @@ export class EmployeeComponent {
             this.modalService.dismissAll();
             this.getEmployees();
           },
-          
+
           (error) => {
             console.log(error);
             this.isSubmitting = false;

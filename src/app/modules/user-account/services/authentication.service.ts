@@ -17,7 +17,6 @@ export default class AuthenticationService extends HttpGenericCrudService<AppUse
     private readonly JWT_TOKEN = 'auth_token';
     private readonly Ref_TOKEN = 'refresh_token';
     private readonly Ref_ROLE = 'user_role';
-    private readonly Ref_TENANTID = 'tenant_id';
 
     private _authNavStatusSource = new BehaviorSubject<boolean>(false);
     authNavStatus$ = this._authNavStatusSource.asObservable();
@@ -50,11 +49,6 @@ export default class AuthenticationService extends HttpGenericCrudService<AppUse
         return this.httpClient.post('user/authenticate', data);
     }                                             
 
-    logintenant(data) {
-        return this.httpClient.post('user/authenticatetenant', data);
-    }   
-
-
     isTokenExpired(token: string) {
         return this.jwtHelper.isTokenExpired(token);
     }
@@ -63,20 +57,12 @@ export default class AuthenticationService extends HttpGenericCrudService<AppUse
         return localStorage.getItem(this.JWT_TOKEN);
     }
 
-    
-
-
     getUserRole() {
         return localStorage.getItem(this.Ref_ROLE);
     }
 
-    getTenantId() {
-        return localStorage.getItem(this.Ref_TENANTID);
-    }
-
-
-
     getRefreshToken() {
+        
         return localStorage.getItem(this.Ref_TOKEN);
     }
 
@@ -86,8 +72,6 @@ export default class AuthenticationService extends HttpGenericCrudService<AppUse
 
     clearStorageToken() {
         localStorage.clear();
-        // this.router.navigate(['/login']);
-
         this.router.navigateByUrl('login');
 
     }

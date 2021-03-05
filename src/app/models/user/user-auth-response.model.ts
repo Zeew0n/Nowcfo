@@ -7,7 +7,7 @@ export class UserAuthResponseModel {
     roleId: string;
     role: string;
     isVerified: boolean;
-    jwToken: string;
+    jwtToken: string;
     roleName: string;
     isSuperAdmin: boolean;
     refreshToken: string;

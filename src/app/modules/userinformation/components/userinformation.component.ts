@@ -79,7 +79,7 @@ export class UserInformationComponent {
     this.initializeuserinformationForm();
     this.getRoles();
   }
-
+  
   private checkPermissions() {
     const role = this.authService.getUserRole();
 
