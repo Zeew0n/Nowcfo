@@ -103,7 +103,7 @@
                   <i class="fa fa-times"></i> Cancel
                 </button> -->
           <div class="float-right">
-            <button type="submit" class="btn btn-green mr-3" (click)="onSubmit()">
+            <button type="submit" class="btn btn-green mr-3" [disabled]="submitted" (click)="onSubmit()">
               {{ EventValue }} 
             </button>
             <button

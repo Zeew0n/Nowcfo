@@ -1,9 +1,9 @@
 import { BaseEntity } from './base-entity';
 
 export class OrganizationModel extends BaseEntity {
-  organizationId: string;
+  organizationId: number;
   organizationName: string;
-  hasParent: string;
-  parentOrganizationId: string;
+  hasParent: boolean;
+  parentOrganizationId: number;
   parentOrganization: string;
 }
