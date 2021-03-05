@@ -15,16 +15,8 @@ export class UserInformationService extends HttpGenericCrudService<UserInformati
         super(
             httpClient,
             environment.API_URL,
-            'user-information/',
+            'user',
         );
-    }
-    protected setHeader() {
-        const httpOptions = {
-            headers: new HttpHeaders({
-                'Content-Type': 'application/json'
-            })
-        };
-        return httpOptions;
     }
 
     GetAllUsers(): Observable<UserInformationModel[]> {

@@ -189,19 +189,27 @@
 
             <div class="col-sm-6">
               <div class="form-group">
-                                <input type="text" class="form-control" formControlName="city" placeholder="City"
-                                    [ngClass]="{
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="city"
+                  placeholder="City"
+                  [ngClass]="{
                     'invalid-input':
                       employeeForm.controls.city.touched &&
                       employeeForm.controls.city.errors?.email
-                  }" />
-                                <div *ngIf="
+                  }"
+                />
+                <div
+                  *ngIf="
                     employeeForm.controls.city.touched &&
                     employeeForm.controls.city.errors?.required
-                  " class="error-msg">
-                                    City is Required!
-                                </div>
-                            </div>
+                  "
+                  class="error-msg"
+                >
+                  City is Required!
+                </div>
+              </div>
             </div>
 
             <div class="col-sm-6">
@@ -252,6 +260,7 @@
                   bindValue="organizationId"
                   placeholder="Select Organization"
                   formControlName="organizationId"
+                  (change)="getSuperVisors(organizationId)"
                 >
                 </ng-select>
               </div>
@@ -284,7 +293,7 @@
               </div>
             </div>
 
-            <div class="col-sm-6">
+            <!-- <div class="col-sm-6">
               <div class="form-group">
                 <input
                   type="text"
@@ -293,7 +302,7 @@
                   placeholder="Pay Type"
                 />
               </div>
-            </div>
+            </div> -->
 
             <div class="col-sm-6">
               <div class="form-group">
@@ -336,7 +345,7 @@
           <div class="form-group">
             <ng-select
               *ngIf="employeeForm.value.isSupervisor"
-              [items]="employees"
+              [items]="supervisors"
               placeholder="Select SuperVisor"
               bindLabel="employeeName"
               bindValue="employeeId"
@@ -345,23 +354,38 @@
             </ng-select>
           </div>
 
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="can-toggle">
+                <input
+                  name="payType"
+                  id="payType"
+                  formControlName="payType"
+                  type="checkbox" 
+                />
+                <label for="payType">
+                  <div
+                    class="can-toggle__switch"
+                    data-checked="Salary"
+                    data-unchecked="Hourly"
+                  ></div>
+                </label>
+              </div>
+            </div>
+          </div>
+
           <div class="form-group">
-            <!-- <ng-multiselect-dropdown
-              name="organization"
-              [placeholder]="'select Permissions'"
-              [data]="organizations"
+            <ng-multiselect-dropdown
+              name="permissionName"
+              [settings]="dropdownEmailAttachmentSettings"
+              [data]="emailAttachmentList"
               formControlName="orgPermissionId"
-              [disabled]="disabled"
-              [settings]="dropdownSettings"
-              (onSelect)="onItemSelect($event)"
+              class="gosend-dropdown"
+              placeholder="Select Permissions"
             >
-            </ng-multiselect-dropdown> -->
-            <ng-multiselect-dropdown name="permissionName" [settings]="dropdownEmailAttachmentSettings" [data]="emailAttachmentList"
-            formControlName="orgPermissionId" class=" gosend-dropdown" placeholder="Select Permissions" >
             </ng-multiselect-dropdown>
           </div>
 
-          
           <div class="float-right">
             <button
               type="submit"

@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  API_URL: 'https://gosend-production-api.azurewebsites.net/api/'
+  ng: 'https://orgmanager-production-api.azurewebsites.net/api/'
 };

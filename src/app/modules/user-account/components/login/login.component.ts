@@ -55,10 +55,11 @@ export class LoginComponent implements OnInit {
         if (this.loginForm.valid) {
         this.authenticationService.login(this.loginForm.value).subscribe(
           (res: UserAuthResponseModel) => {
+              debugger;
               localStorage.clear();
-              localStorage.setItem('auth_token', res.jwToken);
+              localStorage.setItem('auth_token', res.jwtToken);
               localStorage.setItem('role_name', res.roleName)
-              //localStorage.setItem('refresh_token', res.refreshToken);
+              localStorage.setItem('refresh_token', res.refreshToken);
               this.toastr.success('Login Successful.', 'Success!');
               console.log(res);
               this.router.navigateByUrl('home');
