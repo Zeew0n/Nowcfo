@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   FormControl,
   FormBuilder,
@@ -16,11 +16,12 @@ import { OrganizationModel } from 'src/app/models/organization.model';
   styleUrls: ['organization.component.scss'],
   templateUrl: './organization.component.html',
 })
-export class OrganizationComponent {
+export class OrganizationComponent implements OnInit {
   organization: OrganizationModel = new OrganizationModel();
   organizations: OrganizationModel[];
 
-  isSubmitting: boolean; // Form submission variable
+
+
   closeResult = ''; // close result for modal
   submitted = false;
   isEdit = false;
@@ -57,6 +58,8 @@ export class OrganizationComponent {
       parentOrganizationId: new FormControl(''),
     });
   }
+
+  
 
   getOrganizations() {
     this.organizationService.GetAllOrganizations().subscribe(
@@ -119,17 +122,18 @@ export class OrganizationComponent {
         model.organizationName = createForm.organizationName;
         model.hasParent = createForm.hasParent;
         model.parentOrganizationId = createForm.parentOrganizationId;
+        this.submitted = true;
 
         this.organizationService.CreateOrganization(model).subscribe(
           (res) => {
-            this.submitted = true;
+            this.submitted = false;
             this.toastr.success('User Added Successfully.', 'Success!');
             this.modalService.dismissAll();
             this.getOrganizations();
           },
           (error) => {
             console.log(error);
-            this.isSubmitting = false;
+            this.submitted = false;
             this.modalService.dismissAll();
             this.toastr.error(error.error.errorMessage, 'Error!');
           }
@@ -215,6 +219,7 @@ export class OrganizationComponent {
       .open(content, {
         ariaLabelledBy: 'modal-basic-title',
         windowClass: 'modal-cfo',
+        backdrop: false
       })
       .result.then(
         (result) => {
