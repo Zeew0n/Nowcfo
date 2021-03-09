@@ -93,9 +93,9 @@ export class EmployeeComponent {
   designationId = new FormControl('', [Validators.required]);
   superVisorId = new FormControl('');
   isSupervisor = new FormControl('');
-  payType = new FormControl(false);
+  payTypeCheck = new FormControl(false);
   pay = new FormControl(true, [Validators.required]);
-  overTimeRate = new FormControl(true, [Validators.required]);
+  overTimeRate = new FormControl('', [Validators.required]);
   orgPermissionId = new FormControl();
 
 
@@ -167,6 +167,7 @@ export class EmployeeComponent {
   }
 
   getSuperVisors(id) {
+    debugger
     this.employeeService.GetAllSuperVisors(id.value).subscribe(
       (result) => {
         this.supervisors = result;
@@ -209,7 +210,7 @@ export class EmployeeComponent {
       designationId: this.designationId,
       isSupervisor: this.isSupervisor,
       superVisorId: this.superVisorId,
-      payType: this.payType,
+      payTypeCheck: this.payTypeCheck,
       pay: this.pay,
       overTimeRate: this.overTimeRate,
       orgPermissionId: this.orgPermissionId
@@ -255,41 +256,54 @@ export class EmployeeComponent {
 
     if (!this.isUpdate) {
       if (this.employeeForm.valid) {
-        const model = new EmployeeModel();
-        model.employeeName = createForm.employeeName;
-        model.email = createForm.email;
-        model.phoneNumber = createForm.phoneNumber;
-        model.address = createForm.address;
-        model.city = createForm.city;
-        model.zipCode = createForm.zipCode;
-        model.email = createForm.email;
-        model.organizationId = createForm.organizationId;
-        model.designationId = createForm.designationId;
-        model.isSupervisor = createForm.isSupervisor;
-        model.superVisorId = createForm.superVisorId;
-        model.pay = createForm.pay;
-        model.payType == createForm.payType?true:false;
-        model.overTimeRate = createForm.overTimeRate;
-        model.employeepermissions = createForm.orgPermissionId?.map(x => x.item_id)
+        //const model = new EmployeeModel();
+        // model.employeeName = createForm.employeeName;
+        // model.email = createForm.email;
+        // model.phoneNumber = createForm.phoneNumber;
+        // model.address = createForm.address;
+        // model.city = createForm.city;
+        // model.zipCode = createForm.zipCode;
+        // model.email = createForm.email;
+        // model.organizationId = createForm.organizationId;
+        // model.designationId = createForm.designationId;
+        // model.isSupervisor = createForm.isSupervisor;
+        // model.superVisorId = createForm.superVisorId;
+        // model.pay = createForm.pay;
+        // model.payType == createForm.payType?true:false;
+        // model.overTimeRate = createForm.overTimeRate;
+        // model.employeepermissions = createForm.orgPermissionId?.map(x => x.item_id)
 
-        // const model = {
-        //   employeeName: createForm.employeeName,
-        //   email: createForm.email,
-        //   phoneNumber: createForm.phoneNumber,
-        //   address: createForm.address,
-        //   city: createForm.city,
-        //   zipCode: createForm.zipCode,
-        //   organizationId: createForm.organizationId,
-        //   designationId: createForm.designationId,
-        //   isSupervisor: createForm.isSupervisor,
-        //   superVisorId: createForm.superVisorId,
-        //   payType: createForm.payType ? true : false,
-        //   pay: createForm.pay,
-        //   overTimeRate: createForm.overTimeRate,
-        //   employeepermissions: createForm.orgPermissionId?.map(x => x.item_id)
-        // };
+        const model = {
+          employeeName: createForm.employeeName,
+          email: createForm.email,
+          phoneNumber: createForm.phoneNumber,
+          address: createForm.address,
+          city: createForm.city,
+          zipCode: createForm.zipCode,
+          organizationId: createForm.organizationId,
+          designationId: createForm.designationId,
+          isSupervisor: createForm.isSupervisor,
+          superVisorId: createForm.superVisorId,
+          payTypeCheck: createForm.payTypeCheck ? true : false,
+          pay: createForm.pay,
+          overTimeRate: createForm.overTimeRate,
+          payType: "",
+          employeepermissions: createForm.orgPermissionId?.map(x => x.item_id)
+        };
 
-        // debugger
+        if(model.payTypeCheck)
+        
+      {
+        debugger
+        model.payType= "Salary";
+
+      }
+        else
+        {
+          debugger
+          model.payType="Hourly";
+        }
+      
 
         this.employeeService.CreateEmployee(model).subscribe(
           (res) => {
