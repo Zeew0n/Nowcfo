@@ -8,6 +8,14 @@
   <div class="content">
     <div class="title-container">
       <h1 class="page-title">Employee</h1>
+      <!-- <div>
+        <form>
+          <input type="text" placeholder="search here">
+        </form>
+      </div> -->
+      <!-- <div class="content-right">
+        mkl
+      </div> -->
     </div>
     <div class="table-responsive">
       <table class="table table-harbor">
@@ -22,10 +30,9 @@
             <th scope="col">Address</th>
             <th scope="col">City</th>
             <th scope="col">Zip Code</th>
-            <th scope="col">Organization Id</th>
-            <th scope="col">Designation Id</th>
+            <th scope="col">Organization</th>
+            <th scope="col">Designation</th>
             <th scope="col">IsSuperVisor</th>
-            <th scope="col">SuperVisor Id</th>
             <th scope="col">PayType</th>
             <th scope="col">Pay</th>
             <th scope="col">Over Time Rate</th>
@@ -42,10 +49,9 @@
             <td data-th="Address ">{{ employee.address }}</td>
             <td data-th="City">{{ employee.city }}</td>
             <td data-th="Zip Code ">{{ employee.zipCode }}</td>
-            <td data-th="Organization Id ">{{ employee.organizationId }}</td>
-            <td data-th="Designation Id ">{{ employee.designationId }}</td>
+            <td data-th="Organization Id ">{{ employee.organizationName }}</td>
+            <td data-th="Designation Id ">{{ employee.designationName }}</td>
             <td data-th="IsSuperViosr ">{{ employee.isSupervisor }}</td>
-            <td data-th="SuperVisor Id ">{{employee.superVisorId }}</td>
             <td data-th="Pay Type ">{{ employee.payType }}</td>
             <td data-th="Pay ">{{ employee.pay }}</td>
             <td data-th="OverTime Rate">{{ employee.overTimeRate }}</td>
@@ -123,7 +129,8 @@
                 <div
                   *ngIf="
                     employeeForm.controls.email.touched &&
-                    employeeForm.controls.email.errors?.email
+                    employeeForm.controls.email.errors?.email || employeeForm.controls.email.touched &&  employeeForm.controls.email.errors?.required
+                   
                   "
                   class="error-msg"
                 >

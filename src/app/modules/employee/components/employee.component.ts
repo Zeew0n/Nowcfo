@@ -84,7 +84,7 @@ export class EmployeeComponent {
   hasSuperAdmin: boolean = false;
 
   employeeName = new FormControl('', [Validators.required]);
-  email = new FormControl('', Validators.email);
+  email = new FormControl('', [Validators.required,Validators.email]);
   phoneNumber = new FormControl('', [Validators.required]);
   address = new FormControl('', [Validators.required]);
   city = new FormControl('', [Validators.required]);
@@ -396,6 +396,7 @@ export class EmployeeComponent {
       isSupervisor: employee.isSupervisor,
       superVisorId: employee.superVisorId,
       payType: employee.payType,
+      payTypeCheck:employee.payType=="Salary"?true:false,
       pay: employee.pay,
       overTimeRate: employee.overTimeRate,
     });
@@ -410,6 +411,7 @@ export class EmployeeComponent {
       .open(content, {
         ariaLabelledBy: 'modal-basic-title',
         windowClass: 'modal-cfo',
+        backdrop: 'static'
       })
       .result.then(
         (result) => {

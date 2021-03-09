@@ -10,7 +10,9 @@ export class EmployeeModel extends BaseEntity {
     city: string;
     zipCode: string;
     organizationId: string;
+    organizationName:string;
     designationId: string;
+    designationName:string;
     isSupervisor: boolean;
     superVisorId: string;
     payType: string;

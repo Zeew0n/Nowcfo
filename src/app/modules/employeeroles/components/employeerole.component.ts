@@ -199,6 +199,7 @@ export class EmployeeRoleComponent {
       .open(content, {
         ariaLabelledBy: 'modal-basic-title',
         windowClass: 'modal-cfo',
+        backdrop: 'static'
       })
       .result.then(
         (result) => {

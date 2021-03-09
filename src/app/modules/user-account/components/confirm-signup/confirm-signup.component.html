@@ -1,20 +1,23 @@
 <div class="auth-page">
 	<div class="auth-container">
-		<div class="logo">
-			<img class="mb-4" src="assets/images/nowcfo.png" alt="logo" />
-		</div>
 		<ng-container *ngIf="isTokenValid; else elseBlock">
 			<div class="col-md-12 mx-auto text-center token-expired">
-				<i class="icon fa fa-exclamation-triangle"></i>
+				<i class="icon fa fa-check-circle"></i>
 				<h3>Email confirmed Successfully.</h3>
 			</div>
 		</ng-container>
 		<ng-template #elseBlock>
-			<div class="col-md-12 mx-auto text-center token-expired">
+
+			<ng-container *ngIf="isTokenValid; else elseBlock">
+				<div class="col-md-12 mx-auto text-center token-expired">
 				<i class="icon fa fa-exclamation-triangle"></i>
 				<h3>Token has been expired!</h3>
 				<h4>Please contact the administrator.</h4>
 			</div>
+			</ng-container>
+
+
+		
 		</ng-template>
 	</div>
 </div>
