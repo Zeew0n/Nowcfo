@@ -1,57 +1,71 @@
-import { Component, Output, EventEmitter, } from '@angular/core';
-import { NgForm, FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-import { NgbModal, ModalDismissReasons, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-import AuthenticationService from '../../../user-account/services/authentication.service';
-import { ToastrService } from 'ngx-toastr';
-import { ActivatedRoute } from '@angular/router';
+import { Component} from '@angular/core';
+import { OnInit } from '@angular/core';
+import { NavigationService } from '../../services/navigation.service';
+import { OrganizationNavModel } from 'src/app/models/OrganizationNavModel';
+import { TreeviewConfig, TreeviewItem } from 'ngx-treeview';
 
 @Component({
-    selector: 'app-side-nav',
-    templateUrl: './side-nav.component.html',
-    styleUrls: ['./sidebar.scss']
+  selector: 'app-side-nav',
+  templateUrl: './side-nav.component.html',
+  styleUrls: ['./sidebar.scss'],
 })
+export class SideNavComponent implements OnInit {
+  constructor(
+    private navigationService: NavigationService
+  ) {}
 
-export class SideNavComponent {
+  expandOrgNav = false;
 
-    hasUser: boolean = true;
-    hasAdmin: boolean = false;
-    hasSuperAdmin: boolean = false;
-    sidebarInner : boolean =false;
+  menus = ['org manager', 'org roles', 'employee management'];
 
-    constructor(
-        private fb: FormBuilder,
-        private  modalService: NgbModal,
-        private toastr: ToastrService,
-        private authService: AuthenticationService,
-        private route: ActivatedRoute) {
-         }
+  admins = ['admin', 'users', 'portal settings'];
 
-         private checkPermissions() {
-            const role = this.authService.getUserRole();
+  organizations: OrganizationNavModel[];
+  items: TreeviewItem[] = [];
 
-            if (role=="User") {
-              this.hasUser = true;
-            } else {
-              this.hasUser = false;
-            }
-            if (role=="Admin") {
-                this.hasAdmin = true;
-              } else {
-                this.hasAdmin = false;
-              }
+  config = TreeviewConfig.create({
+    hasAllCheckBox: false,
+    hasFilter: true,
+    hasCollapseExpand: false,
+    decoupleChildFromParent: false,
+    maxHeight: 400
+  });
 
-              if (role=="SuperAdmin") {
-                this.hasSuperAdmin = true;
-              } else {
-                this.hasSuperAdmin = false;
-              }
-          }
-    
-          private checkPermission(user): boolean {
-            return this.authService.checkPermission(user);
-          }
+  ngOnInit() {}
 
+  toggleOrganizationNav() {
+    this.expandOrgNav = !this.expandOrgNav;
+    this.NavigateOrganization();
+  }
 
+  NavigateOrganization(index = 0) {
+    this.getOrganizatioNavigation();
+  }
 
+  getOrganizatioNavigation() {
+    this.navigationService.getOrganizationNavigation().subscribe(
+      (res: TreeviewItem[]) => {
+        this.items.length = 0;
+        res.forEach((data) => {
+          const item = new TreeviewItem({
+            text: data.text,
+            value: data.value,
+            collapsed: true,
+            children: data.children,
+          });
+          this.items.push(item);
+          console.log('Data', this.items);
+        });
+      },
+      (error) => console.error(error)
+    );
+  }
 
+  onValueChange(e) {
+    const data = this.items.find((x) => x.value === e);
+    if (data) {
+      this.items.find((x) => x.value === e).collapsed = !data.collapsed;
+      console.log(e);
+    }
+  }
 }

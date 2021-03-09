@@ -11,7 +11,6 @@ import {
   NgxUiLoaderRouterModule,
 } from 'ngx-ui-loader';
 import { AppComponent } from './app.component';
-import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { UserAccountModule } from './modules/user-account/user-account.module';
 import { AppRoutingModule } from './app-routing.module';
 import { ToastrModule } from 'ngx-toastr';
@@ -38,6 +37,9 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { EmployeeComponent } from './modules/employee/components/employee.component';
 import { EmployeeRoleComponent } from './modules/employeeroles/components/employeerole.component';
 import { UserRoleComponent } from './modules/userroles/components/userrole.component';
+import {TreeviewModule } from 'ngx-treeview';
+
+
 
 const ngxUiLoaderConfig: NgxUiLoaderConfig = {
   bgsColor: 'red',
@@ -56,7 +58,6 @@ export function tokenGetter() {
 @NgModule({
   declarations: [
     AppComponent,
-    NavMenuComponent,
     SideNavComponent,
     TopNavComponent,
     AppLayoutComponent,
@@ -98,7 +99,8 @@ export function tokenGetter() {
         disallowedRoutes: ['http://example.com/examplebadroute/'],
       },
     }),
-    NgxPaginationModule
+    NgxPaginationModule,
+    TreeviewModule.forRoot(),
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
