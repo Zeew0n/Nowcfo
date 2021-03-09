@@ -7,7 +7,7 @@
   
     <div class="content">
       <div class="title-container">
-        <h1 class="page-title">Org Roles</h1>
+        <h1 class="page-title">User Roles</h1>
       </div>
       <div class="table-responsive">
         <table class="table table-harbor">
@@ -15,19 +15,17 @@
             <tr>
               <th scope="col">S.N</th>
               <th scope="col">Role Name</th>
-              <th scope="col">IsActive</th>
               <th scope="col">Action</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let designation of designations; let i = index">
+            <tr *ngFor="let role of roles; let i = index">
               <td>{{ i + 1 }}</td>
-              <td data-th="Role Name ">{{ designation.designationName }}</td>
-              <td data-th="Is Active ">{{ designation.isActive }}</td>
+              <td data-th="Role Name ">{{ role.roleName }}</td>
   
               <td data-th="Actions">
                 <a
-                  (click)="EditData(content, designation)"
+                  (click)="EditData(content, role)"
                   class="icon-holder"
                   href="javascript:void(0)"
                   title="edit"
@@ -36,7 +34,7 @@
                 <span></span>
                 <a
                   class="icon-holder"
-                  (click)="Delete(designation.designationId)"
+                  (click)="Delete(role.roleId)"
                   href="javascript:void(0)"
                   title="delete"
                   ><i class="icon icon-circle-block"></i
@@ -53,17 +51,17 @@
   
           <form
             class="form-cfo"
-            [formGroup]="designationForm"
+            [formGroup]="roleForm"
             (ngSubmit)="onSubmit()"
           >
           <div class="form-group">
-            <input type="text" formControlName="designationName" class="form-control" placeholder="Designation Name"
-                [ngClass]="{'invalid-input': designationForm.controls.designationName.touched && designationForm.controls.designationName.errors}">
-            <div *ngIf="designationForm.controls.designationName.touched && designationForm.controls.designationName.errors?.required"
-                class="error-msg ">Designation Name is Required!</div>
+            <input type="text" formControlName="roleName" class="form-control" placeholder="Role Name"
+                [ngClass]="{'invalid-input': roleForm.controls.roleName.touched && roleForm.controls.roleName.errors}">
+            <div *ngIf="roleForm.controls.roleName.touched && roleForm.controls.roleName.errors?.required"
+                class="error-msg ">Role Name is Required!</div>
         </div>
   
-            <div class="row">
+            <!-- <div class="row">
 
               <div class="col-sm-6">
                 <div class="custom-checkbox">
@@ -77,10 +75,10 @@
                 </div>
                
               </div>
-            </div>
+            </div> -->
      
             <div class="float-right">
-              <button type="submit" class="btn btn-green mr-3" [disabled]="designationForm.invalid" >
+              <button type="submit" class="btn btn-green mr-3" [disabled]="roleForm.invalid" >
                 {{ EventValue }}
               </button>
               <button

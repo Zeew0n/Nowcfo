@@ -36,7 +36,9 @@ import { OrganizationComponent } from './modules/organization/components/organiz
 import { NgSelectModule } from '@ng-select/ng-select';
 import { EmployeeComponent } from './modules/employee/components/employee.component';
 import { EmployeeRoleComponent } from './modules/employeeroles/components/employeerole.component';
+import { UserRoleComponent } from './modules/userroles/components/userrole.component';
 import {TreeviewModule } from 'ngx-treeview';
+
 
 
 const ngxUiLoaderConfig: NgxUiLoaderConfig = {
@@ -66,7 +68,8 @@ export function tokenGetter() {
     UserInformationComponent,
     OrganizationComponent,
     EmployeeComponent,
-    EmployeeRoleComponent
+    EmployeeRoleComponent,
+    UserRoleComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

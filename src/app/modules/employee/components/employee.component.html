@@ -45,7 +45,7 @@
             <td data-th="Organization Id ">{{ employee.organizationId }}</td>
             <td data-th="Designation Id ">{{ employee.designationId }}</td>
             <td data-th="IsSuperViosr ">{{ employee.isSupervisor }}</td>
-            <td data-th="SuperVisor Id ">{{ employee.superVisorId }}</td>
+            <td data-th="SuperVisor Id ">{{employee.superVisorId }}</td>
             <td data-th="Pay Type ">{{ employee.payType }}</td>
             <td data-th="Pay ">{{ employee.pay }}</td>
             <td data-th="OverTime Rate">{{ employee.overTimeRate }}</td>
@@ -342,9 +342,11 @@
               </div>
             </div>
           </div>
+
+          <!-- *ngIf="employeeForm.value.isSupervisor"  in: ng-select-->
           <div class="form-group">
             <ng-select
-              *ngIf="employeeForm.value.isSupervisor"
+         
               [items]="supervisors"
               placeholder="Select SuperVisor"
               bindLabel="employeeName"
@@ -358,17 +360,18 @@
             <div class="col-sm-6">
               <div class="can-toggle">
                 <input
-                  name="payType"
-                  id="payType"
-                  formControlName="payType"
+                  name="payTypeCheck"
+                  id="payTypeCheck"
+                  formControlName="payTypeCheck"
                   type="checkbox" 
                 />
-                <label for="payType">
+                <label for="payTypeCheck">
                   <div
                     class="can-toggle__switch"
                     data-checked="Salary"
                     data-unchecked="Hourly"
                   ></div>
+
                 </label>
               </div>
             </div>

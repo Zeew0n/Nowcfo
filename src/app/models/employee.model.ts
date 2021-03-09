@@ -14,7 +14,7 @@ export class EmployeeModel extends BaseEntity {
     isSupervisor: boolean;
     superVisorId: string;
     payType: string;
-    pay: boolean;
+    pay: string;
     overTimeRate: string;
     employeepermissions: EmployeePermission[];
 
