@@ -7,7 +7,8 @@
   <div class="content">
     <div class="title-container">
       <h1 class="page-title"  *ngIf="orgList">Organizations</h1>
-      <div class="table-responsive" *ngIf="orgList">
+    </div>
+    <div class="table-responsive" *ngIf="orgList">
         <table class="table table-harbor">
           <thead>
             <tr>
@@ -45,7 +46,7 @@
             </tr>
           </tbody>
         </table>
-      </div>
+    </div>
       <div *ngIf="empList">
       <div class="table-responsive" *ngIf="orgEmployees.organization||orgEmployees.childOrganization">
         <h4>{{orgEmployees.organization}}</h4>
@@ -74,7 +75,7 @@
       </div>
       <app-org-employees *ngIf="orgEmployees.childOrganization.length>0" [orgList]="orgEmployees.childOrganization"></app-org-employees>
     </div>
-    </div>
+  
    
 
  
