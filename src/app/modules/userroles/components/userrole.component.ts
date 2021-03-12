@@ -73,28 +73,24 @@ export class UserRoleComponent {
     this.openModal(content);
   }
 
-  Delete(id) {
+  Delete() {
     debugger
-    this.roleService.DeleteRole(id).subscribe(
+    this.roleService.DeleteRole(this.selectedRole).subscribe(
       (result) => {
         if (result == null) {
           this.modalService.dismissAll();
-          this.toastr.success(
-            'role delete successfully.',
-            'success!'
-          );
+          this.toastr.success('Role deleted successfully.', 'success!');
           this.getRoles();
         } else {
           this.toastr.success('something went wrong.', 'error!');
         }
       },
       (error) => {
-        console.log(error);
-        this.toastr.error(error.error.errormessage, 'error!');
+        console.log(error.errorMessage);
+        this.toastr.error('Cannot delete role', 'error!');
       }
     );
   }
-
   open(content) {
     this.isUpdate = false;
     this.resetFrom();
@@ -189,6 +185,7 @@ export class UserRoleComponent {
     this.modalService.open(content, {
       ariaLabelledBy: 'modal-basic-title',
       windowClass: 'modal-cfo',
+      backdropClass:'static'
     });
   }
 

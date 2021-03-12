@@ -56,7 +56,7 @@
             <td data-th="Pay ">{{ employee.pay }}</td>
             <td data-th="OverTime Rate">{{ employee.overTimeRate }}</td>
 
-            <td data-th="IsActive ">{{ employee.status }}</td>
+            <td data-th="IsActive ">{{ employee.isActive }}</td>
             <td data-th="Actions">
               <a
                 (click)="EditData(content, employee)"
@@ -68,7 +68,7 @@
               <span></span>
               <a
                 class="icon-holder"
-                (click)="Delete(employee.employeeId)"
+                (click)="openDeleteModal(deletecontent,employee.employeeId)"
                 href="javascript:void(0)"
                 title="delete"
                 ><i class="icon icon-circle-block"></i
@@ -88,6 +88,7 @@
           [formGroup]="employeeForm"
           (ngSubmit)="onSubmit()"
         >
+          <!-- {{ employeeForm.value | json }} -->
           <div class="form-group">
             <input
               type="text"
@@ -128,17 +129,15 @@
 
                 <div
                   *ngIf="
-                    employeeForm.controls.email.touched &&
-                    employeeForm.controls.email.errors?.email || employeeForm.controls.email.touched &&  employeeForm.controls.email.errors?.required
-                   
+                    (employeeForm.controls.email.touched &&
+                      employeeForm.controls.email.errors?.email) ||
+                    (employeeForm.controls.email.touched &&
+                      employeeForm.controls.email.errors?.required)
                   "
                   class="error-msg"
                 >
                   Email is invalid!
                 </div>
-                <!-- <div *ngIf="employeeForm.controls.email.errors?.email" class="error-msg">
-                                    Email is invalid
-                                </div> -->
               </div>
             </div>
 
@@ -245,6 +244,23 @@
             </div>
           </div>
 
+          <div class="form-group">
+            <ng-select
+              [items]="stateList"
+              bindLabel="name"
+              bindValue="name"
+              style="width: 100%"
+              [searchable]="true"
+              [dropdownPosition]="'bottom'"
+              formControlName="state"
+              [selectOnTab]="true"
+              [tabIndex]="7"
+              placeholder="Select State"
+              (change)="onStateChange($event)"
+            >
+            </ng-select>
+          </div>
+
           <div class="row">
             <div class="col-sm-6">
               <div class="form-group">
@@ -300,17 +316,6 @@
               </div>
             </div>
 
-            <!-- <div class="col-sm-6">
-              <div class="form-group">
-                <input
-                  type="text"
-                  class="form-control"
-                  formControlName="payType"
-                  placeholder="Pay Type"
-                />
-              </div>
-            </div> -->
-
             <div class="col-sm-6">
               <div class="form-group">
                 <input
@@ -353,7 +358,6 @@
           <!-- *ngIf="employeeForm.value.isSupervisor"  in: ng-select-->
           <div class="form-group">
             <ng-select
-         
               [items]="supervisors"
               placeholder="Select SuperVisor"
               bindLabel="employeeName"
@@ -370,7 +374,7 @@
                   name="payTypeCheck"
                   id="payTypeCheck"
                   formControlName="payTypeCheck"
-                  type="checkbox" 
+                  type="checkbox"
                 />
                 <label for="payTypeCheck">
                   <div
@@ -378,7 +382,6 @@
                     data-checked="Salary"
                     data-unchecked="Hourly"
                   ></div>
-
                 </label>
               </div>
             </div>
@@ -425,7 +428,7 @@
           Employee?
         </h3>
         <div class="float-right">
-          <button type="submit" class="btn btn-green mr-3">
+          <button type="submit" (click)="Delete()" class="btn btn-green mr-3">
             {{ EventValue }}
           </button>
           <button

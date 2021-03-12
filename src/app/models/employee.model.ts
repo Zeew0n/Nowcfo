@@ -7,6 +7,7 @@ export class EmployeeModel extends BaseEntity {
     email: string;
     phoneNumber: string;
     address: string;
+    state:string;
     city: string;
     zipCode: string;
     organizationId: string;
@@ -14,6 +15,7 @@ export class EmployeeModel extends BaseEntity {
     designationId: string;
     designationName:string;
     isSupervisor: boolean;
+    isActive:boolean;
     superVisorId: string;
     payType: string;
     pay: string;

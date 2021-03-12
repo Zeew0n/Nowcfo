@@ -25,6 +25,7 @@ import { EmployeeModel } from 'src/app/models/employee.model';
 import { DesignationModel } from 'src/app/models/designation.model';
 import { EmployeeService } from '../services/employee.service';
 import { OrganizationModel } from 'src/app/models/organization.model';
+import csc from 'country-state-city';
 @Component({
   selector: 'app-employee-list',
   styleUrls: ['employee.component.scss'],
@@ -57,9 +58,11 @@ export class EmployeeComponent {
   isEdit: boolean = false;
   selectedSimpleItem = 'User';
   websiteList: any = ['User', 'Admin'];
+  stateList: Array<any>;
   simpleItems = [];
   isUpdate = false;
   selectemployee;
+  selectedEmployeeId:number;
 
   //for checkboxes
 
@@ -78,17 +81,18 @@ export class EmployeeComponent {
   /* Form Declarations */
   employeeForm: FormGroup;
   EventValue: any = 'Save';
-  //isActive: boolean;
+  isActive: boolean;
   hasUser: boolean = false;
   hasAdmin: boolean = false;
   hasSuperAdmin: boolean = false;
 
   employeeName = new FormControl('', [Validators.required]);
-  email = new FormControl('', [Validators.required,Validators.email]);
+  email = new FormControl('', [Validators.required, Validators.email]);
   phoneNumber = new FormControl('', [Validators.required]);
   address = new FormControl('', [Validators.required]);
   city = new FormControl('', [Validators.required]);
   zipCode = new FormControl('', [Validators.required]);
+  state = new FormControl('', [Validators.required]);
   organizationId = new FormControl(true, [Validators.required]);
   designationId = new FormControl('', [Validators.required]);
   superVisorId = new FormControl('');
@@ -115,7 +119,6 @@ export class EmployeeComponent {
       itemsShowLimit: 3,
       allowSearchFilter: true
     };
-
   }
 
   checkIsSupervisor(event) {
@@ -199,6 +202,8 @@ export class EmployeeComponent {
 
 
   initializeemployeeForm() {
+    this.stateList = csc.getStatesOfCountry('US');
+
     this.employeeForm = new FormGroup({
       employeeName: this.employeeName,
       email: this.email,
@@ -206,6 +211,7 @@ export class EmployeeComponent {
       address: this.address,
       city: this.city,
       zipCode: this.zipCode,
+      state: this.state,
       organizationId: this.organizationId,
       designationId: this.designationId,
       isSupervisor: this.isSupervisor,
@@ -217,27 +223,32 @@ export class EmployeeComponent {
     });
   }
 
-  Delete(id) {
 
-    console.log('Hello Ashok!');
-    this.employeeService.DeleteEmployee(id).subscribe(
+  openDeleteModal(content, id) {
+    this.EventValue = 'Delete';
+    this.selectedEmployeeId = id;
+    this.openModal(content);
+  }
+
+  Delete() {
+    debugger
+    this.employeeService.DeleteEmployee(this.selectedEmployeeId).subscribe(
       (result) => {
-        if (confirm(' Are you sure to delete this record? ')) {
-          if (result == null) {
-            this.modalService.dismissAll();
-            this.toastr.success('Employee Delete Successfully.', 'Success!');
-            this.getEmployees();
-          } else {
-            this.toastr.success('Something went Wrong.', 'Error!');
-          }
+        if (result == null) {
+          this.modalService.dismissAll();
+          this.toastr.success('Employee delete successfully.', 'success!');
+          this.getEmployees();
+        } else {
+          this.toastr.success('something went wrong.', 'error!');
         }
       },
       (error) => {
-        console.log(error);
-        this.toastr.error(error.error.errorMessage, 'Error!');
+        console.log(error.errorMessage);
+        this.toastr.error('Cannot delete employee', 'error!');
       }
     );
   }
+
 
   open(content) {
     this.isUpdate = false;
@@ -246,6 +257,16 @@ export class EmployeeComponent {
     this.userId = '';
     this.employee == null;
     this.openModal(content);
+  }
+
+  /**
+   * Triggers on state option change
+   * @param event 
+   */
+  onStateChange(event) {
+    if (event !== undefined) {
+      this.employeeForm.controls.state.setValue(event.name);
+    }
   }
 
   onSubmit() {
@@ -280,6 +301,7 @@ export class EmployeeComponent {
           address: createForm.address,
           city: createForm.city,
           zipCode: createForm.zipCode,
+          state: createForm.state,
           organizationId: createForm.organizationId,
           designationId: createForm.designationId,
           isSupervisor: createForm.isSupervisor,
@@ -291,19 +313,16 @@ export class EmployeeComponent {
           employeepermissions: createForm.orgPermissionId?.map(x => x.item_id)
         };
 
-        if(model.payTypeCheck)
-        
-      {
-        debugger
-        model.payType= "Salary";
-
-      }
-        else
-        {
+        if (model.payTypeCheck) {
           debugger
-          model.payType="Hourly";
+          model.payType = "Salary";
+
         }
-      
+        else {
+          debugger
+          model.payType = "Hourly";
+        }
+
 
         this.employeeService.CreateEmployee(model).subscribe(
           (res) => {
@@ -332,6 +351,7 @@ export class EmployeeComponent {
         model.address = createForm.address;
         model.city = createForm.city;
         model.zipCode = createForm.zipCode;
+        model.state = createForm.state.name;
         model.email = createForm.email;
         model.organizationId = createForm.organizationId;
         model.designationId = createForm.designationId;
@@ -391,18 +411,21 @@ export class EmployeeComponent {
       address: employee.address,
       city: employee.city,
       zipCode: employee.zipCode,
+      // state:employee.state,
       organizationId: employee.organizationId,
       designationId: employee.designationId,
       isSupervisor: employee.isSupervisor,
       superVisorId: employee.superVisorId,
       payType: employee.payType,
-      payTypeCheck:employee.payType=="Salary"?true:false,
+      payTypeCheck: employee.payType == "Salary" ? true : false,
       pay: employee.pay,
       overTimeRate: employee.overTimeRate,
     });
+
     this.modalService.open(content, {
       ariaLabelledBy: 'modal-basic-title',
       windowClass: 'modal-cfo',
+      backdrop: 'static'
     });
   }
 

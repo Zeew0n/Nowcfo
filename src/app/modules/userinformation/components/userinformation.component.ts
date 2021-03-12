@@ -63,8 +63,8 @@ export class UserInformationComponent {
   hasSuperAdmin: boolean = false;
 
   userName = new FormControl('', [Validators.required]);
-  email = new FormControl('', Validators.email);
-  phoneNumber = new FormControl('', [Validators.required]);
+  email = new FormControl('', [Validators.email,Validators.required]);
+  phoneNumber = new FormControl('', [Validators.required, Validators.pattern("^((\\+91-?)|0)?[0-9]{10}$")]);
   firstName = new FormControl('', [Validators.required]);
   lastName = new FormControl('', [Validators.required]);
   //password = new FormControl('', [Validators.required]);
@@ -142,23 +142,28 @@ export class UserInformationComponent {
     console.log(e.target.value);
   }
 
-  Delete(id) {
-    debugger;
-    this.userInformationService.DeleteUser(id).subscribe(
+  openDeleteModal(content, id) {
+    this.EventValue = 'Delete';
+    this.selectuserinformation = id;
+    this.openModal(content);
+  }
+
+
+  Delete() {
+    debugger
+    this.userInformationService.DeleteUser(this.selectuserinformation).subscribe(
       (result) => {
-        if (confirm(' Are you sure to delete this record? ')) {
-          if (result == null) {
-            this.modalService.dismissAll();
-            this.toastr.success('User Delete Successfully.', 'Success!');
-            this.getUsers();
-          } else {
-            this.toastr.success('Something went Wrong.', 'Error!');
-          }
+        if (result == null) {
+          this.modalService.dismissAll();
+          this.toastr.success('User deleted successfully.', 'success!');
+          this.getRoles();
+        } else {
+          this.toastr.success('something went wrong.', 'error!');
         }
       },
       (error) => {
-        console.log(error);
-        this.toastr.error(error.error.errorMessage, 'Error!');
+        console.log(error.errorMessage);
+        this.toastr.error('Cannot delete user', 'error!');
       }
     );
   }
@@ -285,6 +290,7 @@ export class UserInformationComponent {
       ariaLabelledBy: 'modal-basic-title',
       backdrop: false,
       windowClass: 'modal-cfo',
+      backdropClass:'static'
     });
   }
 
@@ -294,6 +300,7 @@ export class UserInformationComponent {
         ariaLabelledBy: 'modal-basic-title',
         backdrop: false,
         windowClass: 'modal-cfo',
+        backdropClass:'static'
       })
       .result.then(
         (result) => {

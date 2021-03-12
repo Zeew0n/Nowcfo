@@ -36,7 +36,7 @@
                 <span></span>
                 <a
                   class="icon-holder"
-                  (click)="Delete(designation.designationId)"
+                  (click)="openDeleteModal(deletecontent,designation.designationId)"
                   href="javascript:void(0)"
                   title="delete"
                   ><i class="icon icon-circle-block"></i
@@ -71,7 +71,7 @@
                   <input
                     type="checkbox"
                     id="checkboxId"
-                    formControlName="isActive" 
+                    formControlName="isActive"
                   />
                   <span>Is Active</span>
                 </div>
@@ -80,7 +80,7 @@
             </div>
      
             <div class="float-right">
-              <button type="submit" class="btn btn-green mr-3" [disabled]="designationForm.invalid" >
+              <button type="submit"  class="btn btn-green mr-3" [disabled]="designationForm.invalid" >
                 {{ EventValue }}
               </button>
               <button
@@ -102,7 +102,7 @@
             role?
           </h3>
           <div class="float-right">
-            <button type="submit" class="btn btn-green mr-3">
+            <button type="submit" (click)="Delete()" class="btn btn-green mr-3">
               {{ EventValue }}
             </button>
             <button
