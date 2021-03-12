@@ -69,35 +69,31 @@ export class EmployeeRoleComponent {
     });
   }
   openDeleteModal(content, id) {
+    debugger
     this.EventValue = 'Delete';
     this.selectedDesignationId = id;
     this.openModal(content);
   }
 
-  Delete(id) {
-    alert("hello");
+
+  Delete() {
     debugger
-    this.designationService.DeleteDesignation(id).subscribe(
-      
+    this.designationService.DeleteDesignation(this.selectedDesignationId).subscribe(
       (result) => {
         if (result == null) {
           this.modalService.dismissAll();
-          this.toastr.success(
-            'role delete successfully.',
-            'success!'
-          );
+          this.toastr.success('Role deleted successfully.', 'success!');
           this.getRoles();
         } else {
           this.toastr.success('something went wrong.', 'error!');
         }
       },
       (error) => {
-        console.log(error);
-        this.toastr.error(error.error.errormessage, 'error!');
+        console.log(error.errorMessage);
+        this.toastr.error('Cannot delete role', 'error!');
       }
     );
   }
-
   open(content) {
     this.isUpdate = false;
     this.resetFrom();
@@ -191,14 +187,18 @@ export class EmployeeRoleComponent {
     this.modalService.open(content, {
       ariaLabelledBy: 'modal-basic-title',
       windowClass: 'modal-cfo',
+      backdrop: 'static'
     });
   }
 
+
+  
   private openModal(content: any) {
     this.modalService
       .open(content, {
         ariaLabelledBy: 'modal-basic-title',
         windowClass: 'modal-cfo',
+        backdrop: 'static'
       })
       .result.then(
         (result) => {

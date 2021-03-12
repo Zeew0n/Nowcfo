@@ -30,6 +30,7 @@
     "@ng-select/ng-select": "^5.0.3",
     "@nguniversal/module-map-ngfactory-loader": "^8.2.6",
     "bootstrap": "^4.4.0",
+    "country-state-city": "^2.0.0",
     "font-awesome": "^4.7.0",
     "jquery": "^3.5.1",
     "jwt-decode": "^3.0.0-beta.2",

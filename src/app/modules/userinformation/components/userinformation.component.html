@@ -45,7 +45,7 @@
                             <a (click)="EditData(content, userinformation)" class="icon-holder"
                                 href="javascript:void(0)" title="edit"><i class="icon icon-pencil-create"></i></a>
                             <span></span>
-                            <a class="icon-holder" (click)="Delete(userinformation.id)" href="javascript:void(0)"
+                            <a class="icon-holder"  (click)="openDeleteModal(deletecontent,userinformation.id)" href="javascript:void(0)"
                                 title="delete"><i class="icon icon-circle-block"></i></a>
                         </td>
                     </tr>
@@ -64,7 +64,7 @@
                         <input type="text" formControlName="userName" class="form-control" placeholder="username"
                             [ngClass]="{'invalid-input': userForm.controls.userName.touched && userForm.controls.userName.errors}">
                         <div *ngIf="userForm.controls.userName.touched && userForm.controls.userName.errors?.required"
-                            class="error-msg ">userName is invalid</div>
+                            class="error-msg ">Username is required</div>
                     </div>
 
                     <div class="row">
@@ -74,7 +74,7 @@
                                     placeholder="First Name"
                                     [ngClass]="{'invalid-input': userForm.controls.firstName.touched && userForm.controls.firstName.errors}">
                                 <div *ngIf="userForm.controls.firstName.touched && userForm.controls.firstName.errors?.required"
-                                    class="error-msg">firstName is invalid</div>
+                                    class="error-msg">First Name is required</div>
                             </div>
 
                         </div>
@@ -86,7 +86,7 @@
                                     placeholder="Last Name"
                                     [ngClass]="{'invalid-input': userForm.controls.lastName.touched && userForm.controls.lastName.errors}">
                                 <div *ngIf="userForm.controls.lastName.touched && userForm.controls.lastName.errors?.required"
-                                    class="error-msg">lastName is invalid</div>
+                                    class="error-msg">Last name is required</div>
                             </div>
                         </div>
                     </div>
@@ -94,18 +94,35 @@
                     <div class="form-group">
                         <input type="password" formControlName="password" *ngIf="!isEdit" class="form-control"
                             placeholder="password"
-                            [ngClass]="{'invalid-input': userForm.controls.password.touched && userForm.controls.phoneNumber.errors}">
+                            [ngClass]="{'invalid-input': userForm.controls.password.touched && userForm.controls.password.errors}">
                         <div *ngIf="userForm.controls.password.touched && userForm.controls.password.errors?.required"
-                            class="error-msg">lastName is invalid</div>
+                            class="error-msg">Password is required</div>
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
-                            <div class="form-group">
-                                <input type="text" formControlName="email" class="form-control" placeholder="Email"
-                                    [ngClass]="{'invalid-input': userForm.controls.email.touched && userForm.controls.email.errors}" />
-                                <div *ngIf="userForm.controls.email.touched && userForm.controls.email.errors?.required"
-                                    class="error-msg">Email is invalid</div>
-                            </div>
+                            <input
+                  type="email"
+                  class="form-control"
+                  formControlName="email"
+                  placeholder="Email"
+                  [ngClass]="{
+                    'invalid-input':
+                      userForm.controls.email.touched &&
+                      userForm.controls.email.errors?.required
+                  }"
+                />
+
+                <div
+                  *ngIf="
+                    (userForm.controls.email.touched &&
+                      userForm.controls.email.errors?.email) ||
+                    (userForm.controls.email.touched &&
+                      userForm.controls.email.errors?.required)
+                  "
+                  class="error-msg"
+                >
+                  Email is invalid!
+                </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
@@ -148,13 +165,6 @@
                             </div>
                         </div>
 
-                        <!-- <div class="col-sm-6">
-                        <div class="form-group">
-                            <input type="text" class="form-control" formControlName="state"    placeholder="City">
-                            <div *ngIf="userForm.controls.state.touched && userForm.controls.state.errors?.required" class="error-msg">state is required</div>
-                        </div>
-                    </div> -->
-
 
                         <div class="col-sm-6">
                             <div class="form-group">
@@ -186,21 +196,26 @@
         </ng-template>
 
 
-        <ng-template #content let-modal>
+        <ng-template #deletecontent let-modal>
             <div class="container">
-                <div class="alert">
-                    <i class="fa fa-exclamation" aria-hidden="true"></i>
-                </div>
-                <h3 class="modal-title">This action is permanent.
-                    Are you sure you want to delete
-                    this User</h3>
-                <div class="btn-container">
-                    <button type="submit" class="btn btn-red mr-3"> Delete</button>
-                    <button type="button" class="btn btn-gray" (click)="modal.close('Close Button Clicked')"> Cancel
-                    </button>
-                </div>
+              <h3 class="modal-title">
+                This action is permanent. Are you sure you want to delete this
+                user?
+              </h3>
+              <div class="float-right">
+                <button type="submit" (click)="Delete()"  class="btn btn-green mr-3">
+                  {{ EventValue }}
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-gray"
+                  (click)="modal.close('Close Button Clicked')"
+                >
+                  Cancel
+                </button>
+              </div>
             </div>
-        </ng-template>
+          </ng-template>
 
     </div>
 </div>

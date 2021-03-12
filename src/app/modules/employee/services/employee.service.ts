@@ -57,7 +57,7 @@ export class EmployeeService extends HttpGenericCrudService<EmployeeModel>{
 
     DeleteEmployee(id)
     {
-        return this.httpClient.delete('employee'+id);
+        return this.httpClient.delete('employee/'+id);
     }
 
 

@@ -8,6 +8,14 @@
   <div class="content">
     <div class="title-container">
       <h1 class="page-title">Employee</h1>
+      <!-- <div>
+        <form>
+          <input type="text" placeholder="search here">
+        </form>
+      </div> -->
+      <!-- <div class="content-right">
+        mkl
+      </div> -->
     </div>
     <div class="table-responsive">
       <table class="table table-harbor">
@@ -22,10 +30,9 @@
             <th scope="col">Address</th>
             <th scope="col">City</th>
             <th scope="col">Zip Code</th>
-            <th scope="col">Organization Id</th>
-            <th scope="col">Designation Id</th>
+            <th scope="col">Organization</th>
+            <th scope="col">Designation</th>
             <th scope="col">IsSuperVisor</th>
-            <th scope="col">SuperVisor Id</th>
             <th scope="col">PayType</th>
             <th scope="col">Pay</th>
             <th scope="col">Over Time Rate</th>
@@ -42,15 +49,14 @@
             <td data-th="Address ">{{ employee.address }}</td>
             <td data-th="City">{{ employee.city }}</td>
             <td data-th="Zip Code ">{{ employee.zipCode }}</td>
-            <td data-th="Organization Id ">{{ employee.organizationId }}</td>
-            <td data-th="Designation Id ">{{ employee.designationId }}</td>
+            <td data-th="Organization Id ">{{ employee.organizationName }}</td>
+            <td data-th="Designation Id ">{{ employee.designationName }}</td>
             <td data-th="IsSuperViosr ">{{ employee.isSupervisor }}</td>
-            <td data-th="SuperVisor Id ">{{employee.superVisorId }}</td>
             <td data-th="Pay Type ">{{ employee.payType }}</td>
             <td data-th="Pay ">{{ employee.pay }}</td>
             <td data-th="OverTime Rate">{{ employee.overTimeRate }}</td>
 
-            <td data-th="IsActive ">{{ employee.status }}</td>
+            <td data-th="IsActive ">{{ employee.isActive }}</td>
             <td data-th="Actions">
               <a
                 (click)="EditData(content, employee)"
@@ -62,7 +68,7 @@
               <span></span>
               <a
                 class="icon-holder"
-                (click)="Delete(employee.employeeId)"
+                (click)="openDeleteModal(deletecontent,employee.employeeId)"
                 href="javascript:void(0)"
                 title="delete"
                 ><i class="icon icon-circle-block"></i
@@ -82,6 +88,7 @@
           [formGroup]="employeeForm"
           (ngSubmit)="onSubmit()"
         >
+          <!-- {{ employeeForm.value | json }} -->
           <div class="form-group">
             <input
               type="text"
@@ -122,16 +129,15 @@
 
                 <div
                   *ngIf="
-                    employeeForm.controls.email.touched &&
-                    employeeForm.controls.email.errors?.email
+                    (employeeForm.controls.email.touched &&
+                      employeeForm.controls.email.errors?.email) ||
+                    (employeeForm.controls.email.touched &&
+                      employeeForm.controls.email.errors?.required)
                   "
                   class="error-msg"
                 >
                   Email is invalid!
                 </div>
-                <!-- <div *ngIf="employeeForm.controls.email.errors?.email" class="error-msg">
-                                    Email is invalid
-                                </div> -->
               </div>
             </div>
 
@@ -238,6 +244,23 @@
             </div>
           </div>
 
+          <div class="form-group">
+            <ng-select
+              [items]="stateList"
+              bindLabel="name"
+              bindValue="name"
+              style="width: 100%"
+              [searchable]="true"
+              [dropdownPosition]="'bottom'"
+              formControlName="state"
+              [selectOnTab]="true"
+              [tabIndex]="7"
+              placeholder="Select State"
+              (change)="onStateChange($event)"
+            >
+            </ng-select>
+          </div>
+
           <div class="row">
             <div class="col-sm-6">
               <div class="form-group">
@@ -293,17 +316,6 @@
               </div>
             </div>
 
-            <!-- <div class="col-sm-6">
-              <div class="form-group">
-                <input
-                  type="text"
-                  class="form-control"
-                  formControlName="payType"
-                  placeholder="Pay Type"
-                />
-              </div>
-            </div> -->
-
             <div class="col-sm-6">
               <div class="form-group">
                 <input
@@ -346,7 +358,6 @@
           <!-- *ngIf="employeeForm.value.isSupervisor"  in: ng-select-->
           <div class="form-group">
             <ng-select
-         
               [items]="supervisors"
               placeholder="Select SuperVisor"
               bindLabel="employeeName"
@@ -363,7 +374,7 @@
                   name="payTypeCheck"
                   id="payTypeCheck"
                   formControlName="payTypeCheck"
-                  type="checkbox" 
+                  type="checkbox"
                 />
                 <label for="payTypeCheck">
                   <div
@@ -371,7 +382,6 @@
                     data-checked="Salary"
                     data-unchecked="Hourly"
                   ></div>
-
                 </label>
               </div>
             </div>
@@ -418,7 +428,7 @@
           Employee?
         </h3>
         <div class="float-right">
-          <button type="submit" class="btn btn-green mr-3">
+          <button type="submit" (click)="Delete()" class="btn btn-green mr-3">
             {{ EventValue }}
           </button>
           <button
