@@ -55,11 +55,9 @@
               <th scope="col">S.N </th>
               <th scope="col">Name</th>
               <th scope="col">Email</th>
+              <th scope="col">Phone</th>
               <th scope="col">Address</th>
               <th scope="col">City</th>
-              <th scope="col">Phone</th>
-              <th scope="col" class="float-right">Actions</th>
-  
             </tr>
           </thead>
           <tbody>
@@ -67,27 +65,9 @@
               <td>{{ i + 1 }}</td>
               <td data-th="employeeName ">{{ orgEmp.employeeName }}</td>
               <td data-th="First Name ">{{ orgEmp.email }}</td>
+              <td data-th="Last Name">{{ orgEmp.phoneNumber }}</td>
               <td data-th="Last Name">{{ orgEmp.address }}</td>
               <td data-th="Last Name">{{ orgEmp.city }}</td>
-              <td data-th="Last Name">{{ orgEmp.phoneNumber }}</td>
-  
-              <td data-th="Actions" class="float-right">
-                <a
-                  
-                  class="icon-holder"
-                  href="javascript:void(0)"
-                  title="edit"
-                  ><i class="icon icon-pencil-create"></i
-                ></a>
-                <span></span>
-                <a
-                  class="icon-holder"
-                  
-                  href="javascript:void(0)"
-                  title="delete"
-                  ><i class="icon icon-circle-block"></i
-                ></a>
-              </td>
             </tr>
           </tbody>
         </table>
