@@ -4,50 +4,80 @@
       New Organization
     </button>
   </div>
-
   <div class="content">
     <div class="title-container">
-      <h1 class="page-title">Organizations</h1>
+      <h1 class="page-title"  *ngIf="orgList">Organizations</h1>
+      <div class="table-responsive" *ngIf="orgList">
+        <table class="table table-harbor">
+          <thead>
+            <tr>
+              <th scope="col">S.N</th>
+              <th scope="col">Organization Name</th>
+              <th scope="col">HasParent</th>
+              <th scope="col">ParentOrganization</th>
+              <th scope="col">Action {{selectedOrgId}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let organization of organizations; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td data-th="UserName ">{{ organization.organizationName }}</td>
+              <td data-th="First Name ">{{ organization.hasParent }}</td>
+              <td data-th="Last Name">{{ organization.parentOrganization }}</td>
+  
+              <td data-th="Actions">
+                <a
+                  (click)="openEditModal(content, organization)"
+                  class="icon-holder"
+                  href="javascript:void(0)"
+                  title="edit"
+                  ><i class="icon icon-pencil-create"></i
+                ></a>
+                <span></span>
+                <a
+                  class="icon-holder"
+                  (click)="openDeleteModal(deletecontent,organization.organizationId)"
+                  href="javascript:void(0)"
+                  title="delete"
+                  ><i class="icon icon-circle-block"></i
+                ></a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div *ngIf="empList">
+      <div class="table-responsive" *ngIf="orgEmployees.organization||orgEmployees.childOrganization">
+        <h4>{{orgEmployees.organization}}</h4>
+        <table class="table table-harbor" >
+          <thead>
+            <tr>
+              <th scope="col">S.N </th>
+              <th scope="col">Name</th>
+              <th scope="col">Email</th>
+              <th scope="col">Phone</th>
+              <th scope="col">Address</th>
+              <th scope="col">City</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let orgEmp of orgEmployees.employees; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td data-th="employeeName ">{{ orgEmp.employeeName }}</td>
+              <td data-th="First Name ">{{ orgEmp.email }}</td>
+              <td data-th="Last Name">{{ orgEmp.phoneNumber }}</td>
+              <td data-th="Last Name">{{ orgEmp.address }}</td>
+              <td data-th="Last Name">{{ orgEmp.city }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <app-org-employees *ngIf="orgEmployees.childOrganization.length>0" [orgList]="orgEmployees.childOrganization"></app-org-employees>
     </div>
-    <div class="table-responsive">
-      <table class="table table-harbor">
-        <thead>
-          <tr>
-            <th scope="col">S.N</th>
-            <th scope="col">Organization Name</th>
-            <th scope="col">HasParent</th>
-            <th scope="col">ParentOrganization</th>
-            <th scope="col">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let organization of organizations; let i = index">
-            <td>{{ i + 1 }}</td>
-            <td data-th="UserName ">{{ organization.organizationName }}</td>
-            <td data-th="First Name ">{{ organization.hasParent }}</td>
-            <td data-th="Last Name">{{ organization.parentOrganization }}</td>
+    </div>
+   
 
-            <td data-th="Actions">
-              <a
-                (click)="openEditModal(content, organization)"
-                class="icon-holder"
-                href="javascript:void(0)"
-                title="edit"
-                ><i class="icon icon-pencil-create"></i
-              ></a>
-              <span></span>
-              <a
-                class="icon-holder"
-                (click)="openDeleteModal(deletecontent,organization.organizationId)"
-                href="javascript:void(0)"
-                title="delete"
-                ><i class="icon icon-circle-block"></i
-              ></a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+ 
     <ng-template #content let-modal>
       <div class="container">
         <h3 class="modal-title" *ngIf="!isEdit">Create New Organization</h3>
@@ -56,8 +86,6 @@
         <form
           class="form-cfo"
           [formGroup]="OrganizationForm">
-          <!-- <pre>{{OrganizationForm.value | json}}</pre>
-          <pre>{{OrganizationForm.controls.parentOrganizationId.errors | json}}</pre> -->
           <div class="form-group">
             <input
               type="text"

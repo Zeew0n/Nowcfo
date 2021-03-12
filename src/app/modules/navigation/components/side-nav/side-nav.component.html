@@ -8,10 +8,11 @@
         </a>
       </li>
       <li class="nav-item" *ngFor="let menu of menus">
+        
         <a
           class="nav-link"
           routerlinkactive="active"
-          (click)="toggleOrganizationNav()"
+          (click)="toggleOrganizationNav(menu)"
         >
           <i class="icon icon-user"></i>
           {{ menu }}
