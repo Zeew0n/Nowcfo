@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import {
   FormControl,
   FormBuilder,
@@ -8,9 +8,10 @@ import {
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
-import AuthenticationService from '../../user-account/services/authentication.service';
-import { OrganizationService } from '../services/organization.service';
 import { OrganizationModel } from 'src/app/models/organization.model';
+import { OrganizationService } from '../../services/organization.service';
+import AuthenticationService from 'src/app/modules/user-account/services/authentication.service';
+import { NavigationService } from 'src/app/modules/navigation/services/navigation.service';
 @Component({
   selector: 'app-organization-list',
   styleUrls: ['organization.component.scss'],
@@ -19,34 +20,43 @@ import { OrganizationModel } from 'src/app/models/organization.model';
 export class OrganizationComponent implements OnInit {
   organization: OrganizationModel = new OrganizationModel();
   organizations: OrganizationModel[];
-
-
+  orgList;
+  empList;
 
   closeResult = ''; // close result for modal
   submitted = false;
   isEdit = false;
 
   selectorganization;
-  selectedOrgId: number;
+  selectedOrgId;
+  orgEmployees;
 
   constructor(
     private fb: FormBuilder,
     private modalService: NgbModal,
     private toastr: ToastrService,
     private organizationService: OrganizationService,
-
-    private authService: AuthenticationService,
-    private route: ActivatedRoute
-  ) {}
+    private route: ActivatedRoute,
+    private navigationService: NavigationService
+  ) {
+    this.route.params.subscribe((params) => {
+      if ( params.id !== undefined) {
+      this.selectedOrgId = params.id;
+      this.getEmployeeList();
+     // alert("mike check");
+      }
+    });
+  }
 
   /* Form Declarations */
   OrganizationForm: FormGroup;
   EventValue: any = 'Save';
 
-
   ngOnInit() {
     //  this.UserForm.controls.password.setValidators(null);
-    this.getOrganizations();
+    if (!this.selectedOrgId) {
+      this.getOrganizations();
+    }
     this.initializeorganizationForm();
   }
 
@@ -59,11 +69,11 @@ export class OrganizationComponent implements OnInit {
     });
   }
 
-  
-
   getOrganizations() {
     this.organizationService.GetAllOrganizations().subscribe(
       (result) => {
+        this.orgList = true;
+        this.empList = false;
         this.organizations = result;
       },
       (error) => console.error
@@ -219,7 +229,7 @@ export class OrganizationComponent implements OnInit {
       .open(content, {
         ariaLabelledBy: 'modal-basic-title',
         windowClass: 'modal-cfo',
-        backdrop: false
+        backdrop: false,
       })
       .result.then(
         (result) => {
@@ -227,6 +237,22 @@ export class OrganizationComponent implements OnInit {
         },
         (reason) => {
           this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+        }
+      );
+  }
+
+  getEmployeeList() {
+    this.navigationService
+      .getEmployeesByOrganizationId(this.selectedOrgId)
+      .subscribe(
+        (res) => {
+          console.log(res);
+          this.empList = true;
+          this.orgList = false;
+          this.orgEmployees = res;
+        },
+        (err) => {
+          console.log(err);
         }
       );
   }

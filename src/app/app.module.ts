@@ -32,7 +32,6 @@ import { HomePageComponent } from './modules/home/components/home-page/home-page
 import { ConfirmSignupComponent } from './modules/user-account/components/confirm-signup/confirm-signup.component';
 import { ResetPasswordComponent } from './modules/user-account/components/reset-password/reset-password.component';
 import { UserInformationComponent } from './modules/userinformation/components/userinformation.component';
-import { OrganizationComponent } from './modules/organization/components/organization.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { EmployeeComponent } from './modules/employee/components/employee.component';
 import { EmployeeRoleComponent } from './modules/employeeroles/components/employeerole.component';
@@ -66,7 +65,6 @@ export function tokenGetter() {
     ConfirmSignupComponent,
     ResetPasswordComponent,
     UserInformationComponent,
-    OrganizationComponent,
     EmployeeComponent,
     EmployeeRoleComponent,
     UserRoleComponent

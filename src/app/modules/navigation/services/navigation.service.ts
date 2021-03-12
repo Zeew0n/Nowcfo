@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { HttpGenericCrudService } from '../../../services/http-generic-crud.service';
 import { Observable } from 'rxjs';
 import { OrganizationNavModel } from 'src/app/models/OrganizationNavModel';
+import { EmployeeModel } from 'src/app/models/employee.model';
 
 @Injectable({
   providedIn: 'root',
@@ -21,9 +22,13 @@ export class NavigationService extends HttpGenericCrudService<OrganizationNavMod
     return httpOptions;
   }
 
-  public getOrganizationNavigation(): any{
+  public getOrganizationNavigation(): any {
     return this.httpClient.get<OrganizationNavModel[]>(
       'Organization/OrganizationHierarchy'
     );
+  }
+
+  getEmployeesByOrganizationId( id):any {
+    return this.httpClient.get<EmployeeModel[]>('Organization/EmployeesByOrganizationHierarchy/'+id)
   }
 }
