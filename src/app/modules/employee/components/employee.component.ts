@@ -18,14 +18,18 @@ import {
   NgbDateStruct,
 } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, ChildrenOutletContexts, Router } from '@angular/router';
 import { RoleModel } from 'src/app/models/role.model';
 import AuthenticationService from '../../user-account/services/authentication.service';
 import { EmployeeModel } from 'src/app/models/employee.model';
 import { DesignationModel } from 'src/app/models/designation.model';
 import { EmployeeService } from '../services/employee.service';
 import { OrganizationModel } from 'src/app/models/organization.model';
+import { DownlineTreeviewItem, TreeviewConfig, TreeviewItem } from 'ngx-treeview';
 import csc from 'country-state-city';
+import { NavigationService } from '../../navigation/services/navigation.service';
+import { EmployeeUpdateModel } from 'src/app/models/EmployeeUpdateModel';
+import { analyzeNgModules } from '@angular/compiler';
 @Component({
   selector: 'app-employee-list',
   styleUrls: ['employee.component.scss'],
@@ -50,6 +54,8 @@ export class EmployeeComponent {
 
   emailAttachmentList: Array<any> = [];
 
+  employeeId = '';
+
 
   isSubmitting: boolean; // Form submission variable
   closeResult = ''; // close result for modal
@@ -62,21 +68,49 @@ export class EmployeeComponent {
   simpleItems = [];
   isUpdate = false;
   selectemployee;
-  selectedEmployeeId:number;
+  selectedEmployeeId:string;
 
-  //for checkboxes
+selectedIds=[];
+
+
+  //for treeview
+  values: number[];
+
+  updatevalues: number[];
+
+  rows:number[];
+
+  items= [];
+
+  updateitems=[];
+
+  config = TreeviewConfig.create({
+    hasAllCheckBox: true,
+    hasFilter: false,
+    hasCollapseExpand: true,
+    decoupleChildFromParent: true,
+    maxHeight: 400,
+  });
+
+
+
+
+
 
   constructor(
     private fb: FormBuilder,
     private modalService: NgbModal,
     private toastr: ToastrService,
     private employeeService: EmployeeService,
-
+    private navigationService: NavigationService,
     private authService: AuthenticationService,
     private route: ActivatedRoute
   ) {
 
   }
+
+
+  
 
   /* Form Declarations */
   employeeForm: FormGroup;
@@ -107,7 +141,6 @@ export class EmployeeComponent {
     this.getEmployees();
     this.getOrganizations();
     this.getDesignations();
-    //this.getSuperVisors();
     this.initializeemployeeForm();
 
     this.dropdownEmailAttachmentSettings = {
@@ -121,31 +154,54 @@ export class EmployeeComponent {
     };
   }
 
+  selectParent(id){
+    const match = this.selectedIds.find(x=>x===id);
+    if(!match){
+    this.selectedIds.push(id);
+    }
+  }
+
+  onSelectedChange(downlineItems: TreeviewItem[]): void {
+    this.selectedIds.push('');
+    downlineItems.forEach(downlineItem => {
+      debugger
+      const rec = downlineItem;
+    });
+    // this.rows = [];
+    // downlineItems.forEach(downlineItem => {
+    //   const rec = downlineItem;
+    //   let parent = downlineItem.parent;
+    //   let valueSelected: any = null;
+    //   if (parent.item != null && !parent.item.children.some(ele => ele.checked !== true)) {
+    //     valueSelected = parent.item.value;
+    //     parent = parent.parent;
+
+    //     while (!isNil(parent)) {
+    //       if (parent.item != null && !parent.item.children.some(ele => ele.checked !== true)) {
+    //         valueSelected = parent.item.value;
+    //       }
+    //       parent = parent.parent;
+    //     }
+    //   } else {
+    //     valueSelected = downlineItem.item.value;
+    //   }
+
+
+    //   if (!this.rows.some(ele => isEqual(ele, valueSelected)))
+    //     this.rows.push(valueSelected);
+    // });
+  }
+
+  onFilterChange(value: string): void {
+    debugger
+    alert('ashok');
+    console.log('filter:', value);
+  }
+
   checkIsSupervisor(event) {
     console.log('test');
-    //this.getSuperVisors(id);
   }
 
-  private checkPermissions() {
-    const role = this.authService.getUserRole();
-
-    if (role == 'User') {
-      this.hasUser = true;
-    } else {
-      this.hasUser = false;
-    }
-    if (role == 'Admin') {
-      this.hasAdmin = true;
-    } else {
-      this.hasAdmin = false;
-    }
-
-    if (role == 'SuperAdmin') {
-      this.hasSuperAdmin = true;
-    } else {
-      this.hasSuperAdmin = false;
-    }
-  }
 
   get f() {
     return this.employeeForm.controls;
@@ -174,7 +230,6 @@ export class EmployeeComponent {
     this.employeeService.GetAllSuperVisors(id.value).subscribe(
       (result) => {
         this.supervisors = result;
-        console.log('test', this.supervisors);
       },
       (error) => console.error
     );
@@ -199,10 +254,57 @@ export class EmployeeComponent {
   }
 
 
+ test=[];
+  getOrganizatioNavigation() {
+    this.navigationService.getOrganizationNavigation().subscribe(
+      (res) => {
+        this.items.length = 0;
+        res.forEach((data) => {
+          const item = {
+            text: data.text,
+            value: data.value,
+            collapsed: true,
+            checked:false,
+            children: data.children,
+            level: data.level
+          };
+          this.items.push(item);
+          console.log('Data', this.items);
+        });
+      },
+      (error) => console.error(error)
+    );
+  }
+
+
+
+  getEmployeePermissionNavigation(id:any) {
+    this.employeeService.getEmployeePermissionNavigationById(id).subscribe(
+      (res) => {
+        this.updateitems.length = 0;
+        res.forEach((data) => {
+          const item = {
+            text: data.text,
+            value: data.value,
+            checked:data.checked,
+            collapsed: true,
+            children: data.children,
+            level: data.level
+          };
+          this.updateitems.push(item);
+          console.log('Data', this.updateitems);
+        });
+      },
+      (error) => console.error(error)
+    );
+  }
+
 
 
   initializeemployeeForm() {
     this.stateList = csc.getStatesOfCountry('US');
+    this.getOrganizatioNavigation();
+
 
     this.employeeForm = new FormGroup({
       employeeName: this.employeeName,
@@ -222,6 +324,59 @@ export class EmployeeComponent {
       orgPermissionId: this.orgPermissionId
     });
   }
+
+
+  //Edit
+  EditData(content, id: string) {
+    this.selectedEmployeeId = id;
+    this.resetFrom();
+    this.employeeId = id;
+   
+    this.isUpdate= true;
+    this.isEdit = true;
+    this.getEmployeeById(id, content);
+  }
+
+  private displayFormData(data: EmployeeUpdateModel,id:any) {
+    this.getEmployeePermissionNavigation(id);
+    this.employeeForm.patchValue({
+      employeeName: data.employeeName,
+      email: data.email,
+      phoneNumber: data.phoneNumber,
+      address: data.address,
+      city: data.city,
+      zipCode: data.zipCode,
+      state:data.state,
+      organizationId: data.organizationId,
+      designationId: data.designationId,
+      isSupervisor: data.isSupervisor,
+      superVisorId: data.superVisorId,
+      payType: data.payType,
+      payTypeCheck: data.payType == "Salary" ? true : false,
+      pay: data.pay,
+      overTimeRate: data.overTimeRate,
+      orgPermissionId: this.updateitems
+    });
+  }
+
+
+
+  getEmployeeById(id: string, content) {
+    debugger
+    this.employeeService.getEmployeeById(id).subscribe(
+      (res: EmployeeUpdateModel) => {
+        if (res)
+        this.isEdit = true;
+        this.EventValue = 'Update';
+        this.displayFormData(res, id);
+        this.openModal(content);
+      },
+      error => {
+        this.toastr.error(error.error.errorMessage !== undefined ?
+          error.error.errorMessage : 'Employee Create failed', 'Error!');
+      });
+  }
+
 
 
   openDeleteModal(content, id) {
@@ -270,30 +425,12 @@ export class EmployeeComponent {
   }
 
   onSubmit() {
-    debugger
 
     const createForm = this.employeeForm.value;
     console.log(createForm);
 
     if (!this.isUpdate) {
       if (this.employeeForm.valid) {
-        //const model = new EmployeeModel();
-        // model.employeeName = createForm.employeeName;
-        // model.email = createForm.email;
-        // model.phoneNumber = createForm.phoneNumber;
-        // model.address = createForm.address;
-        // model.city = createForm.city;
-        // model.zipCode = createForm.zipCode;
-        // model.email = createForm.email;
-        // model.organizationId = createForm.organizationId;
-        // model.designationId = createForm.designationId;
-        // model.isSupervisor = createForm.isSupervisor;
-        // model.superVisorId = createForm.superVisorId;
-        // model.pay = createForm.pay;
-        // model.payType == createForm.payType?true:false;
-        // model.overTimeRate = createForm.overTimeRate;
-        // model.employeepermissions = createForm.orgPermissionId?.map(x => x.item_id)
-
         const model = {
           employeeName: createForm.employeeName,
           email: createForm.email,
@@ -310,7 +447,7 @@ export class EmployeeComponent {
           pay: createForm.pay,
           overTimeRate: createForm.overTimeRate,
           payType: "",
-          employeepermissions: createForm.orgPermissionId?.map(x => x.item_id)
+          employeepermissions: this.values
         };
 
         if (model.payTypeCheck) {
@@ -342,26 +479,40 @@ export class EmployeeComponent {
       }
     } else {
       if (this.employeeForm.valid) {
-        const model = new EmployeeModel();
-        debugger;
 
-        model.employeeName = createForm.employeeName;
-        model.email = createForm.email;
-        model.phoneNumber = createForm.phoneNumber;
-        model.address = createForm.address;
-        model.city = createForm.city;
-        model.zipCode = createForm.zipCode;
-        model.state = createForm.state.name;
-        model.email = createForm.email;
-        model.organizationId = createForm.organizationId;
-        model.designationId = createForm.designationId;
-        model.isSupervisor = createForm.isSupervisor;
-        model.superVisorId = createForm.superVisorId;
-        model.payType = createForm.payType;
-        model.pay = createForm.pay;
-        model.overTimeRate = createForm.overTimeRate;
-        model.employeeId = this.selectemployee.employeeId;
-        this.employeeService.updateEmployee(model.employeeId, model).subscribe(
+
+        const model = {
+          employeeName: createForm.employeeName,
+          email: createForm.email,
+          phoneNumber: createForm.phoneNumber,
+          address: createForm.address,
+          city: createForm.city,
+          zipCode: createForm.zipCode,
+          state: createForm.state,
+          organizationId: createForm.organizationId,
+          designationId: createForm.designationId,
+          isSupervisor: createForm.isSupervisor,
+          superVisorId: createForm.superVisorId,
+          payTypeCheck: createForm.payTypeCheck ? true : false,
+          pay: createForm.pay,
+          overTimeRate: createForm.overTimeRate,
+          payType: "",
+          employeepermissions: this.updatevalues
+        };
+
+        if(model.payTypeCheck) {
+          
+          model.payType = "Salary";
+
+        }
+        else {
+          
+          model.payType = "Hourly";
+        }
+
+        this.employeeId = this.selectedEmployeeId;
+        debugger
+        this.employeeService.updateEmployee(this.employeeId,model).subscribe(
           (res) => {
             this.toastr.success('Employee Updated Successfully.', 'Success!');
             this.modalService.dismissAll();
@@ -397,37 +548,10 @@ export class EmployeeComponent {
     this.employee == null;
   }
 
-  EditData(content, employee: any) {
-    this.isUpdate = true;
-    this.isEdit = true;
-    this.selectemployee = employee;
-    debugger;
-    console.log(employee);
-    this.EventValue = 'Update';
-    this.employeeForm.patchValue({
-      employeeName: employee.employeeName,
-      email: employee.email,
-      phoneNumber: employee.phoneNumber,
-      address: employee.address,
-      city: employee.city,
-      zipCode: employee.zipCode,
-      // state:employee.state,
-      organizationId: employee.organizationId,
-      designationId: employee.designationId,
-      isSupervisor: employee.isSupervisor,
-      superVisorId: employee.superVisorId,
-      payType: employee.payType,
-      payTypeCheck: employee.payType == "Salary" ? true : false,
-      pay: employee.pay,
-      overTimeRate: employee.overTimeRate,
-    });
 
-    this.modalService.open(content, {
-      ariaLabelledBy: 'modal-basic-title',
-      windowClass: 'modal-cfo',
-      backdrop: 'static'
-    });
-  }
+
+
+
 
   private openModal(content: any) {
     this.modalService
@@ -444,5 +568,9 @@ export class EmployeeComponent {
           this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
         }
       );
+  }
+
+  onIdFromChild(event){
+    this.selectedIds.push(event);
   }
 }

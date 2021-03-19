@@ -3,6 +3,7 @@
         <button type="button" class="btn btn-green" (click)="open(content)">
             New User
         </button>
+        
     </div>
 
     <div class="content">
@@ -61,6 +62,7 @@
 
                 <form class="form-cfo" [formGroup]="userForm" (ngSubmit)="onSubmit()">
                     <div class="form-group">
+                        <label>UserName</label>
                         <input type="text" formControlName="userName" class="form-control" placeholder="username"
                             [ngClass]="{'invalid-input': userForm.controls.userName.touched && userForm.controls.userName.errors}">
                         <div *ngIf="userForm.controls.userName.touched && userForm.controls.userName.errors?.required"
@@ -70,6 +72,7 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
+                                <label>First Name</label>
                                 <input type="text" class="form-control" formControlName="firstName"
                                     placeholder="First Name"
                                     [ngClass]="{'invalid-input': userForm.controls.firstName.touched && userForm.controls.firstName.errors}">
@@ -82,6 +85,7 @@
 
                         <div class="col-sm-6">
                             <div class="form-group">
+                                <label>Last Name</label>
                                 <input type="text" class="form-control" formControlName="lastName"
                                     placeholder="Last Name"
                                     [ngClass]="{'invalid-input': userForm.controls.lastName.touched && userForm.controls.lastName.errors}">
@@ -92,6 +96,7 @@
                     </div>
 
                     <div class="form-group">
+                        <label>Password</label>
                         <input type="password" formControlName="password" *ngIf="!isEdit" class="form-control"
                             placeholder="password"
                             [ngClass]="{'invalid-input': userForm.controls.password.touched && userForm.controls.password.errors}">
@@ -100,6 +105,7 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
+                            <label>Email</label>
                             <input
                   type="email"
                   class="form-control"
@@ -126,6 +132,7 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
+                                <label>Phone Number</label>
 
                                 <input type="text" formControlName="phoneNumber" class="form-control"
                                     placeholder="Phone"
@@ -149,6 +156,7 @@
 
 
                     <div class="form-group">
+                        <label>Address</label>
                         <input type="text" class="form-control" formControlName="address" placeholder="Address"
                             [ngClass]="{'invalid-input': userForm.controls.address.touched && userForm.controls.address.errors}">
                         <div *ngIf="userForm.controls.address.touched && userForm.controls.address.errors?.required"
@@ -158,6 +166,7 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
+                                <label>City</label>
                                 <input type="text" class="form-control" formControlName="city" placeholder="City"
                                     [ngClass]="{'invalid-input': userForm.controls.city.touched && userForm.controls.city.errors}">
                                 <div *ngIf="userForm.controls.city.touched && userForm.controls.city.errors?.required"
@@ -168,6 +177,7 @@
 
                         <div class="col-sm-6">
                             <div class="form-group">
+                                <label>ZipCode</label>
                                 <input type="text" class="form-control" formControlName="zipCode" placeholder="Zip Code"
                                     [ngClass]="{'invalid-input': userForm.controls.zipCode.touched && userForm.controls.zipCode.errors}">
                                 <div *ngIf="userForm.controls.zipCode.touched && userForm.controls.zipCode.errors?.required"
@@ -179,6 +189,7 @@
                     </div>
 
                     <div class="form-group">
+                        <label>Role</label>
                         <ng-select [items]="roles" bindLabel="roleName" bindValue="roleId"  placeholder="Select Role" formControlName="roleId" class="cfo-select">
                         </ng-select>
                         <!-- {{userForm.value|json}} -->

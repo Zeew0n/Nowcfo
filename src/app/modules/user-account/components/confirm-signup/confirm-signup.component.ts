@@ -46,6 +46,7 @@ export class ConfirmSignupComponent implements OnInit {
             this.ConfirmUserService.confirmUser(this.userId, this.token)
                 .subscribe(() => {
                     this.isTokenValid = true;
+                    this.router.navigateByUrl('login');
                 }, error => {
                     this.isTokenValid = false;
                 });

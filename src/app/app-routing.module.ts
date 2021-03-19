@@ -68,6 +68,25 @@ export const routes: Routes = [
           ),
         canActivate: [AuthGuard],
       },
+
+      {
+        path: 'menu',
+        loadChildren: () =>
+          import('./modules/menu/menu-routing.module').then(
+            (m) => m.MenuRoutingModule
+          ),
+        canActivate: [AuthGuard],
+      },
+      
+      // {
+      //   path: 'role-menu',
+      //   loadChildren: () =>
+      //     import('./modules/employee/employee.module').then(
+      //       (m) => m.EmployeeModule
+      //     ),
+      //   canActivate: [AuthGuard],
+      // },
+
       {
         path: 'organization-information',
         loadChildren: () =>
@@ -85,4 +104,4 @@ export const routes: Routes = [
   exports: [RouterModule],
   providers: [],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

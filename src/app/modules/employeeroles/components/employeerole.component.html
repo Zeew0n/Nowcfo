@@ -57,6 +57,7 @@
             (ngSubmit)="onSubmit()"
           >
           <div class="form-group">
+            <label>Designation Name</label>
             <input type="text" formControlName="designationName" class="form-control" placeholder="Designation Name"
                 [ngClass]="{'invalid-input': designationForm.controls.designationName.touched && designationForm.controls.designationName.errors}">
             <div *ngIf="designationForm.controls.designationName.touched && designationForm.controls.designationName.errors?.required"
