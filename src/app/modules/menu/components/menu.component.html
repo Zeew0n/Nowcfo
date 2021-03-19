@@ -1,31 +1,34 @@
 <div class="">
     <div class="btn-container">
       <button type="button" class="btn btn-green" (click)="open(content)">
-        New Role
+        New Menu
       </button>
     </div>
   
     <div class="content">
       <div class="title-container">
-        <h1 class="page-title">User Roles</h1>
+        <h1 class="page-title">Menu</h1>
       </div>
       <div class="table-responsive">
         <table class="table table-harbor">
           <thead>
             <tr>
               <th scope="col">S.N</th>
-              <th scope="col">Role Name</th>
+              <th scope="col">Menu Name</th>
+              <th scope="col">Route URL</th>
+              <th scope="col">IsActive</th>
               <th scope="col">Action</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let role of roles; let i = index">
+            <tr *ngFor="let menu of menus; let i = index">
               <td>{{ i + 1 }}</td>
-              <td data-th="Role Name ">{{ role.roleName }}</td>
-  
+              <td data-th="Menu Name ">{{ menu.menuName }}</td>
+              <td data-th="Route URL ">{{ menu.routeURL }}</td>
+              <td data-th="IsActive">{{ menu.isActive }}</td>
               <td data-th="Actions">
                 <a
-                  (click)="EditData(content, role)"
+                  (click)="EditData(content, menu)"
                   class="icon-holder"
                   href="javascript:void(0)"
                   title="edit"
@@ -34,7 +37,7 @@
                 <span></span>
                 <a
                   class="icon-holder"
-                  (click)="openDeleteModal(deletecontent,role.roleId)"
+                  (click)="openDeleteModal(deletecontent,menu.menuId)"
                   href="javascript:void(0)"
                   title="delete"
                   ><i class="icon icon-circle-block"></i
@@ -46,23 +49,33 @@
       </div>
       <ng-template #content let-modal>
         <div class="container">
-          <h3 class="modal-title" *ngIf="!isEdit">Create New Role</h3>
-          <h3 class="modal-title" *ngIf="isEdit">Update Role</h3>
+          <h3 class="modal-title" *ngIf="!isEdit">Create New Menu</h3>
+          <h3 class="modal-title" *ngIf="isEdit">Update Menu</h3>
   
           <form
             class="form-cfo"
-            [formGroup]="roleForm"
+            [formGroup]="menuForm"
             (ngSubmit)="onSubmit()"
           >
           <div class="form-group">
             <label>Role Name</label>
-            <input type="text" formControlName="roleName" class="form-control" placeholder="Role Name"
-                [ngClass]="{'invalid-input': roleForm.controls.roleName.touched && roleForm.controls.roleName.errors}">
-            <div *ngIf="roleForm.controls.roleName.touched && roleForm.controls.roleName.errors?.required"
-                class="error-msg ">Role Name is Required!</div>
+            <input type="text" formControlName="menuName" class="form-control" placeholder="Menu Name"
+                [ngClass]="{'invalid-input': menuForm.controls.menuName.touched && menuForm.controls.menuName.errors}">
+            <div *ngIf="menuForm.controls.menuName.touched && menuForm.controls.menuName.errors?.required"
+                class="error-msg ">Menu Name is Required!</div>
         </div>
+
+        <div class="form-group">
+            <label>Route URL</label>
+            <input type="text" formControlName="routeUrl" class="form-control" placeholder="Route URL"
+                [ngClass]="{'invalid-input': menuForm.controls.routeUrl.touched && menuForm.controls.routeUrl.errors}">
+            <div *ngIf="menuForm.controls.routeUrl.touched && menuForm.controls.routeUrl.errors?.required"
+                class="error-msg ">Route URL is Required!</div>
+        </div>
+
+      
   
-            <!-- <div class="row">
+            <div class="row">
 
               <div class="col-sm-6">
                 <div class="custom-checkbox">
@@ -76,10 +89,10 @@
                 </div>
                
               </div>
-            </div> -->
+            </div>
      
             <div class="float-right">
-              <button type="submit" class="btn btn-green mr-3" [disabled]="roleForm.invalid" >
+              <button type="submit" class="btn btn-green mr-3" [disabled]="menuForm.invalid" >
                 {{ EventValue }}
               </button>
               <button
@@ -98,7 +111,7 @@
         <div class="container">
           <h3 class="modal-title">
             This action is permanent. Are you sure you want to delete this
-            role?
+            menu?
           </h3>
           <div class="float-right">
             <button type="submit" (click)="Delete()"  class="btn btn-green mr-3">

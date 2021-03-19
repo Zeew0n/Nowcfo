@@ -9,103 +9,93 @@ import { NgbModal,ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DesignationModel } from 'src/app/models/designation.model';
-import { DesignationService } from '../services/employeerole.service';
 import { TreeviewConfig, TreeviewItem } from 'ngx-treeview';
+import { MenuModel } from 'src/app/models/menu.model';
+import { MenuService } from '../services/menu.service';
 
 @Component({
-  selector: 'app-employeerole',
-  styleUrls: ['employeerole.component.scss'],
-  templateUrl: './employeerole.component.html',
+  selector: 'app-menu',
+  styleUrls: ['menu.component.scss'],
+  templateUrl: './menu.component.html',
 })
-export class EmployeeRoleComponent {
-  designation: DesignationModel = new DesignationModel();
-  designations: DesignationModel[];
+export class MenuComponent {
+  menu: MenuModel = new MenuModel();
+  menus: MenuModel[];
 
   isSubmitting: boolean; // Form submission variable
   closeResult = ''; // close result for modal
   submitted = false;
 
-  // designationId: number;
   isEdit = false;
   isUpdate = false;
 
-  selectemployeerole;
-  selectedDesignationId: number;
+  selectmenu;
+  selectedMenuId: number;
 
   constructor(
     private fb: FormBuilder,
     private modalService: NgbModal,
     private toastr: ToastrService,
-    private designationService: DesignationService,
+    private menuService: MenuService,
     private route: ActivatedRoute
   ) {}
 
 
-  //For TreeView Checklist
-
-  items: TreeviewItem[] = [];
-
-  config = TreeviewConfig.create({
-    hasAllCheckBox: false,
-    hasFilter: true,
-    hasCollapseExpand: false,
-    decoupleChildFromParent: false,
-    maxHeight: 400,
-  });
-
 
   /* Form Declarations */
-  designationForm: FormGroup;
+  menuForm: FormGroup;
   EventValue: any = 'Save';
 
-  designationId = new FormControl('');
-  designationName = new FormControl('', [Validators.required]);
+  menuId = new FormControl('');
+  menuName = new FormControl('', [Validators.required]);
+  routeUrl = new FormControl('', [Validators.required]);
   isActive = new FormControl(true);
 
   ngOnInit() {
-    this.getRoles();
+    this.getMenu();
     this.initializeEmployeeRoleForm();
   }
 
-  getRoles() {
-    this.designationService.GetAllRoles().subscribe(
+  getMenu() {
+    this.menuService.GetAllMenus().subscribe(
       (result) => {
-        this.designations = result;
+        this.menus = result;
       },
       (error) => console.error
     );
   }
 
   initializeEmployeeRoleForm() {
-    this.designationForm = new FormGroup({
-      designationId: this.designationId,
-      designationName: this.designationName,
+    this.menuForm = new FormGroup({
+      menuId: this.menuId,
+      menuName: this.menuName,
+      routeUrl: this.routeUrl,
       isActive: this.isActive
     });
   }
   openDeleteModal(content, id) {
     debugger
     this.EventValue = 'Delete';
-    this.selectedDesignationId = id;
+    this.selectedMenuId = id;
     this.openModal(content);
   }
 
 
   Delete() {
     debugger
-    this.designationService.DeleteDesignation(this.selectedDesignationId).subscribe(
+    this.menuService.DeleteMenu(this.selectedMenuId).subscribe(
       (result) => {
         if (result == null) {
           this.modalService.dismissAll();
-          this.toastr.success('Role deleted successfully.', 'success!');
-          this.getRoles();
+          this.toastr.success('Menu deleted successfully.', 'success!');
+          this.getMenu();
         } else {
           this.toastr.success('something went wrong.', 'error!');
         }
       },
       (error) => {
         console.log(error.errorMessage);
-        this.toastr.error('Cannot delete role', 'error!');
+        this.toastr.error('Cannot delete menu', 'error!');
       }
     );
   }
@@ -113,27 +103,28 @@ export class EmployeeRoleComponent {
     this.isUpdate = false;
     this.resetFrom();
     this.isEdit = false;
-    this.designation = null;
+    this.menu = null;
     this.openModal(content);
   }
 
   onSubmit() {
     debugger
-    const createForm = this.designationForm.value;
+    const createForm = this.menuForm.value;
     console.log(createForm);
 
     if (!this.isEdit) {
-      if (this.designationForm.valid) {
-        const model = new DesignationModel();
+      if (this.menuForm.valid) {
+        const model = new MenuModel();
 
-        model.designationName = createForm.designationName;
+        model.menuName = createForm.menuName;
+        model.routeUrl = createForm.routeUrl;
         model.isActive = createForm.isActive ? true : false;
-        this.designationService.CreateDesignation(model).subscribe(
+        this.menuService.CreateMenu(model).subscribe(
           (res) => {
             this.submitted = true;
-            this.toastr.success('Designation Added Successfully.', 'Success!');
+            this.toastr.success('Menu Added Successfully.', 'Success!');
             this.modalService.dismissAll();
-            this.getRoles();
+            this.getMenu();
           },
           (error) => {
             console.log(error);
@@ -145,24 +136,25 @@ export class EmployeeRoleComponent {
       }
     } else {
 
-      if (this.designationForm.valid) {
+      if (this.menuForm.valid) {
 
-     const model = new DesignationModel();
+     const model = new MenuModel();
 
-     model.designationName = createForm.designationName;
+     model.menuName = createForm.menuName;
+    model.routeUrl = createForm.routeUrl;
      model.isActive = createForm.isActive;
-     model.id = this.selectemployeerole.designationId;
-     this.designationService.UpdateDesignation(model.id, model).subscribe(
+     model.menuId = this.selectmenu.menuId;
+     this.menuService.UpdateMenu(model.menuId, model).subscribe(
         (res) => {
-          this.toastr.success('Designation Updated Successfully.', 'Success!');
+          this.toastr.success('Menu Updated Successfully.', 'Success!');
           this.modalService.dismissAll();
-          this.getRoles();
+          this.getMenu();
         },
         (error) => {
           this.toastr.error(
             error.error.errorMessage !== undefined
               ? error.error.errorMessage
-              : 'designation Update failed',
+              : 'menu Update failed',
             'Error!'
           );
         }
@@ -182,33 +174,29 @@ export class EmployeeRoleComponent {
   }
 
   resetFrom() {
-    this.designationForm.reset();
+    this.menuForm.reset();
     this.EventValue = 'Save';
     this.submitted = false;
-    this.designation = null;
+    this.menu = null;
   }
 
-  EditData(content, designation: any) {
+  EditData(content, menu: any) {
     this.isUpdate = true;
     this.isEdit = true;
-    this.selectemployeerole = designation;
-    console.log(designation);
+    this.selectmenu = menu;
+    console.log(menu);
     this.EventValue = 'Update';
-    this.designationForm.patchValue({
-      designationName: designation.designationName,
-      designationId: designation.designationId,
-      isActive:designation.isActive
+    this.menuForm.patchValue({
+      menuName: menu.menuName,
+      routeUrl: menu.routeUrl,
+      menuId: menu.menuId,
+      isActive:menu.isActive
     });
     this.modalService.open(content, {
       ariaLabelledBy: 'modal-basic-title',
       windowClass: 'modal-cfo',
       backdrop: 'static'
     });
-  }
-
-
-  onFilterChange(value: string): void {
-    console.log('filter:', value);
   }
 
   

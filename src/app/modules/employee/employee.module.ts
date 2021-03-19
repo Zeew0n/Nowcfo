@@ -7,11 +7,14 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { BrowserModule } from '@angular/platform-browser';
 import { EmployeeRoutingModule } from './employee.routing';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { ChildComponent } from './components/child/child.component';
+import { EmployeeComponent } from './components/employee.component';
+import { TreeviewModule } from 'ngx-treeview';
 
 @NgModule({
     imports: [
         CommonModule,
-
+        TreeviewModule.forRoot(),
         EmployeeRoutingModule,
         FormsModule,
         NgSelectModule,
@@ -20,7 +23,7 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
         NgMultiSelectDropDownModule,
         
     ],
-    declarations: [],
+    declarations: [EmployeeComponent,ChildComponent],
     providers: []
 })
 export class EmployeeModule { }

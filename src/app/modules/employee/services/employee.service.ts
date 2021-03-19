@@ -7,6 +7,8 @@ import { RoleModel } from 'src/app/models/role.model';
 import { DesignationModel } from 'src/app/models/designation.model';
 import { EmployeeModel } from 'src/app/models/employee.model';
 import { OrganizationModel } from 'src/app/models/organization.model';
+import { EmployeeUpdateModel } from 'src/app/models/EmployeeUpdateModel';
+import { EmployeeNavModel } from 'src/app/models/EmployeeNavModel';
 
 
 @Injectable({
@@ -32,6 +34,13 @@ export class EmployeeService extends HttpGenericCrudService<EmployeeModel>{
     GetAllEmployees(): Observable<EmployeeModel[]> {
         return this.httpClient.get<EmployeeModel[]>('employee')
     }
+
+
+    getEmployeeById(id: string): Observable<EmployeeUpdateModel> {
+       debugger
+        return this.httpClient.get<EmployeeUpdateModel>(`employee/${id}`);
+      }
+
 
 
     GetAllDesignations(): Observable<DesignationModel[]> {
@@ -60,8 +69,12 @@ export class EmployeeService extends HttpGenericCrudService<EmployeeModel>{
         return this.httpClient.delete('employee/'+id);
     }
 
+    getEmployeePermissionNavigationById( employeeId):any {
+        return this.httpClient.get<EmployeeNavModel[]>('employee/listallpermissions/'+employeeId)
+      }
 
-      updateEmployee(id,data: EmployeeModel) {
+      updateEmployee(id,data) {
+          debugger
         return this.httpClient.put('employee/'+id, data);
       }
 
