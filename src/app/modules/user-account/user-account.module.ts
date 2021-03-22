@@ -7,6 +7,7 @@ import { SignupComponent } from './components/signup/signup.component';
 import { ConfirmSignupComponent } from './components/confirm-signup/confirm-signup.component';
 import { UserAccountRoutingModule } from './user-account-routing.module';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
+import { ChangePasswordComponent } from './components/change-password/change-password.component';
 
 @NgModule({
     imports: [
@@ -15,7 +16,7 @@ import { ForgotPasswordComponent } from './components/forgot-password/forgot-pas
         FormsModule,
         ReactiveFormsModule
     ],
-    declarations: [LoginComponent, LoginPageComponent, SignupComponent],
+    declarations: [LoginComponent, LoginPageComponent, SignupComponent, ChangePasswordComponent],
     providers: []
 })
 export class UserAccountModule { }

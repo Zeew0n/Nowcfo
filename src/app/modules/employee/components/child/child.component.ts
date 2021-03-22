@@ -11,7 +11,8 @@ export class ChildComponent implements OnInit {
 @Input() selectedItemIds;
 @Output() id =new EventEmitter<any>();
 @Output() childId =new EventEmitter<any>();
-  constructor() { }
+
+ constructor() { }
 
   ngOnInit(): void {
   }
@@ -22,7 +23,7 @@ export class ChildComponent implements OnInit {
       this.id.emit(item);
   }
   }
-
+  
   onIdFromChild(item){
     const child = this.children.find(x=>x.value===item.value);
     if(child){

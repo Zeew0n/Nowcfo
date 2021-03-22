@@ -51,12 +51,8 @@ export class EmployeeComponent {
   cities: any = [];
   selectedItems: any = [];
   dropdownSettings: any = {};
-
   emailAttachmentList: Array<any> = [];
-
   employeeId = '';
-
-
   isSubmitting: boolean; // Form submission variable
   closeResult = ''; // close result for modal
   submitted = false;
@@ -69,34 +65,22 @@ export class EmployeeComponent {
   isUpdate = false;
   selectemployee;
   selectedEmployeeId:string;
-
 selectedIds=[];
-
-
   //for treeview
   values: number[];
-
   updatevalues: number[];
-
   rows:number[];
-
-  items= [];
-
-  updateitems=[];
-
+  items: TreeviewItem[] = [];
+  updateitems:TreeviewItem[]=[];
   config = TreeviewConfig.create({
-    hasAllCheckBox: true,
-    hasFilter: false,
+    hasAllCheckBox:true,
+    hasFilter: true,
     hasCollapseExpand: true,
-    decoupleChildFromParent: true,
+    decoupleChildFromParent: false,
     maxHeight: 400,
+
+  
   });
-
-
-
-
-
-
   constructor(
     private fb: FormBuilder,
     private modalService: NgbModal,
@@ -108,8 +92,6 @@ selectedIds=[];
   ) {
 
   }
-
-
   
 
   /* Form Declarations */
@@ -161,35 +143,21 @@ selectedIds=[];
     }
   }
 
+  onSelect(event)
+  {
+  
+    console.log(event)
+
+  }
+
   onSelectedChange(downlineItems: TreeviewItem[]): void {
     this.selectedIds.push('');
     downlineItems.forEach(downlineItem => {
       debugger
       const rec = downlineItem;
     });
-    // this.rows = [];
-    // downlineItems.forEach(downlineItem => {
-    //   const rec = downlineItem;
-    //   let parent = downlineItem.parent;
-    //   let valueSelected: any = null;
-    //   if (parent.item != null && !parent.item.children.some(ele => ele.checked !== true)) {
-    //     valueSelected = parent.item.value;
-    //     parent = parent.parent;
 
-    //     while (!isNil(parent)) {
-    //       if (parent.item != null && !parent.item.children.some(ele => ele.checked !== true)) {
-    //         valueSelected = parent.item.value;
-    //       }
-    //       parent = parent.parent;
-    //     }
-    //   } else {
-    //     valueSelected = downlineItem.item.value;
-    //   }
-
-
-    //   if (!this.rows.some(ele => isEqual(ele, valueSelected)))
-    //     this.rows.push(valueSelected);
-    // });
+ 
   }
 
   onFilterChange(value: string): void {
@@ -238,7 +206,7 @@ selectedIds=[];
   getOrganizations() {
     this.employeeService.GetAllOrganizations().subscribe(
       (result) => {
-        console.log(result);
+       
         this.organizations = result;
         const count = result.length;
         if (count > 0) {
@@ -257,42 +225,43 @@ selectedIds=[];
  test=[];
   getOrganizatioNavigation() {
     this.navigationService.getOrganizationNavigation().subscribe(
-      (res) => {
+      (res: TreeviewItem[]) => {
         this.items.length = 0;
         res.forEach((data) => {
-          const item = {
+          const item = new TreeviewItem({
             text: data.text,
             value: data.value,
             collapsed: true,
-            checked:false,
             children: data.children,
-            level: data.level
-          };
+          });
+          console.log(item)
           this.items.push(item);
-          console.log('Data', this.items);
+          
         });
       },
       (error) => console.error(error)
     );
+   
   }
 
 
 
   getEmployeePermissionNavigation(id:any) {
     this.employeeService.getEmployeePermissionNavigationById(id).subscribe(
-      (res) => {
+      (res:TreeviewItem[]) => {
+
         this.updateitems.length = 0;
         res.forEach((data) => {
-          const item = {
+          const updateitem = new TreeviewItem({
             text: data.text,
             value: data.value,
             checked:data.checked,
             collapsed: true,
             children: data.children,
-            level: data.level
-          };
-          this.updateitems.push(item);
-          console.log('Data', this.updateitems);
+            //level: data.level
+          });
+          this.updateitems.push(updateitem);
+          
         });
       },
       (error) => console.error(error)
