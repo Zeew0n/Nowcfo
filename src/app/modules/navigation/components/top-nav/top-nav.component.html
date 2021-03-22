@@ -9,10 +9,24 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <!-- <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search"> -->
-      <div class="logout">
-          <a href="javascript:;" (click)="onLogOut()">Sign out</a>
+
+      <!-- <div class="logout">
+        <a href="javascript:;">Sign out</a>
+      </div> -->
+      <div ngbDropdown>
+        <button class="btn user-options" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+          aria-expanded="false">
+          <img class="rounded-circle img-responsive imgcard2" src="assets/images/nowcfo.png" alt="" >
+          <i ngbDropdownToggle class="headericon fa fa-chevron-down custom-icon-class"></i>
+        </button>
+        <form ngbDropdownMenu class="dropdown-menu list dropdown-menu-right users-dropdown">
+          <span>Username</span>
+          <a class="dropdown-item menu text-center">Profile</a>
+          <hr>
+          <!-- <a class="dropdown-item menu" routerLink="#">Help</a> -->
+          <a class="dropdown-item menu text-center">Logout</a>
+        </form>
       </div>
-      
     </nav>
   </div>
 </header>
