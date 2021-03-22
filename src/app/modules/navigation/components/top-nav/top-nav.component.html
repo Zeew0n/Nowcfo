@@ -22,9 +22,11 @@
         <form ngbDropdownMenu class="dropdown-menu list dropdown-menu-right users-dropdown">
           <span>Username</span>
           <a class="dropdown-item menu text-center">Profile</a>
+                    <a class="dropdown-item menu" routerLink="/changepassword">Change Password</a>
+
           <hr>
           <!-- <a class="dropdown-item menu" routerLink="#">Help</a> -->
-          <a class="dropdown-item menu text-center">Logout</a>
+          <a class="dropdown-item menu text-center" href="javascript:;" (click)="onLogOut()" routerLinkActive="router-link-active" >Logout</a>
         </form>
       </div>
     </nav>
