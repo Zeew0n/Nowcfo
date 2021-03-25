@@ -5,6 +5,7 @@ import { HttpGenericCrudService } from '../../../services/http-generic-crud.serv
 import { Observable } from 'rxjs';
 import { RoleModel } from 'src/app/models/role.model';
 import { UserInformationModel } from 'src/app/models/userinformation.model';
+import { PasswordUpdateModel } from 'src/app/models/user/user-password.update.model';
 
 
 @Injectable({
@@ -51,6 +52,10 @@ export class UserInformationService extends HttpGenericCrudService<UserInformati
 
       updateUser(data: UserInformationModel) {
         return this.httpClient.put('user/update', data);
+      }
+
+      changePassword(data:PasswordUpdateModel) {
+        return this.httpClient.put('user/changepassword', data);
       }
 
 }

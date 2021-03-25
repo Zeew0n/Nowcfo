@@ -4,10 +4,10 @@ import { AppLayoutComponent } from './_layouts/app-layout/app-layout.component';
 import { LoginPageComponent } from './modules/user-account/components/login-page/login-page.component';
 import { ForgotPasswordComponent } from './modules/user-account/components/forgot-password/forgot-password.component';
 import { SignupComponent } from './modules/user-account/components/signup/signup.component';
-import { HomePageComponent } from './modules/home/components/home-page/home-page.component';
 import { ResetPasswordComponent } from './modules/user-account/components/reset-password/reset-password.component';
 import { ConfirmSignupComponent } from './modules/user-account/components/confirm-signup/confirm-signup.component';
 import { AuthGuard } from './services/_guards/auth-guard';
+import { ChangePasswordComponent } from './modules/user-account/components/change-password/change-password.component';
 export const routes: Routes = [
   { path: '', component: LoginPageComponent },
   { path: 'login', component: LoginPageComponent },
@@ -23,17 +23,24 @@ export const routes: Routes = [
     component: ConfirmSignupComponent,
   },
 
+
+
   {
     path: '',
     component: AppLayoutComponent,
     children: [
-      // { path: '', component: HomePageComponent, pathMatch: 'full', canActivate: [AuthGuard] },
       {
         path: 'home',
         loadChildren: () =>
           import('./modules/home/home.module').then((m) => m.HomeModule),
         canActivate: [AuthGuard],
       },
+      {
+        path: 'changepassword',
+        component: ChangePasswordComponent,
+        canActivate:[AuthGuard],
+      },
+      
       {
         path: 'emp-roles',
         loadChildren: () =>
@@ -78,14 +85,6 @@ export const routes: Routes = [
         canActivate: [AuthGuard],
       },
       
-      // {
-      //   path: 'role-menu',
-      //   loadChildren: () =>
-      //     import('./modules/employee/employee.module').then(
-      //       (m) => m.EmployeeModule
-      //     ),
-      //   canActivate: [AuthGuard],
-      // },
 
       {
         path: 'organization-information',

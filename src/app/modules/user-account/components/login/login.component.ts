@@ -60,6 +60,7 @@ export class LoginComponent implements OnInit {
               localStorage.setItem('auth_token', res.jwtToken);
               localStorage.setItem('role_name', res.roleName)
               localStorage.setItem('refresh_token', res.refreshToken);
+              localStorage.setItem('user_name',res.userName);
               this.toastr.success('Login Successful.', 'Success!');
               console.log(res);
               this.router.navigateByUrl('home');

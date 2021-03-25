@@ -63,7 +63,7 @@
                 <form class="form-cfo" [formGroup]="userForm" (ngSubmit)="onSubmit()">
                     <div class="form-group">
                         <label>UserName</label>
-                        <input type="text" formControlName="userName" class="form-control" placeholder="username"
+                        <input type="text" formControlName="userName" [readonly] = "disableSelect" class="form-control" placeholder="username"
                             [ngClass]="{'invalid-input': userForm.controls.userName.touched && userForm.controls.userName.errors}">
                         <div *ngIf="userForm.controls.userName.touched && userForm.controls.userName.errors?.required"
                             class="error-msg ">Username is required</div>
@@ -95,14 +95,15 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label>Password</label>
                         <input type="password" formControlName="password" *ngIf="!isEdit" class="form-control"
                             placeholder="password"
                             [ngClass]="{'invalid-input': userForm.controls.password.touched && userForm.controls.password.errors}">
                         <div *ngIf="userForm.controls.password.touched && userForm.controls.password.errors?.required"
                             class="error-msg">Password is required</div>
-                    </div>
+                    </div> -->
+                    
                     <div class="row">
                         <div class="col-sm-6">
                             <label>Email</label>
@@ -190,8 +191,21 @@
 
                     <div class="form-group">
                         <label>Role</label>
-                        <ng-select [items]="roles" bindLabel="roleName" bindValue="roleId"  placeholder="Select Role" formControlName="roleId" class="cfo-select">
+                        <ng-select [items]="roles" bindLabel="roleName" bindValue="roleId"  placeholder="Select Role" formControlName="roleId" class="cfo-select"  [ngClass]="{
+                            'invalid-input':
+                            userForm.controls.roleId.errors?.required
+                          }" >
                         </ng-select>
+                        <div
+                        *ngIf="
+        
+                        userForm.controls.roleId.errors?.required
+                        "
+                        class="error-msg"
+                      >
+                        Role is required!
+                      </div>
+
                         <!-- {{userForm.value|json}} -->
                     </div>
                     <div class="float-right">

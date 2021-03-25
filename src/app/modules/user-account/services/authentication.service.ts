@@ -17,6 +17,7 @@ export default class AuthenticationService extends HttpGenericCrudService<AppUse
     private readonly JWT_TOKEN = 'auth_token';
     private readonly Ref_TOKEN = 'refresh_token';
     private readonly Ref_ROLE = 'user_role';
+    private readonly Ref_USER = 'user_name';
 
     private _authNavStatusSource = new BehaviorSubject<boolean>(false);
     authNavStatus$ = this._authNavStatusSource.asObservable();
@@ -55,6 +56,10 @@ export default class AuthenticationService extends HttpGenericCrudService<AppUse
 
     getJwtToken() {
         return localStorage.getItem(this.JWT_TOKEN);
+    }
+
+    getUserName() {
+        return localStorage.getItem(this.Ref_USER);
     }
 
     getUserRole() {
