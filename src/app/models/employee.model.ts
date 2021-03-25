@@ -5,7 +5,7 @@ export class EmployeeModel extends BaseEntity {
     employeeId: string;
     employeeName: string;
     email: string;
-    phoneNumber: string;
+    phone: string;
     address: string;
     state:string;
     city: string;

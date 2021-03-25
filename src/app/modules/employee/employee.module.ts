@@ -17,9 +17,9 @@ import { TreeViewModule } from '@progress/kendo-angular-treeview';
 @NgModule({
     imports: [
         CommonModule,
-        //TreeviewModule.forRoot(),
+        TreeviewModule.forRoot(),
         EmployeeRoutingModule,
-        TreeViewModule,
+        //TreeViewModule,
         FormsModule,
         NgSelectModule,
         ReactiveFormsModule,
@@ -27,7 +27,7 @@ import { TreeViewModule } from '@progress/kendo-angular-treeview';
         NgMultiSelectDropDownModule,
         
     ],
-    declarations: [EmployeeComponent,ChildComponent, KendotreeviewComponent],
+    declarations: [EmployeeComponent,ChildComponent],
     providers: []
 })
 export class EmployeeModule { }

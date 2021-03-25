@@ -15,7 +15,6 @@
             <tr>
               <th scope="col">S.N</th>
               <th scope="col">Role Name</th>
-              <th scope="col">IsActive</th>
               <th scope="col">Action</th>
             </tr>
           </thead>
@@ -23,7 +22,7 @@
             <tr *ngFor="let designation of designations; let i = index">
               <td>{{ i + 1 }}</td>
               <td data-th="Role Name ">{{ designation.designationName }}</td>
-              <td data-th="Is Active ">{{ designation.isActive }}</td>
+        
   
               <td data-th="Actions">
                 <a
@@ -64,7 +63,7 @@
                 class="error-msg ">Designation Name is Required!</div>
         </div>
   
-            <div class="row">
+            <!-- <div class="row">
 
               <div class="col-sm-6">
                 <div class="custom-checkbox">
@@ -78,7 +77,7 @@
                 </div>
                
               </div>
-            </div>
+            </div> -->
      
             <div class="float-right">
               <button type="submit"  class="btn btn-green mr-3" [disabled]="designationForm.invalid" >

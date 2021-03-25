@@ -173,6 +173,7 @@ export class UserInformationComponent {
     this.isUpdate = false;
     this.resetFrom();
     this.isEdit = false;
+    this.disableSelect=false;
     this.userId = '';
     this.userinformation == null;
     this.openModal(content);
@@ -223,7 +224,7 @@ export class UserInformationComponent {
         model.roleId = createForm.roleId;
         model.phoneNumber = createForm.phoneNumber;
         model.address = createForm.address;
-        model.firstName = createForm.lastName;
+        model.firstName = createForm.firstName;
         model.lastName = createForm.lastName;
         model.city = createForm.city;
         model.userName = createForm.userName;
