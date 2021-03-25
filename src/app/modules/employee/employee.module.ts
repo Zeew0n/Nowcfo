@@ -9,13 +9,17 @@ import { EmployeeRoutingModule } from './employee.routing';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { ChildComponent } from './components/child/child.component';
 import { EmployeeComponent } from './components/employee.component';
+
 import { TreeviewModule } from 'ngx-treeview';
+import { KendotreeviewComponent } from './components/kendotreeview/kendotreeview.component';
+import { TreeViewModule } from '@progress/kendo-angular-treeview';
 
 @NgModule({
     imports: [
         CommonModule,
-        TreeviewModule.forRoot(),
+        //TreeviewModule.forRoot(),
         EmployeeRoutingModule,
+        TreeViewModule,
         FormsModule,
         NgSelectModule,
         ReactiveFormsModule,
@@ -23,7 +27,7 @@ import { TreeviewModule } from 'ngx-treeview';
         NgMultiSelectDropDownModule,
         
     ],
-    declarations: [EmployeeComponent,ChildComponent],
+    declarations: [EmployeeComponent,ChildComponent, KendotreeviewComponent],
     providers: []
 })
 export class EmployeeModule { }

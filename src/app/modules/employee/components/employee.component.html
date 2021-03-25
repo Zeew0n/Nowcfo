@@ -1,4 +1,6 @@
 <div class="">
+
+  
   <div class="btn-container">
     <button type="button" class="btn btn-green" (click)="open(content)">
       New Employee
@@ -82,8 +84,8 @@
     </div>
     <ng-template #content let-modal>
       <div class="container">
-        <h3 class="modal-title" *ngIf="!isEdit"> {{values}} Create New Employee</h3>
-        <h3 class="modal-title" *ngIf="isEdit"> {{updatevalues}} Update Employee</h3>
+        <!-- <h3 class="modal-title" *ngIf="!isEdit"> {{values}} Create New Employee</h3>
+        <h3 class="modal-title" *ngIf="isEdit"> {{updatevalues}} Update Employee</h3> -->
 
         <form
           class="form-cfo"
@@ -285,9 +287,23 @@
                   bindValue="designationId"
                   placeholder="Select Role"
                   formControlName="designationId"
-                  class="cfo-select"
+                  class="cfo-select"  [ngClass]="{
+                    'invalid-input':
+                      employeeForm.controls.designationId.errors?.required
+                  }"
                 >
                 </ng-select>
+
+                <div
+                *ngIf="
+
+                  employeeForm.controls.designationId.errors?.required
+                "
+                class="error-msg"
+              >
+                Role is required!
+              </div>
+
               </div>
             </div>
 
@@ -301,9 +317,24 @@
                   placeholder="Select Organization"
                   formControlName="organizationId"
                   (change)="getSuperVisors(organizationId)"
-                  class="cfo-select"
+                  class="cfo-select" [ngClass]="{
+                    'invalid-input':
+                      employeeForm.controls.organizationId.errors?.required
+                  }"
                 >
                 </ng-select>
+
+                <div
+                *ngIf="
+
+                  employeeForm.controls.organizationId.errors?.required
+                "
+                class="error-msg"
+              >
+                Organization is required!
+              </div>
+
+
               </div>
             </div>
           </div>
@@ -409,6 +440,10 @@
             >
             </ng-select>
           </div>
+          <div class="example-config">
+            Checked keys: {{checkedKeys}}
+        </div>
+
 <!--           
               {{selectedIds|json}}
         <div class="form-group" *ngIf="!isEdit">
@@ -416,7 +451,7 @@
             <p (click)="selectParent(item.value)">{{item.text}}</p>
             <app-child *ngIf="item.children?.length>0" [selectedItemIds]=selectedIds [isFirstChild]="true" (id)="onIdFromChild($event)" [children]=item.children></app-child>
           </div>
-          </div> 
+          </div>
 
           <div class="form-group" *ngIf="isEdit">
             <div *ngFor="let item of items">
@@ -424,7 +459,8 @@
             </div>
             </div>  -->
          
-            <div class="form-group" *ngIf="!isEdit">
+
+            <!-- <div class="form-group" *ngIf="!isEdit">
               <ngx-treeview [config]="config" [items]="items" (filterChange)="onFilterChange($event)"
               (selectedChange)="values = $event">
             </ngx-treeview>
@@ -435,7 +471,7 @@
               <ngx-treeview [config]="config" [items]="updateitems" (filterChange)="onFilterChange($event)"
               (selectedChange)="updatevalues = $event">
             </ngx-treeview>
-            </div>
+            </div> -->
 
             
            <!-- // onSelect($event) -->
@@ -443,6 +479,24 @@
               <!-- <ngx-treeview [config]="config" [items]="items" 
               (selectedChange)="onSelectedChange($event)" (change)="onSelect($event)">
             </ngx-treeview> -->
+
+            <div class="form-group" *ngIf="showTree">
+            <kendo-treeview 
+            [nodes]="data"
+            [children]="children"
+            [hasChildren]="hasChildren"
+            textField="text" 
+            kendoTreeViewExpandable
+            [expandBy]="'id'"
+            (expand)="expandNode($event)"
+            kendoTreeViewCheckable
+            [(checkedKeys)] = "checkedKeys"
+            [checkBy] = "'id'"
+            [isChecked] = "isChecked"
+            (checkedChange) = "checkChange($event)">
+            </kendo-treeview>
+            </div>
+
               
           <div class="float-right">
             <button

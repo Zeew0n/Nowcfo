@@ -44,7 +44,8 @@ export class UserInformationComponent {
   simpleItems = [];
   isUpdate = false;
   selectuserinformation;
-
+  disableSelect = false;
+  
   constructor(
     private fb: FormBuilder,
     private modalService: NgbModal,
@@ -68,7 +69,7 @@ export class UserInformationComponent {
   firstName = new FormControl('', [Validators.required]);
   lastName = new FormControl('', [Validators.required]);
   //password = new FormControl('', [Validators.required]);
-  password = new FormControl();
+  //password = new FormControl();
   address = new FormControl('', [Validators.required]);
   city = new FormControl('', [Validators.required]);
   zipCode = new FormControl('', [Validators.required]);
@@ -128,7 +129,6 @@ export class UserInformationComponent {
       userName: this.userName,
       firstName: this.firstName,
       lastName: this.lastName,
-      password: this.password,
       email: this.email,
       phoneNumber: this.phoneNumber,
       address: this.address,
@@ -157,6 +157,7 @@ export class UserInformationComponent {
           this.modalService.dismissAll();
           this.toastr.success('User deleted successfully.', 'success!');
           this.getRoles();
+          this.getUsers();
         } else {
           this.toastr.success('something went wrong.', 'error!');
         }
@@ -191,7 +192,6 @@ export class UserInformationComponent {
         model.firstName = createForm.firstName;
         model.lastName = createForm.lastName;
         model.email = createForm.email;
-        model.password = createForm.password;
         model.roleId = createForm.roleId;
         model.phoneNumber = createForm.phoneNumber;
         model.address = createForm.address;
@@ -271,6 +271,7 @@ export class UserInformationComponent {
   EditData(content, userinformation: any) {
     this.isUpdate = true;
     this.isEdit = true;
+    this.disableSelect = true;
     this.selectuserinformation = userinformation;
     debugger;
     console.log(userinformation);
