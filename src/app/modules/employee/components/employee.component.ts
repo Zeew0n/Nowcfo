@@ -43,11 +43,6 @@ import { KendoNavModel } from 'src/app/models/KendoNavModel';
   templateUrl: './employee.component.html',
 })
 export class EmployeeComponent implements OnInit {
-  //Fields for KendTreeView
-  public checkedKeys: any[] = []; //121, 40
-  public key = 'id';
-  public data: KendoNavModel[];
-
 
   employee: EmployeeModel = new EmployeeModel();
   employees: EmployeeModel[];
@@ -78,14 +73,14 @@ export class EmployeeComponent implements OnInit {
   isUpdate = false;
   selectemployee;
   selectedEmployeeId:string;
-selectedIds=[];
-showTree=false;
+  selectedIds=[];
+  showTree=false;
+
   //for treeview
-  //values: number[];
-  //updatevalues: number[];
-  //rows:number[];
-  //items: TreeviewItem[] = [];
-  //updateitems:TreeviewItem[]=[];
+  values: number[];
+  updatevalues: number[];
+  items: TreeviewItem[] = [];
+  updateitems:TreeviewItem[]=[];
   config = TreeviewConfig.create({
     hasAllCheckBox:true,
     hasFilter: true,
@@ -118,7 +113,7 @@ showTree=false;
 
   employeeName = new FormControl('', [Validators.required]);
   email = new FormControl('', [Validators.required, Validators.email]);
-  phoneNumber = new FormControl('', [Validators.required]);
+  phone = new FormControl('', [Validators.required]);
   address = new FormControl('', [Validators.required]);
   city = new FormControl('', [Validators.required]);
   zipCode = new FormControl('', [Validators.required]);
@@ -139,6 +134,7 @@ showTree=false;
     this.getDesignations();
     this.initializeemployeeForm();
     this.getOrganizatioNavigation();
+    this.getSuperVisors();
 
 
 
@@ -155,24 +151,31 @@ showTree=false;
     };
   }
 
-  public children = (dataItem: any): Observable<any[]> => of(dataItem.items);
-  public hasChildren = (dataItem: any): boolean => dataItem.childrenCount > 0;
 
-  public isChecked = (dataItem: any, index: string): CheckedState => {
-    if (this.containsItem(dataItem)) return 'checked';
-    if(dataItem.checkType === 3) {
-      if(dataItem.items.length < 1) return 'indeterminate';
-      if (this.isIndeterminate(dataItem.items)) { return 'indeterminate'; }
-    }
-    return 'none';
+  getOrganizatioNavigation() {
+    debugger
+    this.navigationService.getOrganizationNavigation().subscribe(
+      (res: TreeviewItem[]) => {
+        this.items.length = 0;
+        res.forEach((data) => {
+          const item = new TreeviewItem({
+            text: data.text,
+            value: data.value,
+            collapsed: true,
+            children: data.children,
+          });
+          console.log(item)
+          this.items.push(item);
+          
+        });
+      },
+      (error) => console.error(error)
+    );
+   
   }
 
-  selectParent(id){
-    const match = this.selectedIds.find(x=>x===id);
-    if(!match){
-    this.selectedIds.push(id);
-    }
-  }
+
+
 
   onSelect(event)
   {
@@ -213,9 +216,9 @@ showTree=false;
     );
   }
 
-  getSuperVisors(id) {
+  getSuperVisors() {
     debugger
-    this.employeeService.GetAllSuperVisors(id.value).subscribe(
+    this.employeeService.GetAllSuperVisors().subscribe(
       (result) => {
         this.supervisors = result;
       },
@@ -242,56 +245,12 @@ showTree=false;
   }
 
 
- actualData:any;
-  getOrganizatioNavigation() {
-    
-    this.employeeService.getKendoNavigation().subscribe(
-      (res: KendoNavModel[]) => {
-        res.forEach(ele => {
-          debugger;
-            if(ele.childrenCount==0){
-              delete ele.items;
-            }
-            if( ele.items!=undefined && ele.items.length>0) {
-             this.actualData=  this.checkChild(ele.items);
-            }   
-        });
-        debugger;
-        console.log("actual data ",this.actualData)
-        this.data=res;
-       console.log(this.data)
-        
-    for(let i = 0; i < this.data?.length; i++) {
-      const item = this.data[i];
-      item.checkType === 1 ? this.checkedKeys.push(item.id) : null;
-    }
-
-      },
-      (error) => console.error(error)
-    );
-  }
-  checkChild(items: KendoNavModel[]) {
-    items.forEach(ele => {
-      debugger;
-        if(ele.childrenCount==0){
-          delete ele.items;
-        }
-        if( ele.items!=undefined && ele.items.length>0) {
-           this.checkChild(ele.items);
-        }   
-    });
-    return items;
-  }
-
-
-
   initializeemployeeForm() {
     this.stateList = csc.getStatesOfCountry('US');
-    this.getOrganizatioNavigation();
     this.employeeForm = new FormGroup({
       employeeName: this.employeeName,
       email: this.email,
-      phoneNumber: this.phoneNumber,
+      phone: this.phone,
       address: this.address,
       city: this.city,
       zipCode: this.zipCode,
@@ -320,11 +279,10 @@ showTree=false;
   }
 
   private displayFormData(data: EmployeeUpdateModel,id:any) {
-    //this.getEmployeePermissionNavigation(id);
     this.employeeForm.patchValue({
       employeeName: data.employeeName,
       email: data.email,
-      phoneNumber: data.phoneNumber,
+      phone: data.phone,
       address: data.address,
       city: data.city,
       zipCode: data.zipCode,
@@ -336,8 +294,8 @@ showTree=false;
       payType: data.payType,
       payTypeCheck: data.payType == "Salary" ? true : false,
       pay: data.pay,
-      overTimeRate: data.overTimeRate,
-      orgPermissionId: []
+      overTimeRate: data.overTimeRate
+      // orgPermissionId:data.employeepermissions
     });
   }
 
@@ -416,7 +374,7 @@ showTree=false;
         const model = {
           employeeName: createForm.employeeName,
           email: createForm.email,
-          phoneNumber: createForm.phoneNumber,
+          phone: createForm.phone,
           address: createForm.address,
           city: createForm.city,
           zipCode: createForm.zipCode,
@@ -429,7 +387,7 @@ showTree=false;
           pay: createForm.pay,
           overTimeRate: createForm.overTimeRate,
           payType: "",
-          employeepermissions: []
+          employeepermissions:this.values
         };
 
         if (model.payTypeCheck) {
@@ -466,7 +424,7 @@ showTree=false;
         const model = {
           employeeName: createForm.employeeName,
           email: createForm.email,
-          phoneNumber: createForm.phoneNumber,
+          phone: createForm.phone,
           address: createForm.address,
           city: createForm.city,
           zipCode: createForm.zipCode,
@@ -479,7 +437,7 @@ showTree=false;
           pay: createForm.pay,
           overTimeRate: createForm.overTimeRate,
           payType: "",
-          employeepermissions: [],
+          employeepermissions:this.updatevalues,
         };
 
         if(model.payTypeCheck) {
@@ -558,52 +516,7 @@ showTree=false;
   }
 
 
-  //Fields for KendoTreeView
-  private isIndeterminate(items: any[] = []): boolean {
-    let idx = 0;
-    let item;
 
-    while (item = items[idx]) {
-      if (this.isIndeterminate(item.items) || this.containsItem(item)) return true;
-      try{
-        if(item.items.length < 1) return true;
-      }
-      catch(exc){}
-      idx += 1;
-    }
-    return false;
-  }
-
-private containsItem(item: any): boolean {
-  return this.checkedKeys.indexOf(item[this.key]) > -1;
-}
-
-public checkChange($event) {
-  if($event.parent) {
-    let p = $event.parent.item.dataItem;
-    p.checkType = 3
-  }
-}
-
-public expandNode($event) {
-  debugger;
-  // let item = $event.dataItem;
-  // if(item.id == 10){
-  //   item.items = [
-  //     { id: 11, text: 'Tables & Chairs', checkType: 0, childrenCount: 0 },
-  //     { id: 12, text: 'Sofas', items: [], checkType: 0, childrenCount: 2 }
-  //   ];
-  // }
-  // else if(item.id == 12) {
-  //   item.items = [
-  //   { id: 121, text: 'Sofa 1', checkType: 0, childrenCount: 0 },
-  //   { id: 122, text: 'Sofa 2', checkType: 0, childrenCount: 0 }];
-  // }
-  // for(let i = 0; i < item.items.length; i++) {
-  //   const subItem = item.items[i];
-  //   subItem.checkType === 1 ? this.checkedKeys.push(subItem.id) : null;
-  // }
-}
 }
 
 

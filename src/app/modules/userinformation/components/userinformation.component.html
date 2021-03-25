@@ -62,7 +62,7 @@
 
                 <form class="form-cfo" [formGroup]="userForm" (ngSubmit)="onSubmit()">
                     <div class="form-group">
-                        <label>UserName</label>
+                        <label>Username</label>
                         <input type="text" formControlName="userName" [readonly] = "disableSelect" class="form-control" placeholder="username"
                             [ngClass]="{'invalid-input': userForm.controls.userName.touched && userForm.controls.userName.errors}">
                         <div *ngIf="userForm.controls.userName.touched && userForm.controls.userName.errors?.required"
@@ -95,42 +95,22 @@
                         </div>
                     </div>
 
-                    <!-- <div class="form-group">
-                        <label>Password</label>
-                        <input type="password" formControlName="password" *ngIf="!isEdit" class="form-control"
-                            placeholder="password"
-                            [ngClass]="{'invalid-input': userForm.controls.password.touched && userForm.controls.password.errors}">
-                        <div *ngIf="userForm.controls.password.touched && userForm.controls.password.errors?.required"
-                            class="error-msg">Password is required</div>
-                    </div> -->
+
                     
                     <div class="row">
                         <div class="col-sm-6">
-                            <label>Email</label>
-                            <input
-                  type="email"
-                  class="form-control"
-                  formControlName="email"
-                  placeholder="Email"
-                  [ngClass]="{
-                    'invalid-input':
-                      userForm.controls.email.touched &&
-                      userForm.controls.email.errors?.required
-                  }"
-                />
+                            <div class="form-group">
+                                <label>Email</label>
 
-                <div
-                  *ngIf="
-                    (userForm.controls.email.touched &&
-                      userForm.controls.email.errors?.email) ||
-                    (userForm.controls.email.touched &&
-                      userForm.controls.email.errors?.required)
-                  "
-                  class="error-msg"
-                >
-                  Email is invalid!
-                </div>
+                                <input type="email" formControlName="email" class="form-control"
+                                    placeholder="Email"
+                                    [ngClass]="{'invalid-input': userForm.controls.email.touched && userForm.controls.email.errors}">
+                                <div *ngIf="userForm.controls.email.touched && userForm.controls.email.errors?.required || userForm.controls.email.touched &&
+                                userForm.controls.email.errors?.email"
+                                    class="error-msg">Email is Invalid!</div>
+                            </div>
                         </div>
+            
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>Phone Number</label>
@@ -143,17 +123,7 @@
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="row">
-                        <div class="col-sm-6">
-                            <div class="can-toggle">
-                                <input id="a" type="checkbox">
-                                <label for="a">
-                                    <div class="can-toggle__switch" data-checked="Salary" data-unchecked="Hourly"></div>
-                                </label>
-                            </div>
-
-                        </div>
-                    </div> -->
+              
 
 
                     <div class="form-group">
@@ -161,7 +131,7 @@
                         <input type="text" class="form-control" formControlName="address" placeholder="Address"
                             [ngClass]="{'invalid-input': userForm.controls.address.touched && userForm.controls.address.errors}">
                         <div *ngIf="userForm.controls.address.touched && userForm.controls.address.errors?.required"
-                            class="error-msg">address is required</div>
+                            class="error-msg">Address is Required!</div>
 
                     </div>
                     <div class="row">
@@ -171,7 +141,7 @@
                                 <input type="text" class="form-control" formControlName="city" placeholder="City"
                                     [ngClass]="{'invalid-input': userForm.controls.city.touched && userForm.controls.city.errors}">
                                 <div *ngIf="userForm.controls.city.touched && userForm.controls.city.errors?.required"
-                                    class="error-msg">city is required</div>
+                                    class="error-msg">City is Required!</div>
                             </div>
                         </div>
 
@@ -182,7 +152,7 @@
                                 <input type="text" class="form-control" formControlName="zipCode" placeholder="Zip Code"
                                     [ngClass]="{'invalid-input': userForm.controls.zipCode.touched && userForm.controls.zipCode.errors}">
                                 <div *ngIf="userForm.controls.zipCode.touched && userForm.controls.zipCode.errors?.required"
-                                    class="error-msg">zipCode is required</div>
+                                    class="error-msg">ZipCode is Required!</div>
                             </div>
 
                         </div>
@@ -203,7 +173,7 @@
                         "
                         class="error-msg"
                       >
-                        Role is required!
+                        Role is Required!
                       </div>
 
                         <!-- {{userForm.value|json}} -->

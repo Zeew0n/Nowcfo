@@ -48,8 +48,8 @@ export class EmployeeService extends HttpGenericCrudService<EmployeeModel>{
         return this.httpClient.get<DesignationModel[]>('designation');
     }
 
-    GetAllSuperVisors(id): Observable<EmployeeModel[]> {
-        return this.httpClient.get<EmployeeModel[]>('employee/listallsupervisors/'+id);
+    GetAllSuperVisors(): Observable<EmployeeModel[]> {
+        return this.httpClient.get<EmployeeModel[]>('employee/listallsupervisors/');
     }
 
     public getKendoNavigation(): any {

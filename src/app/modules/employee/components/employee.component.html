@@ -10,14 +10,6 @@
   <div class="content">
     <div class="title-container">
       <h1 class="page-title">Employee</h1>
-      <!-- <div>
-        <form>
-          <input type="text" placeholder="search here">
-        </form>
-      </div> -->
-      <!-- <div class="content-right">
-        mkl
-      </div> -->
     </div>
     <div class="table-responsive">
       <table class="table table-harbor">
@@ -48,7 +40,7 @@
             <td>{{ i + 1 }}</td>
             <td data-th="Employee Name ">{{ employee.employeeName }}</td>
             <td data-th="Email ">{{ employee.email }}</td>
-            <td data-th="Phone Number ">{{ employee.phoneNumber }}</td>
+            <td data-th="Phone Number ">{{ employee.phone }}</td>
             <td data-th="Address ">{{ employee.address }}</td>
             <td data-th="City">{{ employee.city }}</td>
             <td data-th="Zip Code ">{{ employee.zipCode }}</td>
@@ -84,8 +76,8 @@
     </div>
     <ng-template #content let-modal>
       <div class="container">
-        <!-- <h3 class="modal-title" *ngIf="!isEdit"> {{values}} Create New Employee</h3>
-        <h3 class="modal-title" *ngIf="isEdit"> {{updatevalues}} Update Employee</h3> -->
+        <h3 class="modal-title" *ngIf="!isEdit"> {{values}} Create New Employee</h3>
+        <h3 class="modal-title" *ngIf="isEdit"> {{updatevalues}} Update Employee</h3>
 
         <form
           class="form-cfo"
@@ -157,18 +149,18 @@
                 <input
                   type="text"
                   class="form-control"
-                  formControlName="phoneNumber"
+                  formControlName="phone"
                   placeholder="Phone Number"
                   [ngClass]="{
                     'invalid-input':
-                      employeeForm.controls.phoneNumber.touched &&
-                      employeeForm.controls.phoneNumber.errors
+                      employeeForm.controls.phone.touched &&
+                      employeeForm.controls.phone.errors
                   }"
                 />
                 <div
                   *ngIf="
-                    employeeForm.controls.phoneNumber.touched &&
-                    employeeForm.controls.phoneNumber.errors?.required
+                    employeeForm.controls.phone.touched &&
+                    employeeForm.controls.phone.errors?.required
                   "
                   class="error-msg"
                 >
@@ -316,7 +308,6 @@
                   bindValue="organizationId"
                   placeholder="Select Organization"
                   formControlName="organizationId"
-                  (change)="getSuperVisors(organizationId)"
                   class="cfo-select" [ngClass]="{
                     'invalid-input':
                       employeeForm.controls.organizationId.errors?.required
@@ -420,15 +411,41 @@
                   id="checkboxSuperVisorId"
                   value="1"
                   formControlName="isSupervisor"
-                  (change)="checkIsSupervisor($event)"
+                 
                 />
                 <span>Is Supervisor</span>
               </div>
             </div>
           </div>
 
-          <!-- *ngIf="employeeForm.value.isSupervisor"  in: ng-select-->
           <div class="form-group">
+            <label>SuperVisor</label>
+            <ng-select
+              [items]="supervisors"
+              placeholder="Select SuperVisor"
+              bindLabel="employeeName"
+              bindValue="employeeId"
+              formControlName="superVisorId"
+              class="cfo-select"
+            >
+            </ng-select>
+          </div>
+
+                      <div class="form-group" *ngIf="!isEdit">
+              <ngx-treeview [config]="config" [items]="items" (filterChange)="onFilterChange($event)"
+              (selectedChange)="values = $event">
+            </ngx-treeview>
+            </div>
+
+
+            <div class="form-group" *ngIf="isEdit">
+              <ngx-treeview [config]="config" [items]="updateitems" (filterChange)="onFilterChange($event)"
+              (selectedChange)="updatevalues = $event">
+            </ngx-treeview>
+            </div>
+
+
+          <!-- <div class="form-group">
             <label>SuperVisor</label>
             <ng-select
               [items]="supervisors"
@@ -442,7 +459,7 @@
           </div>
           <div class="example-config">
             Checked keys: {{checkedKeys}}
-        </div>
+        </div> -->
 
 <!--           
               {{selectedIds|json}}
@@ -480,7 +497,7 @@
               (selectedChange)="onSelectedChange($event)" (change)="onSelect($event)">
             </ngx-treeview> -->
 
-            <div class="form-group" *ngIf="showTree">
+            <!-- <div class="form-group" *ngIf="showTree">
             <kendo-treeview 
             [nodes]="data"
             [children]="children"
@@ -495,7 +512,7 @@
             [isChecked] = "isChecked"
             (checkedChange) = "checkChange($event)">
             </kendo-treeview>
-            </div>
+            </div> -->
 
               
           <div class="float-right">
