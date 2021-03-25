@@ -1,32 +1,37 @@
-import {Component} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   FormControl,
   FormBuilder,
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { NgbModal,ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoleModel } from 'src/app/models/role.model';
 import { RoleService } from '../services/userrole.service';
 import AuthenticationService from '../../user-account/services/authentication.service';
+import { MenuModel } from 'src/app/models/menu.model';
+import { RolePermissionModel } from 'src/app/models/role-permission';
 @Component({
   selector: 'app-userrole',
   styleUrls: ['userrole.component.scss'],
   templateUrl: './userrole.component.html',
 })
-export class UserRoleComponent {
+export class UserRoleComponent implements OnInit {
   role: RoleModel = new RoleModel();
   roles: RoleModel[];
+  menuList: MenuModel[];
+  checkedMenuList: MenuModel[] = [];
+  dropdownPermissionSettings;
+  rolePermissionForm: FormGroup;
 
   isSubmitting: boolean; // Form submission variable
   closeResult = ''; // close result for modal
   submitted = false;
 
   isEdit = false;
-  isUpdate = false;
-
+  disableRoleDdl = false;
   selectrole;
   selectedRole: number;
 
@@ -43,28 +48,94 @@ export class UserRoleComponent {
   roleForm: FormGroup;
   EventValue: any = 'Save';
 
- roleId = new FormControl('');
+  roleId = new FormControl('');
   roleName = new FormControl('', [Validators.required]);
-  //isActive = new FormControl(true);
 
   ngOnInit() {
     this.getRoles();
+    this.getMenus();
     this.initializeUserRoleForm();
+    this.initializeRolePermissionForm();
+    this.dropdownPermissionSettings = {
+      singleSelection: false,
+      idField: 'id',
+      textField: 'menuName',
+      selectAllText: 'Select All',
+      unSelectAllText: 'UnSelect All',
+      itemsShowLimit: 3,
+      allowSearchFilter: true,
+    };
   }
 
   getRoles() {
-    this.roleService.GetAllRoles().subscribe(
+    this.roleService.getAllRoles().subscribe(
       (result) => {
         this.roles = result;
+        console.table(this.roles);
       },
       (error) => console.error
     );
+  }
+  getMenus() {
+    this.roleService.getAllMenus().subscribe(
+      (result) => {
+        this.menuList = result;
+        console.table(this.menuList);
+      },
+      (error) => console.error
+    );
+  }
+  getRoleById(id: string, content) {
+    this.roleService.getRoleById(id).subscribe(
+      (result: RoleModel) => {
+        this.isEdit = true;
+        this.EventValue = 'Update';
+        this.displayFormData(result, id);
+        this.openModal(content);
+      },
+      (error) => {
+        this.toastr.error(
+          error.error.errorMessage !== undefined
+            ? error.error.errorMessage
+            : ' failed',
+          'Error!'
+        );
+      }
+    );
+  }
+  displayFormData(data: RoleModel, id: any) {
+    this.rolePermissionForm.patchValue({
+      roleId: data.roleId,
+      // employeeName: data.employeeName,
+      // email: data.email,
+      // phoneNumber: data.phoneNumber,
+      // address: data.address,
+      // city: data.city,
+      // zipCode: data.zipCode,
+      // state: data.state,
+      // organizationId: data.organizationId,
+      // designationId: data.designationId,
+      // isSupervisor: data.isSupervisor,
+      // superVisorId: data.superVisorId,
+      // payType: data.payType,
+      // payTypeCheck: data.payType == 'Salary' ? true : false,
+      // pay: data.pay,
+      // overTimeRate: data.overTimeRate,
+      // orgPermissionId: this.updateitems
+    });
+  }
+
+  initializeRolePermissionForm() {
+    this.rolePermissionForm = this.fb.group({
+      roleId: new FormControl(''),
+      menuIds: new FormControl(''),
+    });
   }
 
   initializeUserRoleForm() {
     this.roleForm = new FormGroup({
       roleId: this.roleId,
-      roleName: this.roleName
+      roleName: this.roleName,
     });
   }
   openDeleteModal(content, id) {
@@ -74,7 +145,6 @@ export class UserRoleComponent {
   }
 
   Delete() {
-    debugger
     this.roleService.DeleteRole(this.selectedRole).subscribe(
       (result) => {
         if (result == null) {
@@ -92,7 +162,6 @@ export class UserRoleComponent {
     );
   }
   open(content) {
-    this.isUpdate = false;
     this.resetFrom();
     this.isEdit = false;
     this.role = null;
@@ -100,16 +169,13 @@ export class UserRoleComponent {
   }
 
   onSubmit() {
-    debugger
     const createForm = this.roleForm.value;
     console.log(createForm);
 
     if (!this.isEdit) {
       if (this.roleForm.valid) {
         const model = new RoleModel();
-
         model.roleName = createForm.roleName;
-        //model.isActive= createForm.isActive ? true : false;
         this.roleService.CreateRole(model).subscribe(
           (res) => {
             this.submitted = true;
@@ -126,36 +192,69 @@ export class UserRoleComponent {
         );
       }
     } else {
-
       if (this.roleForm.valid) {
+        const model = new RoleModel();
+        model.roleName = createForm.roleName;
+        model.roleId = createForm.roleId;
 
-     const model = new RoleModel();
-     debugger
+        this.roleService.UpdateRole(model).subscribe(
+          (res) => {
+            this.toastr.success('Role Updated Successfully.', 'Success!');
+            this.modalService.dismissAll();
+            this.getRoles();
+          },
+          (error) => {
+            this.toastr.error(
+              error.error.errorMessage !== undefined
+                ? error.error.errorMessage
+                : 'Role Update failed',
+              'Error!'
+            );
+          }
+        );
+      }
+    }
+  }
 
-     model.roleName = createForm.roleName;
-    // model.isActive = createForm.isActive;
-     model.roleId = createForm.roleId;
+  onRoleAssginedSubmit(): void {
+    const model = new RolePermissionModel();
+    const createRolePermissionForm = this.rolePermissionForm.value;
+    model.roleId = createRolePermissionForm.roleId;
+    model.menuIds = createRolePermissionForm.menuIds.map((x) => x.id);
 
-     this.roleService.UpdateRole(model).subscribe(
+    if (!this.isEdit) {
+      this.roleService.addPermissionPermission(model).subscribe(
         (res) => {
-          this.toastr.success('Role Updated Successfully.', 'Success!');
+          this.submitted = true;
+          this.toastr.success('Role Permision Created Successfully.', 'Success!');
           this.modalService.dismissAll();
-          this.getRoles();
         },
         (error) => {
-          this.toastr.error(
-            error.error.errorMessage !== undefined
-              ? error.error.errorMessage
-              : 'Role Update failed',
-            'Error!'
-          );
+          console.log(error);
+          this.isSubmitting = false;
+          this.modalService.dismissAll();
+          this.toastr.error(error?.error?.errorMessage, 'Error!');
+        }
+      );
+    }
+    else{
+      this.roleService.editRolePermission(model).subscribe(
+        (res) => {
+          this.submitted = true;
+          this.toastr.success('Role Permision Updated Successfully.', 'Success!');
+          this.modalService.dismissAll();
+        },
+        (error) => {
+          console.log(error);
+          this.isSubmitting = false;
+          this.modalService.dismissAll();
+          this.toastr.error(error.error.errorMessage, 'Error!');
         }
       );
     }
   }
-}
 
-  private getDismissReason(reason: any): string {
+  getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
     } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
@@ -173,28 +272,54 @@ export class UserRoleComponent {
   }
 
   EditData(content, role: any) {
-    debugger
-    this.isUpdate = true;
     this.isEdit = true;
     this.selectrole = this.role;
     this.EventValue = 'Update';
     this.roleForm.patchValue({
       roleName: role.roleName,
-      roleId: role.roleId
+      roleId: role.roleId,
     });
     this.modalService.open(content, {
       ariaLabelledBy: 'modal-basic-title',
       windowClass: 'modal-cfo',
-      backdropClass:'static'
+      backdropClass: 'static',
     });
   }
 
-  private openModal(content: any) {
+  EditPermission(content: any, role: RoleModel) {
+    this.disableRoleDdl = true;
+    this.isEdit = true;
+    this.EventValue = 'Update';
+    this.rolePermissionForm.patchValue({
+      roleName: role.roleName,
+      roleId: role.roleId,
+    });
+    this.roleService.getRolePermission(role.roleId).subscribe(
+      (result) => {
+        console.table(result.menuIds);
+        this.checkedMenuList = this.menuList.filter((item) =>
+          result.menuIds.includes(item.id)
+        );
+        console.log(this.checkedMenuList);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+
+    this.modalService.open(content, {
+      ariaLabelledBy: 'modal-basic-title',
+      windowClass: 'modal-cfo',
+      backdropClass: 'static',
+    });
+  }
+
+  openModal(content: any) {
     this.modalService
       .open(content, {
         ariaLabelledBy: 'modal-basic-title',
         windowClass: 'modal-cfo',
-        backdrop: 'static'
+        backdrop: 'static',
       })
       .result.then(
         (result) => {

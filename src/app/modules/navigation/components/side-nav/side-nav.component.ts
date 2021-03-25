@@ -20,9 +20,9 @@ export class SideNavComponent implements OnInit {
 
   expandOrgNav = false;
 
-  menus = ['org roles', 'employee management', 'org manager'];
-
-  admins = ['admin', 'users', 'portal settings'];
+  menus = JSON.parse(localStorage.getItem("sidemenu"));
+  
+  admins = ['admin', 'users', 'Settings'];
 
   organizations: OrganizationNavModel[];
 
@@ -41,10 +41,10 @@ export class SideNavComponent implements OnInit {
 
   ngOnInit() {}
 
-  toggleOrganizationNav(menu) {
+  toggleOrganizationNav(menu:string) {
+    menu = menu.trim().toLowerCase();
     const mainTag = document.getElementById('mainTag') as any;
-
-    if (menu === 'org manager') {
+    if (menu === 'organization') {
       this.expandOrgNav = !this.expandOrgNav;
       this.getOrganizatioNavigation();
       this.router.navigateByUrl('organization-information');
@@ -54,19 +54,33 @@ export class SideNavComponent implements OnInit {
         mainTag.classList.remove('main-content-slide');
       }
     }
-    if (menu === 'employee management') {
+    if (menu === 'employee') {
       this.expandOrgNav = false;
       if (mainTag.classList.contains('main-content-slide')) {
         mainTag.classList.remove('main-content-slide');
       }
       this.router.navigateByUrl('employee-information');
     }
-    if (menu === 'org roles') {
+    if (menu === 'designation') {
       this.expandOrgNav = false;
       if (mainTag.classList.contains('main-content-slide')) {
         mainTag.classList.remove('main-content-slide');
       }
       this.router.navigateByUrl('emp-roles');
+    }
+    if (menu === 'user') {
+      this.expandOrgNav = false;
+      if (mainTag.classList.contains('main-content-slide')) {
+        mainTag.classList.remove('main-content-slide');
+      }
+      this.router.navigateByUrl('user-information');
+    }
+    if (menu === 'role') {
+      this.expandOrgNav = false;
+      if (mainTag.classList.contains('main-content-slide')) {
+        mainTag.classList.remove('main-content-slide');
+      }
+      this.router.navigateByUrl('user-roles');
     }
   }
 

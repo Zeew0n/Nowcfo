@@ -77,16 +77,6 @@ export const routes: Routes = [
       },
 
       {
-        path: 'menu',
-        loadChildren: () =>
-          import('./modules/menu/menu-routing.module').then(
-            (m) => m.MenuRoutingModule
-          ),
-        canActivate: [AuthGuard],
-      },
-      
-
-      {
         path: 'organization-information',
         loadChildren: () =>
           import('./modules/organization/organization.module').then(

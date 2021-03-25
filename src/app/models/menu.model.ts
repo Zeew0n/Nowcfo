@@ -1,7 +1,4 @@
 export class MenuModel{
-    menuId: string;
+    id: string;
     menuName: string;
-    routeUrl: string;
-    isActive:boolean;
-
 }
