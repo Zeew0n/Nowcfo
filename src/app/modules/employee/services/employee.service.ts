@@ -9,6 +9,7 @@ import { EmployeeModel } from 'src/app/models/employee.model';
 import { OrganizationModel } from 'src/app/models/organization.model';
 import { EmployeeUpdateModel } from 'src/app/models/EmployeeUpdateModel';
 import { EmployeeNavModel } from 'src/app/models/EmployeeNavModel';
+import { KendoNavModel } from 'src/app/models/KendoNavModel';
 
 
 @Injectable({
@@ -50,6 +51,13 @@ export class EmployeeService extends HttpGenericCrudService<EmployeeModel>{
     GetAllSuperVisors(id): Observable<EmployeeModel[]> {
         return this.httpClient.get<EmployeeModel[]>('employee/listallsupervisors/'+id);
     }
+
+    public getKendoNavigation(): any {
+        return this.httpClient.get<KendoNavModel[]>(
+          'employee/KendoHierarchy'
+        );
+      }
+
 
 
     GetAllOrganizations(): Observable<OrganizationModel[]> {
