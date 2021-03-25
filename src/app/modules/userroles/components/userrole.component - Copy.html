@@ -3,11 +3,7 @@
     <button type="button" class="btn btn-green" (click)="open(content)">
       New Role
     </button>
-    <button
-      type="button"
-      class="btn btn-green mr-2"
-      (click)="open(permission_content)"
-    >
+    <button type="button" class="btn btn-green mr-2" (click)="open(permission_content)">
       Assign Permission
     </button>
   </div>
@@ -22,7 +18,7 @@
           <tr>
             <th scope="col">S.N</th>
             <th scope="col">Role Name</th>
-            <th scope="col">Actions</th>
+            <th scope="col">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -31,15 +27,6 @@
             <td data-th="Role Name ">{{ role.roleName }}</td>
 
             <td data-th="Actions">
-              <a
-              (click)="EditPermission(permission_content, role)"
-              class="icon-holder"
-              href="javascript:void(0)"
-              title="edit_permision"
-              >
-              <i class="fa fa-address-book-o"></i>
-            </a>
-            <span></span>
               <a
                 (click)="EditData(content, role)"
                 class="icon-holder"
@@ -67,7 +54,6 @@
 
         <form class="form-cfo" [formGroup]="roleForm" (ngSubmit)="onSubmit()">
           <div class="form-group">
-            <label>Role Name</label>
             <input
               type="text"
               formControlName="roleName"
@@ -89,6 +75,22 @@
               Role Name is Required!
             </div>
           </div>
+
+          <!-- <div class="row">
+
+              <div class="col-sm-6">
+                <div class="custom-checkbox">
+              
+                  <input
+                    type="checkbox"
+                    id="checkboxId"
+                    formControlName="isActive"
+                  />
+                  <span>Is Active</span>
+                </div>
+               
+              </div>
+            </div> -->
 
           <div class="float-right">
             <button
@@ -132,42 +134,36 @@
 
     <ng-template #permission_content let-modal>
       <div class="container">
-        <h3 class="modal-title" *ngIf="!isEdit">Add Role Permisson</h3>
-        <h3 class="modal-title" *ngIf="isEdit">Edit Role Permisson</h3>
-        <form class="form-cfo" [formGroup]="rolePermissionForm" (ngSubmit)="onRoleAssginedSubmit()">
-          
+        <h3 class="modal-title">Assign Permisson</h3>
+        <form class="form-cfo" [formGroup]="roleForm" (ngSubmit)="onSubmit()">
           <div class="form-group">
-            <label class="control-label">Role</label>
-            <ng-select
-              [items]="roles"
-              formControlName="roleId"
-              placeholder="Select Role"
-              bindLabel="roleName"
-              bindValue="roleId"
-              class="cfo-select"
-              [disabled]="disableRoleDdl"
+            <input
+              type="text"
+              formControlName="roleName"
+              class="form-control"
+              placeholder="Role Name"
+              [ngClass]="{
+                'invalid-input':
+                  roleForm.controls.roleName.touched &&
+                  roleForm.controls.roleName.errors
+              }"
+            />
+            <div
+              *ngIf="
+                roleForm.controls.roleName.touched &&
+                roleForm.controls.roleName.errors?.required
+              "
+              class="error-msg"
             >
-            </ng-select>
-          </div>
-
-          <div class="form-group">
-            <label class="control-label">Permissions</label>
-            <ng-multiselect-dropdown #multiSelect
-              [settings]="dropdownPermissionSettings"
-              [data]="menuList"
-              [(ngModel)]="checkedMenuList"
-              formControlName="menuIds"
-              class="cfo-select"
-              placeholder="Select Permissions"
-            >
-            </ng-multiselect-dropdown>
+              Role Name is Required!
+            </div>
           </div>
 
           <div class="float-right">
             <button
               type="submit"
               class="btn btn-green mr-3"
-              [disabled]="rolePermissionForm.invalid"
+              [disabled]="roleForm.invalid"
             >
               {{ EventValue }}
             </button>

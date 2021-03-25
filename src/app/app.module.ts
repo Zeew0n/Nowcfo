@@ -37,7 +37,6 @@ import { EmployeeComponent } from './modules/employee/components/employee.compon
 import { EmployeeRoleComponent } from './modules/employeeroles/components/employeerole.component';
 import { UserRoleComponent } from './modules/userroles/components/userrole.component';
 import {TreeviewModule } from 'ngx-treeview';
-import { MenuComponent } from './modules/menu/components/menu.component';
 
 
 
@@ -68,7 +67,6 @@ export function tokenGetter() {
     UserInformationComponent,
     EmployeeRoleComponent,
     UserRoleComponent,
-    MenuComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

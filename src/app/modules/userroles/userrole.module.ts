@@ -6,6 +6,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { BrowserModule } from '@angular/platform-browser';
 import { UserRoleRoutingModule } from './userrole.routing';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 @NgModule({
     imports: [
@@ -15,6 +16,7 @@ import { UserRoleRoutingModule } from './userrole.routing';
         NgSelectModule,
         ReactiveFormsModule,
         ToastrModule,
+        NgMultiSelectDropDownModule
     ],
     declarations: [ ],
     providers: []

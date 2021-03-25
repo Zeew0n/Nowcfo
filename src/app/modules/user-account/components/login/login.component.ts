@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import AuthenticationService from '../../services/authentication.service';
 import { UserAuthResponseModel } from '../../../../models/user/user-auth-response.model';
 import { Console } from 'console';
+import jwt_decode from 'jwt-decode';
 
 @Component({
     selector: 'app-login',
@@ -50,14 +51,13 @@ export class LoginComponent implements OnInit {
     }
 
     onSubmit() {
-        // tslint:disable-next-line: no-debugger
-        debugger;
         if (this.loginForm.valid) {
         this.authenticationService.login(this.loginForm.value).subscribe(
           (res: UserAuthResponseModel) => {
-              debugger;
               localStorage.clear();
               localStorage.setItem('auth_token', res.jwtToken);
+              const token = jwt_decode(res.jwtToken) as any;
+              localStorage.setItem("sidemenu", token.menus );
               localStorage.setItem('role_name', res.roleName)
               localStorage.setItem('refresh_token', res.refreshToken);
               this.toastr.success('Login Successful.', 'Success!');
@@ -86,3 +86,4 @@ export class LoginComponent implements OnInit {
         return pass === confirmPass ? null : { notSame: true };
     }
 }
+
