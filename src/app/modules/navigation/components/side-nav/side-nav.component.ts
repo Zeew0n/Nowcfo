@@ -20,8 +20,8 @@ export class SideNavComponent implements OnInit {
 
   expandOrgNav = false;
 
-  menus = JSON.parse(localStorage.getItem("sidemenu"));
-  
+  menus = JSON.parse(localStorage.getItem('sidemenu'));
+
   admins = ['admin', 'users', 'Settings'];
 
   organizations: OrganizationNavModel[];
@@ -41,7 +41,7 @@ export class SideNavComponent implements OnInit {
 
   ngOnInit() {}
 
-  toggleOrganizationNav(menu:string) {
+  toggleOrganizationNav(menu: string) {
     menu = menu.trim().toLowerCase();
     const mainTag = document.getElementById('mainTag') as any;
     if (menu === 'organization') {

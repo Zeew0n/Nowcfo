@@ -29,7 +29,7 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
   styleUrls: ['userinformation.component.scss'],
   templateUrl: './userinformation.component.html',
 })
-export class UserInformationComponent {
+export class UserInformationComponent implements OnInit{
   userinformation: UserInformationModel = new UserInformationModel();
   userinformations: UserInformationModel[];
   roles: RoleModel[];
@@ -37,15 +37,12 @@ export class UserInformationComponent {
   isSubmitting: boolean; // Form submission variable
   closeResult = ''; // close result for modal
   submitted = false;
-  userId: string = '';
-  isEdit: boolean = false;
-  selectedSimpleItem = 'User';
-  websiteList: any = ['User', 'Admin'];
-  simpleItems = [];
+  userId = '';
+  isEdit = false;
   isUpdate = false;
   selectuserinformation;
   disableSelect = false;
-  
+
   constructor(
     private fb: FormBuilder,
     private modalService: NgbModal,
@@ -59,17 +56,17 @@ export class UserInformationComponent {
   /* Form Declarations */
   userForm: FormGroup;
   EventValue: any = 'Save';
-  hasUser: boolean = false;
-  hasAdmin: boolean = false;
-  hasSuperAdmin: boolean = false;
+  hasUser = false;
+  hasAdmin = false;
+  hasSuperAdmin = false;
 
   userName = new FormControl('', [Validators.required]);
-  email = new FormControl('', [Validators.email,Validators.required]);
-  phoneNumber = new FormControl('', [Validators.required, Validators.pattern("^((\\+91-?)|0)?[0-9]{10}$")]);
+  email = new FormControl('', [Validators.email, Validators.required]);
+  phoneNumber = new FormControl('', [Validators.required, Validators.pattern('^((\\+91-?)|0)?[0-9]{10}$')]);
   firstName = new FormControl('', [Validators.required]);
   lastName = new FormControl('', [Validators.required]);
-  //password = new FormControl('', [Validators.required]);
-  //password = new FormControl();
+  // password = new FormControl('', [Validators.required]);
+  // password = new FormControl();
   address = new FormControl('', [Validators.required]);
   city = new FormControl('', [Validators.required]);
   zipCode = new FormControl('', [Validators.required]);
@@ -80,34 +77,15 @@ export class UserInformationComponent {
     this.initializeuserinformationForm();
     this.getRoles();
   }
-  
-  private checkPermissions() {
-    const role = this.authService.getUserRole();
 
-    if (role == 'User') {
-      this.hasUser = true;
-    } else {
-      this.hasUser = false;
-    }
-    if (role == 'Admin') {
-      this.hasAdmin = true;
-    } else {
-      this.hasAdmin = false;
-    }
 
-    if (role === 'SuperAdmin') {
-      this.hasSuperAdmin = true;
-    } else {
-      this.hasSuperAdmin = false;
-    }
-  }
 
   get f() {
     return this.userForm.controls;
   }
 
   getUsers() {
-    this.userInformationService.GetAllUsers().subscribe(
+    this.userInformationService.getAllUsers().subscribe(
       (result) => {
         this.userinformations = result;
       },
@@ -116,7 +94,7 @@ export class UserInformationComponent {
   }
 
   getRoles() {
-    this.userInformationService.GetAllRoles().subscribe(
+    this.userInformationService.getAllRoles().subscribe(
       (result) => {
         this.roles = result;
       },
@@ -150,7 +128,6 @@ export class UserInformationComponent {
 
 
   Delete() {
-    debugger
     this.userInformationService.DeleteUser(this.selectuserinformation).subscribe(
       (result) => {
         if (result == null) {
@@ -173,14 +150,13 @@ export class UserInformationComponent {
     this.isUpdate = false;
     this.resetFrom();
     this.isEdit = false;
-    this.disableSelect=false;
+    this.disableSelect = false;
     this.userId = '';
     this.userinformation == null;
     this.openModal(content);
   }
 
   onSubmit() {
-    debugger;
     this.loader.start();
     const createForm = this.userForm.value;
     console.log(createForm);
@@ -188,7 +164,6 @@ export class UserInformationComponent {
     if (!this.isUpdate) {
       if (this.userForm.valid) {
         const model = new UserInformationModel();
-        debugger;
         model.userName = createForm.userName;
         model.firstName = createForm.firstName;
         model.lastName = createForm.lastName;
@@ -219,7 +194,6 @@ export class UserInformationComponent {
     } else {
       if (this.userForm.valid) {
         const model = new UserInformationModel();
-        debugger;
 
         model.roleId = createForm.roleId;
         model.phoneNumber = createForm.phoneNumber;
@@ -274,7 +248,6 @@ export class UserInformationComponent {
     this.isEdit = true;
     this.disableSelect = true;
     this.selectuserinformation = userinformation;
-    debugger;
     console.log(userinformation);
     this.EventValue = 'Update';
     this.userForm.patchValue({
@@ -292,7 +265,7 @@ export class UserInformationComponent {
       ariaLabelledBy: 'modal-basic-title',
       backdrop: false,
       windowClass: 'modal-cfo',
-      backdropClass:'static'
+      backdropClass: 'static'
     });
   }
 
@@ -302,7 +275,7 @@ export class UserInformationComponent {
         ariaLabelledBy: 'modal-basic-title',
         backdrop: false,
         windowClass: 'modal-cfo',
-        backdropClass:'static'
+        backdropClass: 'static'
       })
       .result.then(
         (result) => {

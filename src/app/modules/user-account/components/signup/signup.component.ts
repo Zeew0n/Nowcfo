@@ -57,7 +57,6 @@ export class SignupComponent {
         const createForm = this.adminRegistrationForm.value;
           if (this.adminRegistrationForm.valid) {
             const model = new AdminSignUpModel();
-            debugger;
             model.userName = createForm.userName;
             model.password = createForm.password;
             model.confirmPassword = createForm.confirmPassword;

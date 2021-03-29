@@ -8,7 +8,6 @@
         </a>
       </li>
       <li class="nav-item" *ngFor="let menu of menus">
-        
         <a
           class="nav-link"
           routerlinkactive="active"
@@ -19,19 +18,18 @@
         </a>
       </li>
     </ul>
-    <!-- <span class="admin-text">Admin</span>
-    <ul class="nav flex-column">
-      <li class="nav-item" *ngFor="let admin of admins">
+    <ul class="nav flex-column nav-bottom">
+      <li class="nav-item">
         <a
           class="nav-link"
-          [routerLink]="['/user-information']"
+          [routerLink]="['/abc']"
           routerLinkActive="active"
         >
           <i class="icon icon-user"></i>
-          {{ admin }}
+          Settings
         </a>
       </li>
-    </ul> -->
+    </ul>
   </div>
   <div class="sidebar left-nav-inner" [ngClass]="expandOrgNav ? 'd-block' : ''">
     <ngx-treeview

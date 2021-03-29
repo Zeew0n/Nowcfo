@@ -31,7 +31,6 @@ export class DesignationService extends HttpGenericCrudService<DesignationModel>
   }
 
   DeleteDesignation(id) {
-    debugger
     return this.httpClient.delete('designation/'+id);
   }
 

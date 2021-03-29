@@ -1,6 +1,16 @@
 @import "src/scss/style.scss";
 
 .sidebar-container {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+
+  .sidebar {
     position: fixed;
     top: 0;
     bottom: 0;
@@ -8,109 +18,98 @@
     z-index: 100;
     display: flex;
     flex-direction: column;
+    padding: 30px;
+    padding-top: 140px;
     z-index: 1;
+  }
 
-    .sidebar {
-        position: fixed;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        z-index: 100;
-        display: flex;
-        flex-direction: column;
-        padding: 30px;
-        padding-top: 140px;
-        z-index: 1;
+  .left-nav {
+    width: 300px;
+    background: #6e6e6e;
+  }
+
+  .left-nav-inner {
+    width: 300px;
+    background: #f3f3f3;
+    left: 300px;
+    display: none;
+
+    a {
+      color: #6e6e6e;
+
+      .fa {
+        margin-right: 10px;
+      }
     }
 
-    .left-nav {
-        width: 300px;
-        background: #6e6e6e;
-
+    .nav-inner {
+      display: none;
+      padding-left: 20px;
     }
 
-    .left-nav-inner {
-        width: 300px;
-        background: #F3F3F3;
-        left: 300px;
-        display: none;
+    li.active {
+      & > .nav-inner {
+        display: block;
+      }
+    }
+  }
 
-        a {
-            color: #6E6E6E;
+  .admin-text {
+    margin-top: 212px;
+    color: #c4c4c4;
+    font-size: 16px;
+    font-weight: 300;
+  }
+  .nav-bottom {
+    margin-top: 150px;
+  }
 
-            .fa {
-                margin-right: 10px;
-            }
-        }
+  .navbar-brand {
+    margin-bottom: 40px;
+  }
 
-        .nav-inner {
-            display: none;
-            padding-left: 20px;
-        }
+  .nav-link {
+    font-weight: 500;
+    color: #fff;
+    font-size: 16px;
+    padding: 16px 0;
+    display: flex;
+    cursor: pointer;
 
-        li.active {
-            &>.nav-inner {
-                display: block;
-            }
-        }
+    &.active {
+      font-weight: bold;
     }
 
-    .admin-text {
-        margin-top: 212px;
-        color: #C4C4C4;
-        font-size: 16px;
-        font-weight: 300;
+    .feather {
+      margin-right: 4px;
+      color: #999;
     }
 
-    .navbar-brand {
-        margin-bottom: 40px;
+    .icon:before {
+      color: #fff;
     }
+  }
 
-    .nav-link {
-        font-weight: 500;
-        color: #fff;
-        font-size: 16px;
-        padding: 16px 0;
-        display: flex;
-
-        &.active {
-            font-weight: bold;
-
-        }
-
-        .feather {
-            margin-right: 4px;
-            color: #999;
-        }
-
-        .icon:before {
-            color: #fff;
-        }
+  ul {
+    .icon {
+      margin-right: 15px;
+      font-size: 18px;
     }
-
-    ul {
-        .icon {
-            margin-right: 15px;
-            font-size: 18px;
-        }
-    }
+  }
 }
 
-
-
 .sidebar-sticky {
-    position: relative;
-    top: 0;
-    height: calc(100vh - 48px);
-    padding-top: 0.5rem;
-    overflow-x: hidden;
-    overflow-y: auto;
-    /* Scrollable contents if viewport is shorter than content. */
+  position: relative;
+  top: 0;
+  height: calc(100vh - 48px);
+  padding-top: 0.5rem;
+  overflow-x: hidden;
+  overflow-y: auto;
+  /* Scrollable contents if viewport is shorter than content. */
 }
 
 .sidebar-heading {
-    font-size: 16px;
-    text-transform: uppercase;
-    color: #b2b2b2;
+  font-size: 16px;
+  text-transform: uppercase;
+  color: #b2b2b2;
 }
-

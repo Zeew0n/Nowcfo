@@ -106,22 +106,6 @@ export class UserRoleComponent implements OnInit {
   displayFormData(data: RoleModel, id: any) {
     this.rolePermissionForm.patchValue({
       roleId: data.roleId,
-      // employeeName: data.employeeName,
-      // email: data.email,
-      // phoneNumber: data.phoneNumber,
-      // address: data.address,
-      // city: data.city,
-      // zipCode: data.zipCode,
-      // state: data.state,
-      // organizationId: data.organizationId,
-      // designationId: data.designationId,
-      // isSupervisor: data.isSupervisor,
-      // superVisorId: data.superVisorId,
-      // payType: data.payType,
-      // payTypeCheck: data.payType == 'Salary' ? true : false,
-      // pay: data.pay,
-      // overTimeRate: data.overTimeRate,
-      // orgPermissionId: this.updateitems
     });
   }
 

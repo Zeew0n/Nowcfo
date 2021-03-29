@@ -25,7 +25,7 @@ import { EmployeeModel } from 'src/app/models/employee.model';
 import { DesignationModel } from 'src/app/models/designation.model';
 import { EmployeeService } from '../services/employee.service';
 import { OrganizationModel } from 'src/app/models/organization.model';
-import { DownlineTreeviewItem, TreeviewConfig, TreeviewItem,TreeviewHelper } from 'ngx-treeview';
+import { DownlineTreeviewItem, TreeviewConfig, TreeviewItem, TreeviewHelper } from 'ngx-treeview';
 import csc from 'country-state-city';
 import { NavigationService } from '../../navigation/services/navigation.service';
 import { EmployeeUpdateModel } from 'src/app/models/EmployeeUpdateModel';
@@ -33,7 +33,7 @@ import { analyzeNgModules } from '@angular/compiler';
 import { Observable, of } from 'rxjs';
 
 
-//KendoTreeview
+// KendoTreeview
 import { CheckableSettings, CheckedState, TreeItemLookup } from '@progress/kendo-angular-treeview';
 import { KendoNavModel } from 'src/app/models/KendoNavModel';
 
@@ -51,7 +51,7 @@ export class EmployeeComponent implements OnInit {
   supervisors: EmployeeModel[];
   dropdownEmailAttachmentSettings: any = {};
 
-  //Added for dropdown
+  // Added for dropdown
   title = 'dropdowmcheckbox';
   disabled = false;
   showFilter = false;
@@ -64,32 +64,29 @@ export class EmployeeComponent implements OnInit {
   isSubmitting: boolean; // Form submission variable
   closeResult = ''; // close result for modal
   submitted = false;
-  userId: string = '';
-  isEdit: boolean = false;
-  selectedSimpleItem = 'User';
-  websiteList: any = ['User', 'Admin'];
+  userId = '';
+  isEdit = false;
   stateList: Array<any>;
   simpleItems = [];
   isUpdate = false;
   selectemployee;
-  selectedEmployeeId:string;
-  selectedIds=[];
-  showTree=false;
+  selectedEmployeeId: string;
+  selectedIds = [];
+  showTree = false;
 
-  //for treeview
+  // for treeview
   values: number[];
   updatevalues: number[];
   items: TreeviewItem[] = [];
-  updateitems:TreeviewItem[]=[];
+  updateitems: TreeviewItem[] = [];
   config = TreeviewConfig.create({
-    hasAllCheckBox:true,
+    hasAllCheckBox: true,
     hasFilter: true,
     hasCollapseExpand: true,
     decoupleChildFromParent: false,
     maxHeight: 400,
-
-  
   });
+
   constructor(
     private fb: FormBuilder,
     private modalService: NgbModal,
@@ -101,15 +98,15 @@ export class EmployeeComponent implements OnInit {
   ) {
 
   }
-  
+
 
   /* Form Declarations */
   employeeForm: FormGroup;
   EventValue: any = 'Save';
   isActive: boolean;
-  hasUser: boolean = false;
-  hasAdmin: boolean = false;
-  hasSuperAdmin: boolean = false;
+  hasUser = false;
+  hasAdmin = false;
+  hasSuperAdmin = false;
 
   employeeName = new FormControl('', [Validators.required]);
   email = new FormControl('', [Validators.required, Validators.email]);
@@ -136,10 +133,6 @@ export class EmployeeComponent implements OnInit {
     this.getOrganizatioNavigation();
     this.getSuperVisors();
 
-
-
-
-
     this.dropdownEmailAttachmentSettings = {
       singleSelection: false,
       idField: 'item_id',
@@ -153,7 +146,6 @@ export class EmployeeComponent implements OnInit {
 
 
   getOrganizatioNavigation() {
-    debugger
     this.navigationService.getOrganizationNavigation().subscribe(
       (res: TreeviewItem[]) => {
         this.items.length = 0;
@@ -164,28 +156,20 @@ export class EmployeeComponent implements OnInit {
             collapsed: true,
             children: data.children,
           });
-          console.log(item)
+          console.log(item);
           this.items.push(item);
-          
+
         });
       },
       (error) => console.error(error)
     );
-   
   }
 
-
-
-
-  onSelect(event)
-  {
-  
-    console.log(event)
-
+  onSelect(event){
+    console.log(event);
   }
 
   onFilterChange(value: string): void {
-    
     console.log('filter:', value);
   }
 
@@ -193,13 +177,12 @@ export class EmployeeComponent implements OnInit {
     console.log('test');
   }
 
-
   get f() {
     return this.employeeForm.controls;
   }
 
   getEmployees() {
-    this.employeeService.GetAllEmployees().subscribe(
+    this.employeeService.getAllEmployees().subscribe(
       (result) => {
         this.employees = result;
       },
@@ -208,7 +191,7 @@ export class EmployeeComponent implements OnInit {
   }
 
   getDesignations() {
-    this.employeeService.GetAllDesignations().subscribe(
+    this.employeeService.getAllDesignations().subscribe(
       (result) => {
         this.designations = result;
       },
@@ -217,8 +200,7 @@ export class EmployeeComponent implements OnInit {
   }
 
   getSuperVisors() {
-    debugger
-    this.employeeService.GetAllSuperVisors().subscribe(
+    this.employeeService.getAllSuperVisors().subscribe(
       (result) => {
         this.supervisors = result;
       },
@@ -229,7 +211,7 @@ export class EmployeeComponent implements OnInit {
   getOrganizations() {
     this.employeeService.GetAllOrganizations().subscribe(
       (result) => {
-       
+
         this.organizations = result;
         const count = result.length;
         if (count > 0) {
@@ -243,7 +225,6 @@ export class EmployeeComponent implements OnInit {
       (error) => console.error
     );
   }
-
 
   initializeemployeeForm() {
     this.stateList = csc.getStatesOfCountry('US');
@@ -267,18 +248,18 @@ export class EmployeeComponent implements OnInit {
   }
 
 
-  //Edit
+  // Edit
   EditData(content, id: string) {
     this.selectedEmployeeId = id;
     this.resetFrom();
     this.employeeId = id;
-   
-    this.isUpdate= true;
+
+    this.isUpdate = true;
     this.isEdit = true;
     this.getEmployeeById(id, content);
   }
 
-  private displayFormData(data: EmployeeUpdateModel,id:any) {
+  private displayFormData(data: EmployeeUpdateModel, id: any) {
     this.employeeForm.patchValue({
       employeeName: data.employeeName,
       email: data.email,
@@ -286,27 +267,25 @@ export class EmployeeComponent implements OnInit {
       address: data.address,
       city: data.city,
       zipCode: data.zipCode,
-      state:data.state,
+      state: data.state,
       organizationId: data.organizationId,
       designationId: data.designationId,
       isSupervisor: data.isSupervisor,
       superVisorId: data.superVisorId,
       payType: data.payType,
-      payTypeCheck: data.payType == "Salary" ? true : false,
+      payTypeCheck: data.payType == 'Salary' ? true : false,
       pay: data.pay,
       overTimeRate: data.overTimeRate
       // orgPermissionId:data.employeepermissions
     });
   }
 
-
-
   getEmployeeById(id: string, content) {
-    debugger
     this.employeeService.getEmployeeById(id).subscribe(
       (res: EmployeeUpdateModel) => {
-        if (res)
+        if (res) {
         this.isEdit = true;
+        }
         this.EventValue = 'Update';
         this.displayFormData(res, id);
         this.openModal(content);
@@ -317,8 +296,6 @@ export class EmployeeComponent implements OnInit {
       });
   }
 
-
-
   openDeleteModal(content, id) {
     this.EventValue = 'Delete';
     this.selectedEmployeeId = id;
@@ -326,7 +303,6 @@ export class EmployeeComponent implements OnInit {
   }
 
   Delete() {
-    debugger
     this.employeeService.DeleteEmployee(this.selectedEmployeeId).subscribe(
       (result) => {
         if (result == null) {
@@ -356,7 +332,7 @@ export class EmployeeComponent implements OnInit {
 
   /**
    * Triggers on state option change
-   * @param event 
+   * @param event
    */
   onStateChange(event) {
     if (event !== undefined) {
@@ -386,18 +362,15 @@ export class EmployeeComponent implements OnInit {
           payTypeCheck: createForm.payTypeCheck ? true : false,
           pay: createForm.pay,
           overTimeRate: createForm.overTimeRate,
-          payType: "",
-          employeepermissions:this.values
+          payType: '',
+          employeepermissions: this.values
         };
 
         if (model.payTypeCheck) {
-          debugger
-          model.payType = "Salary";
-
+          model.payType = 'Salary';
         }
         else {
-          debugger
-          model.payType = "Hourly";
+          model.payType = 'Hourly';
         }
 
 
@@ -436,23 +409,19 @@ export class EmployeeComponent implements OnInit {
           payTypeCheck: createForm.payTypeCheck ? true : false,
           pay: createForm.pay,
           overTimeRate: createForm.overTimeRate,
-          payType: "",
-          employeepermissions:this.updatevalues,
+          payType: '',
+          employeepermissions: this.updatevalues,
         };
 
-        if(model.payTypeCheck) {
-          
-          model.payType = "Salary";
-
+        if (model.payTypeCheck) {
+          model.payType = 'Salary';
         }
         else {
-          
-          model.payType = "Hourly";
+          model.payType = 'Hourly';
         }
 
         this.employeeId = this.selectedEmployeeId;
-        debugger
-        this.employeeService.updateEmployee(this.employeeId,model).subscribe(
+        this.employeeService.updateEmployee(this.employeeId, model).subscribe(
           (res) => {
             this.toastr.success('Employee Updated Successfully.', 'Success!');
             this.modalService.dismissAll();
@@ -494,7 +463,7 @@ export class EmployeeComponent implements OnInit {
 
 
   private openModal(content: any) {
-    this.showTree=true;
+    this.showTree = true;
     this.modalService
       .open(content, {
         ariaLabelledBy: 'modal-basic-title',
@@ -514,8 +483,6 @@ export class EmployeeComponent implements OnInit {
   onIdFromChild(event){
     this.selectedIds.push(event);
   }
-
-
 
 }
 

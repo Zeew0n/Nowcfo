@@ -9,14 +9,14 @@ import AuthenticationService from 'src/app/modules/user-account/services/authent
 })
 
 export class TopNavComponent implements OnInit  {
-  userName :string;
+  userName: string;
     constructor(
       private router: Router,
-      private authService:AuthenticationService
+      private authService: AuthenticationService
     ) {}
 
   ngOnInit(): void {
-    this.userName= this.authService.getUserName();
+    this.userName = this.authService.getUserName();
   }
 
 

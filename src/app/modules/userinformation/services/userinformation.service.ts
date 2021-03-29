@@ -19,43 +19,26 @@ export class UserInformationService extends HttpGenericCrudService<UserInformati
             'user',
         );
     }
-
-    GetAllUsers(): Observable<UserInformationModel[]> {
-        return this.httpClient.get<UserInformationModel[]>('user/listallusers')
+    getAllUsers(): Observable<UserInformationModel[]> {
+        return this.httpClient.get<UserInformationModel[]>('user/listallusers');
     }
-
-
-    GetAllRoles(): Observable<RoleModel[]> {
+    getAllRoles(): Observable<RoleModel[]> {
         return this.httpClient.get<RoleModel[]>('Role/Listrole');
     }
-
-
-
-
-    GetUserById(id): Observable<UserInformationModel> {
+    getUserById(id): Observable<UserInformationModel> {
         return this.httpClient.get<UserInformationModel>('user/UserId?UserId=' + id);
     }
-
-
-    CreateUser(data)
-    {
-       
+    CreateUser(data){
         return this.httpClient.post('user/create', data);
     }
-
-
-    DeleteUser(id)
-    {
-        return this.httpClient.delete('user/delete/'+id);
+    DeleteUser(id){
+        return this.httpClient.delete('user/delete/' + id);
     }
-
-
-      updateUser(data: UserInformationModel) {
+    updateUser(data: UserInformationModel) {
         return this.httpClient.put('user/update', data);
-      }
-
-      changePassword(data:PasswordUpdateModel) {
+    }
+    changePassword(data: PasswordUpdateModel) {
         return this.httpClient.put('user/changepassword', data);
-      }
+    }
 
 }

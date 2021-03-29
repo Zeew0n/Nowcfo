@@ -84,7 +84,6 @@ export class EmployeeRoleComponent {
     });
   }
   openDeleteModal(content, id) {
-    debugger
     this.EventValue = 'Delete';
     this.selectedDesignationId = id;
     this.openModal(content);
@@ -92,7 +91,6 @@ export class EmployeeRoleComponent {
 
 
   Delete() {
-    debugger
     this.designationService.DeleteDesignation(this.selectedDesignationId).subscribe(
       (result) => {
         if (result == null) {
@@ -118,7 +116,6 @@ export class EmployeeRoleComponent {
   }
 
   onSubmit() {
-    debugger
     const createForm = this.designationForm.value;
     console.log(createForm);
 

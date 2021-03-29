@@ -21,23 +21,23 @@ export class OrganizationService extends HttpGenericCrudService<OrganizationMode
     return httpOptions;
   }
 
-  GetAllOrganizations(): Observable<OrganizationModel[]> {
+  getAllOrganizations(): Observable<OrganizationModel[]> {
     return this.httpClient.get<OrganizationModel[]>('organization');
   }
 
-  GetOrganizationById(id): Observable<OrganizationModel> {
+  getOrganizationById(id): Observable<OrganizationModel> {
     return this.httpClient.get<OrganizationModel>('organization/' + id);
   }
 
-  CreateOrganization(data) {
+  createOrganization(data) {
     return this.httpClient.post('organization', data);
   }
 
-  DeleteOrganization(id) {
+  deleteOrganization(id) {
     return this.httpClient.delete('organization/' + id);
   }
 
-  UpdateOrganization(id, data: OrganizationModel) {
+  updateOrganization(id, data: OrganizationModel) {
     return this.httpClient.put('organization/' + id, data);
   }
 }

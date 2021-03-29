@@ -51,11 +51,9 @@ export class ForgotPasswordComponent implements OnInit {
 
     onSubmit() {
         const createForm = this.RequestPasswordForm.value;
-        debugger;
         console.log("Hello");
           if (this.RequestPasswordForm.valid) {
             const model = new AdminSignUpModel();
-            debugger;
             model.userName = createForm.email;
             this.forgotPasswordService.forgetPassword(model).subscribe(
               (res) => {
