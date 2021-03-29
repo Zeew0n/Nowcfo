@@ -62,7 +62,6 @@ export class ChangePasswordComponent implements OnInit {
   onSubmit() {
       const ChangePasswordForm = this.ChangePasswordForm.value;
       if (this.ChangePasswordForm.valid) {
-        debugger
           const model = new PasswordUpdateModel();
           model.userName= this.authService.getUserName();
           model.currentPassword = ChangePasswordForm.currentPassword;

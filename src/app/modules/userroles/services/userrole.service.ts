@@ -47,6 +47,7 @@ export class RoleService extends HttpGenericCrudService<RoleModel> {
   addPermissionPermission(data: RolePermissionModel){
     return this.httpClient.post('role/CreateRolePermission', data);
   }
+
   editRolePermission(data: RolePermissionModel){
     return this.httpClient.put('role/UpdateRolePermission', data);
   }

@@ -32,23 +32,19 @@ export class EmployeeService extends HttpGenericCrudService<EmployeeModel>{
         return httpOptions;
     }
 
-    GetAllEmployees(): Observable<EmployeeModel[]> {
-        return this.httpClient.get<EmployeeModel[]>('employee')
+    getAllEmployees(): Observable<EmployeeModel[]> {
+        return this.httpClient.get<EmployeeModel[]>('employee');
     }
 
-
     getEmployeeById(id: string): Observable<EmployeeUpdateModel> {
-       debugger
         return this.httpClient.get<EmployeeUpdateModel>(`employee/${id}`);
-      }
+    }
 
-
-
-    GetAllDesignations(): Observable<DesignationModel[]> {
+    getAllDesignations(): Observable<DesignationModel[]> {
         return this.httpClient.get<DesignationModel[]>('designation');
     }
 
-    GetAllSuperVisors(): Observable<EmployeeModel[]> {
+    getAllSuperVisors(): Observable<EmployeeModel[]> {
         return this.httpClient.get<EmployeeModel[]>('employee/listallsupervisors/');
     }
 
@@ -68,23 +64,22 @@ export class EmployeeService extends HttpGenericCrudService<EmployeeModel>{
     CreateEmployee(data)
     {
        console.log(data);
-        return this.httpClient.post('employee', data);
+       return this.httpClient.post('employee', data);
     }
 
 
     DeleteEmployee(id)
     {
-        return this.httpClient.delete('employee/'+id);
+        return this.httpClient.delete('employee/' + id);
     }
 
-    getEmployeePermissionNavigationById( employeeId):any {
-        return this.httpClient.get<EmployeeNavModel[]>('employee/listallpermissions/'+employeeId)
+    getEmployeePermissionNavigationById( employeeId): any {
+        return this.httpClient.get<EmployeeNavModel[]>('employee/listallpermissions/' + employeeId);
       }
 
-      updateEmployee(id,data) {
-          debugger
-        return this.httpClient.put('employee/'+id, data);
+      updateEmployee(id, data) {
+        return this.httpClient.put('employee/' + id, data);
       }
 
-      
+
 }

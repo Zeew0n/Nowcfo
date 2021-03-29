@@ -70,7 +70,7 @@ export class OrganizationComponent implements OnInit {
   }
 
   getOrganizations() {
-    this.organizationService.GetAllOrganizations().subscribe(
+    this.organizationService.getAllOrganizations().subscribe(
       (result) => {
         this.orgList = true;
         this.empList = false;
@@ -87,7 +87,7 @@ export class OrganizationComponent implements OnInit {
   }
 
   Delete() {
-    this.organizationService.DeleteOrganization(this.selectedOrgId).subscribe(
+    this.organizationService.deleteOrganization(this.selectedOrgId).subscribe(
       (result) => {
         if (result == null) {
           this.modalService.dismissAll();
@@ -134,7 +134,7 @@ export class OrganizationComponent implements OnInit {
         model.parentOrganizationId = createForm.parentOrganizationId;
         this.submitted = true;
 
-        this.organizationService.CreateOrganization(model).subscribe(
+        this.organizationService.createOrganization(model).subscribe(
           (res) => {
             this.submitted = false;
             this.toastr.success('User Added Successfully.', 'Success!');
@@ -159,7 +159,7 @@ export class OrganizationComponent implements OnInit {
         if (model.hasParent) {
           model.parentOrganizationId = createForm.parentOrganizationId;
         }
-        this.organizationService.UpdateOrganization(model.id, model).subscribe(
+        this.organizationService.updateOrganization(model.id, model).subscribe(
           (res) => {
             this.toastr.success(
               'Organization Updated Successfully.',

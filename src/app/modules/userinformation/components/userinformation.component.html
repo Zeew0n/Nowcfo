@@ -16,25 +16,22 @@
                     <tr>
                         <th scope="col">S.N</th>
                         <th scope="col">UserName</th>
-                        <th scope="col">First Name</th>
-                        <th scope="col">Last Name</th>
-
+                        <th scope="col">Name</th>
                         <th scope="col">Address</th>
                         <th scope="col">City</th>
                         <th scope="col">Zip</th>
                         <th scope="col">Email</th>
-                        <th scope="col">Phone Number</th>
+                        <th scope="col">Phone</th>
                         <th scope="col">Role</th>
                         <th scope="col">Status</th>
-                        <th scope="col">Action</th>
+                        <th scope="col">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let userinformation of userinformations;let i = index">
                         <td>{{i+1}}</td>
                         <td data-th="UserName ">{{userinformation.userName}}</td>
-                        <td data-th="First Name ">{{userinformation.firstName}}</td>
-                        <td data-th="Last Name">{{userinformation.lastName}}</td>
+                        <td data-th="First Name ">{{userinformation.firstName+" "+userinformation.lastName}}</td>
                         <td data-th="Address ">{{userinformation.address}}</td>
                         <td data-th="City">{{userinformation.city}}</td>
                         <td data-th="Zip ">{{userinformation.zipCode}}</td>
