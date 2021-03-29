@@ -8,15 +8,25 @@ import { ConfirmSignupComponent } from './components/confirm-signup/confirm-sign
 import { UserAccountRoutingModule } from './user-account-routing.module';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
+import { UserInformationComponent } from './components/user-information/userinformation.component';
+import { NgSelectComponent, NgSelectModule } from '@ng-select/ng-select';
+import { ToastrModule } from 'ngx-toastr';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { UserRoleComponent } from './components/user-role/userrole.component';
+import { SideNavComponent } from '../navigation/components/side-nav/side-nav.component';
 
 @NgModule({
     imports: [
         CommonModule,
         UserAccountRoutingModule,
         FormsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        NgSelectModule,
+        ToastrModule,
+        NgMultiSelectDropDownModule,
+        
     ],
-    declarations: [LoginComponent, LoginPageComponent, SignupComponent, ChangePasswordComponent],
+    declarations: [LoginComponent, LoginPageComponent, SignupComponent, ChangePasswordComponent,UserInformationComponent,UserRoleComponent],
     providers: []
 })
 export class UserAccountModule { }

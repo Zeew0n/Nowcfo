@@ -9,10 +9,10 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoleModel } from 'src/app/models/role.model';
-import { RoleService } from '../services/userrole.service';
-import AuthenticationService from '../../user-account/services/authentication.service';
 import { MenuModel } from 'src/app/models/menu.model';
 import { RolePermissionModel } from 'src/app/models/role-permission';
+import { RoleService } from '../../services/userrole.service';
+import AuthenticationService from '../../services/authentication.service';
 @Component({
   selector: 'app-userrole',
   styleUrls: ['userrole.component.scss'],
