@@ -35,6 +35,7 @@ import { EmployeeService } from '../../services/employee.service';
 import { NavigationService } from 'src/app/modules/navigation/services/navigation.service';
 import AuthenticationService from 'src/app/modules/user-account/services/authentication.service';
 import { PaginatedResult, Pagination } from 'src/app/models/Pagination/Pagination';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 @Component({
   selector: 'app-employee-list',
   styleUrls: ['employee.component.scss'],
@@ -90,6 +91,7 @@ export class EmployeeComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private modalService: NgbModal,
+    private ngxService: NgxUiLoaderService,
     private toastr: ToastrService,
     private employeeService: EmployeeService,
     private navigationService: NavigationService,
@@ -126,7 +128,7 @@ export class EmployeeComponent implements OnInit {
 
 
   ngOnInit() {
-    this.getEmployees();
+
     this.getOrganizations();
     this.getDesignations();
     this.initializeemployeeForm();
@@ -137,8 +139,10 @@ export class EmployeeComponent implements OnInit {
     });
 
 
+
     this.getOrganizatioNavigation();
     this.getSuperVisors();
+    this.getEmployees();
 
     this.dropdownEmailAttachmentSettings = {
       singleSelection: false,
@@ -189,6 +193,7 @@ export class EmployeeComponent implements OnInit {
   }
 
   getEmployees() {
+    debugger
     this.employeeService.getAllEmployees(this.pagination.currentPage, this.pagination.itemsPerPage)
       .subscribe((res: PaginatedResult<EmployeeModel[]>) => {
         this.employees = res.result;
