@@ -31,6 +31,7 @@ import { ResetPasswordComponent } from './modules/user-account/components/reset-
 import { NgSelectModule } from '@ng-select/ng-select';
 
 import {TreeviewModule } from 'ngx-treeview';
+import { EmployeeListsResolver } from './_resolver/employeeList';
 
 
 
@@ -91,7 +92,7 @@ export function tokenGetter() {
     NgxPaginationModule,
     TreeviewModule.forRoot(),
   ],
-  providers: [
+  providers: [EmployeeListsResolver,
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
   ],
   

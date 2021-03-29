@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import AuthenticationService from '../../services/authentication.service';
 import { UserAuthResponseModel } from '../../../../models/user/user-auth-response.model';
 import { Console } from 'console';
 import jwt_decode from 'jwt-decode';
+import AuthenticationService from '../../services/authentication.service';
 
 @Component({
     selector: 'app-login',

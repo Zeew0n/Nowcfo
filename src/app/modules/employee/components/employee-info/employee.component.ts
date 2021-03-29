@@ -18,7 +18,7 @@ import {
   NgbDateStruct,
 } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { ActivatedRoute, ChildrenOutletContexts, Router } from '@angular/router';
+import { ActivatedRoute, ChildrenOutletContexts, Data, Router } from '@angular/router';
 import { RoleModel } from 'src/app/models/role.model';
 import { EmployeeModel } from 'src/app/models/employee.model';
 import { DesignationModel } from 'src/app/models/designation.model';
@@ -30,15 +30,12 @@ import csc from 'country-state-city';
 import { EmployeeUpdateModel } from 'src/app/models/EmployeeUpdateModel';
 import { analyzeNgModules } from '@angular/compiler';
 import { Observable, of } from 'rxjs';
-
-
-// KendoTreeview
-import { CheckableSettings, CheckedState, TreeItemLookup } from '@progress/kendo-angular-treeview';
 import { KendoNavModel } from 'src/app/models/KendoNavModel';
 import { EmployeeService } from '../../services/employee.service';
 import { NavigationService } from 'src/app/modules/navigation/services/navigation.service';
 import AuthenticationService from 'src/app/modules/user-account/services/authentication.service';
-
+import { PaginatedResult, Pagination } from 'src/app/models/Pagination/Pagination';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 @Component({
   selector: 'app-employee-list',
   styleUrls: ['employee.component.scss'],
@@ -64,6 +61,8 @@ export class EmployeeComponent implements OnInit {
   emailAttachmentList: Array<any> = [];
   employeeId = '';
   isSubmitting: boolean; // Form submission variable
+  pagination: Pagination;
+  
   closeResult = ''; // close result for modal
   submitted = false;
   userId = '';
@@ -92,6 +91,7 @@ export class EmployeeComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private modalService: NgbModal,
+    private ngxService: NgxUiLoaderService,
     private toastr: ToastrService,
     private employeeService: EmployeeService,
     private navigationService: NavigationService,
@@ -128,12 +128,21 @@ export class EmployeeComponent implements OnInit {
 
 
   ngOnInit() {
-    this.getEmployees();
+
     this.getOrganizations();
     this.getDesignations();
     this.initializeemployeeForm();
+
+    this.route.data.subscribe((data: Data )=> {
+      this.employees = data.employees.result;
+      this.pagination = data.employees.pagination;
+    });
+
+
+
     this.getOrganizatioNavigation();
     this.getSuperVisors();
+    this.getEmployees();
 
     this.dropdownEmailAttachmentSettings = {
       singleSelection: false,
@@ -184,13 +193,23 @@ export class EmployeeComponent implements OnInit {
   }
 
   getEmployees() {
-    this.employeeService.getAllEmployees().subscribe(
-      (result) => {
-        this.employees = result;
-      },
-      (error) => console.error
-    );
+    debugger
+    this.employeeService.getAllEmployees(this.pagination.currentPage, this.pagination.itemsPerPage)
+      .subscribe((res: PaginatedResult<EmployeeModel[]>) => {
+        this.employees = res.result;
+        this.pagination = res.pagination;
+    }, error => {
+      this.toastr.error(error);
+    });
   }
+
+
+  pageChanged(event: any): void {
+    this.pagination.currentPage = event.page;
+    this.getEmployees();
+  }
+
+
 
   getDesignations() {
     this.employeeService.getAllDesignations().subscribe(
