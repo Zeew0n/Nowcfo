@@ -1,14 +1,37 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { AuthGuard } from 'src/app/services/_guards/auth-guard';
+import { ChangePasswordComponent } from './components/change-password/change-password.component';
 import { LoginComponent } from './components/login/login.component';
+import { UserInformationComponent } from './components/user-information/userinformation.component';
+import { UserRoleComponent } from './components/user-role/userrole.component';
 
 const routes: Routes = [
     {
-        path: '',
-        component: LoginComponent
-    },
-   
-];
+      path: '',
+      children: [
+        {path: '', component:LoginComponent},
+        {
+          path: 'user-information',
+          component: UserInformationComponent,
+          canActivate: [AuthGuard]
+        },
+
+        {
+            path: 'changepassword',
+            component: ChangePasswordComponent,
+            canActivate:[AuthGuard],
+          },
+    
+        {
+          path: 'user-role',
+          component: UserRoleComponent,
+          canActivate: [AuthGuard]
+        },
+      ]
+    }
+    ];
+
 
 @NgModule({
     imports: [RouterModule.forChild(routes)],

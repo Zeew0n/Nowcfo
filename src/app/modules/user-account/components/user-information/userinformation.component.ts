@@ -20,16 +20,16 @@ import {
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoleModel } from 'src/app/models/role.model';
-import { UserInformationService } from '../services/userinformation.service';
-import AuthenticationService from '../../user-account/services/authentication.service';
 import { UserInformationModel } from 'src/app/models/userinformation.model';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
+import { UserInformationService } from '../../services/userinformation.service';
+import AuthenticationService from '../../services/authentication.service';
 @Component({
   selector: 'app-userinformation-list',
   styleUrls: ['userinformation.component.scss'],
   templateUrl: './userinformation.component.html',
 })
-export class UserInformationComponent implements OnInit{
+export class  UserInformationComponent implements OnInit{
   userinformation: UserInformationModel = new UserInformationModel();
   userinformations: UserInformationModel[];
   roles: RoleModel[];

@@ -3,9 +3,9 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { PasswordUpdateModel } from 'src/app/models/user/user-password.update.model';
-import { UserInformationService } from 'src/app/modules/userinformation/services/userinformation.service';
 import { match_value } from 'src/app/services/_validators/confirmation.validator';
 import AuthenticationService from '../../services/authentication.service';
+import { UserInformationService } from '../../services/userinformation.service';
 
 @Component({
   selector: 'app-change-password',

@@ -55,11 +55,12 @@ export class SideNavComponent implements OnInit {
       }
     }
     if (menu === 'employee') {
+      debugger;
       this.expandOrgNav = false;
       if (mainTag.classList.contains('main-content-slide')) {
         mainTag.classList.remove('main-content-slide');
       }
-      this.router.navigateByUrl('employee-information');
+      this.router.navigateByUrl('employee');
     }
     if (menu === 'designation') {
       this.expandOrgNav = false;

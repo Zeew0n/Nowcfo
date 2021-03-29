@@ -7,7 +7,6 @@ import { SignupComponent } from './modules/user-account/components/signup/signup
 import { ResetPasswordComponent } from './modules/user-account/components/reset-password/reset-password.component';
 import { ConfirmSignupComponent } from './modules/user-account/components/confirm-signup/confirm-signup.component';
 import { AuthGuard } from './services/_guards/auth-guard';
-import { ChangePasswordComponent } from './modules/user-account/components/change-password/change-password.component';
 export const routes: Routes = [
   { path: '', component: LoginPageComponent },
   { path: 'login', component: LoginPageComponent },
@@ -22,9 +21,7 @@ export const routes: Routes = [
     path: 'confirm/:uid/:uname/:token',
     component: ConfirmSignupComponent,
   },
-
-
-
+  
   {
     path: '',
     component: AppLayoutComponent,
@@ -35,46 +32,27 @@ export const routes: Routes = [
           import('./modules/home/home.module').then((m) => m.HomeModule),
         canActivate: [AuthGuard],
       },
-      {
-        path: 'changepassword',
-        component: ChangePasswordComponent,
-        canActivate:[AuthGuard],
-      },
       
+      
+  
       {
-        path: 'emp-roles',
-        loadChildren: () =>
-          import('./modules/employeeroles/employeerole.module').then(
-            (m) => m.EmployeeRoleModule
-          ),
-        canActivate: [AuthGuard],
-      },
-
-      {
-        path: 'user-information',
-        loadChildren: () =>
-          import('./modules/userinformation/userinformation.module').then(
-            (m) => m.UserInformationModule
-          ),
-        canActivate: [AuthGuard],
-      },
-
-      {
-        path: 'user-roles',
-        loadChildren: () =>
-          import('./modules/userroles/userrole.module').then(
-            (m) => m.UserRoleModule
-          ),
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'employee-information',
+        path: 'employee',
         loadChildren: () =>
           import('./modules/employee/employee.module').then(
             (m) => m.EmployeeModule
           ),
         canActivate: [AuthGuard],
       },
+
+      {
+        path: 'user',
+        loadChildren: () =>
+          import('./modules/user-account/user-account.module').then(
+            (m) => m.UserAccountModule
+          ),
+          canActivate: [AuthGuard],
+      },
+
 
       {
         path: 'organization-information',

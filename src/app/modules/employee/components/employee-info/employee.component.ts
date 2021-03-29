@@ -20,14 +20,13 @@ import {
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, ChildrenOutletContexts, Router } from '@angular/router';
 import { RoleModel } from 'src/app/models/role.model';
-import AuthenticationService from '../../user-account/services/authentication.service';
 import { EmployeeModel } from 'src/app/models/employee.model';
 import { DesignationModel } from 'src/app/models/designation.model';
-import { EmployeeService } from '../services/employee.service';
+
 import { OrganizationModel } from 'src/app/models/organization.model';
 import { DownlineTreeviewItem, TreeviewConfig, TreeviewItem, TreeviewHelper } from 'ngx-treeview';
 import csc from 'country-state-city';
-import { NavigationService } from '../../navigation/services/navigation.service';
+
 import { EmployeeUpdateModel } from 'src/app/models/EmployeeUpdateModel';
 import { analyzeNgModules } from '@angular/compiler';
 import { Observable, of } from 'rxjs';
@@ -36,6 +35,9 @@ import { Observable, of } from 'rxjs';
 // KendoTreeview
 import { CheckableSettings, CheckedState, TreeItemLookup } from '@progress/kendo-angular-treeview';
 import { KendoNavModel } from 'src/app/models/KendoNavModel';
+import { EmployeeService } from '../../services/employee.service';
+import { NavigationService } from 'src/app/modules/navigation/services/navigation.service';
+import AuthenticationService from 'src/app/modules/user-account/services/authentication.service';
 
 @Component({
   selector: 'app-employee-list',

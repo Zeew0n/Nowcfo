@@ -9,8 +9,8 @@ import { NgbModal,ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DesignationModel } from 'src/app/models/designation.model';
-import { DesignationService } from '../services/employeerole.service';
 import { TreeviewConfig, TreeviewItem } from 'ngx-treeview';
+import { DesignationService } from '../../services/employeerole.service';
 
 @Component({
   selector: 'app-employeerole',
