@@ -1,10 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { NavigationService } from '../../services/navigation.service';
-import { OrganizationNavModel } from 'src/app/models/OrganizationNavModel';
-
 import { TreeviewConfig, TreeviewItem } from 'ngx-treeview';
-import { EmployeeModel } from 'src/app/models/employee.model';
 import { Router } from '@angular/router';
 
 @Component({
@@ -23,8 +20,6 @@ export class SideNavComponent implements OnInit {
   menus = JSON.parse(localStorage.getItem('sidemenu'));
 
   admins = ['admin', 'users', 'Settings'];
-
-  organizations: OrganizationNavModel[];
 
   // employees:EmployeeModel[];
   employees: any[] = [];
@@ -55,33 +50,32 @@ export class SideNavComponent implements OnInit {
       }
     }
     if (menu === 'employee') {
-      debugger;
       this.expandOrgNav = false;
       if (mainTag.classList.contains('main-content-slide')) {
         mainTag.classList.remove('main-content-slide');
       }
-      this.router.navigateByUrl('employee');
+      this.router.navigateByUrl('employee/employee-information');
     }
     if (menu === 'designation') {
       this.expandOrgNav = false;
       if (mainTag.classList.contains('main-content-slide')) {
         mainTag.classList.remove('main-content-slide');
       }
-      this.router.navigateByUrl('emp-roles');
+      this.router.navigateByUrl('employee/employee-role');
     }
     if (menu === 'user') {
       this.expandOrgNav = false;
       if (mainTag.classList.contains('main-content-slide')) {
         mainTag.classList.remove('main-content-slide');
       }
-      this.router.navigateByUrl('user-information');
+      this.router.navigateByUrl('user/user-information');
     }
     if (menu === 'role') {
       this.expandOrgNav = false;
       if (mainTag.classList.contains('main-content-slide')) {
         mainTag.classList.remove('main-content-slide');
       }
-      this.router.navigateByUrl('user-roles');
+      this.router.navigateByUrl('user/user-role');
     }
   }
 
