@@ -19,7 +19,7 @@ export class SideNavComponent implements OnInit {
 
   menus = JSON.parse(localStorage.getItem('sidemenu'));
 
-  admins = ['admin', 'users', 'Settings'];
+  admins = ['Settings'];
 
   // employees:EmployeeModel[];
   employees: any[] = [];
