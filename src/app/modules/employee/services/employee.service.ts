@@ -3,7 +3,6 @@ import { environment } from 'src/environments/environment';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { HttpGenericCrudService } from '../../../services/http-generic-crud.service';
 import { Observable } from 'rxjs';
-import { RoleModel } from 'src/app/models/role.model';
 import { DesignationModel } from 'src/app/models/designation.model';
 import { EmployeeModel } from 'src/app/models/employee.model';
 import { OrganizationModel } from 'src/app/models/organization.model';
@@ -34,24 +33,23 @@ export class EmployeeService extends HttpGenericCrudService<EmployeeModel>{
         return httpOptions;
     }
 
-    // getAllEmployees(): Observable<EmployeeModel[]> {
-    //     return this.httpClient.get<EmployeeModel[]>('employee');
-    // }
-
-
-
-    
     getAllEmployees(
     page?,
-    itemsPerPage?
+    itemsPerPage?,
+    searchTypeId?,
+    searchValue?
 
   ): Observable<PaginatedResult<EmployeeModel[]>> {
+      
     const paginatedResult: PaginatedResult<EmployeeModel[]> = new PaginatedResult<
     EmployeeModel[] >();
     let params = new HttpParams();
     if (page != null && itemsPerPage != null) {
       params = params.append('pageNumber', page);
       params = params.append('pageSize', itemsPerPage);
+      params = params.append('searchType', searchTypeId);
+      params = params.append('searchValue', searchValue);
+
     }
     return this.httpClient
       .get<EmployeeModel[]>('employee', { observe: 'response', params })

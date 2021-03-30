@@ -9,7 +9,7 @@ import { EmployeeService } from '../modules/employee/services/employee.service';
 export class EmployeeListsResolver implements Resolve<EmployeeModel[]> {
 
   pageNumber = 1;
-  pageSize = 10;
+  pageSize = 20;
   constructor(
     private employeeService: EmployeeService,
     private router: Router,
@@ -17,8 +17,9 @@ export class EmployeeListsResolver implements Resolve<EmployeeModel[]> {
   ) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<EmployeeModel[]> {
+    
     return this.employeeService
-      .getAllEmployees(this.pageNumber, this.pageSize)
+      .getAllEmployees(this.pageNumber, this.pageSize,null,null)
       .pipe(
         catchError(error => {
           this.toastr.error('Problem retrieving data');
