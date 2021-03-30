@@ -63,6 +63,8 @@ export class EmployeeComponent implements OnInit {
   isSubmitting: boolean; // Form submission variable
   pagination: Pagination;
   
+  searchTypes: any=[];
+  
   closeResult = ''; // close result for modal
   submitted = false;
   userId = '';
@@ -74,6 +76,8 @@ export class EmployeeComponent implements OnInit {
   selectedEmployeeId: string;
   selectedIds = [];
   showTree = false;
+  selectedCity: any;
+
 
   // for treeview
   values: number[];
@@ -103,6 +107,7 @@ export class EmployeeComponent implements OnInit {
 
 
   /* Form Declarations */
+  searchForm: FormGroup;
   employeeForm: FormGroup;
   EventValue: any = 'Save';
   isActive: boolean;
@@ -111,6 +116,9 @@ export class EmployeeComponent implements OnInit {
   hasSuperAdmin = false;
 
   employeeName = new FormControl('', [Validators.required]);
+
+  searchTypeId = new FormControl('', [Validators.required]);
+  searchValue = new FormControl('', [Validators.required]);
   email = new FormControl('', [Validators.required, Validators.email]);
   phone = new FormControl('', [Validators.required]);
   address = new FormControl('', [Validators.required]);
@@ -132,17 +140,21 @@ export class EmployeeComponent implements OnInit {
     this.getOrganizations();
     this.getDesignations();
     this.initializeemployeeForm();
-
     this.route.data.subscribe((data: Data )=> {
       this.employees = data.employees.result;
+      console.log(this.employees);
       this.pagination = data.employees.pagination;
     });
 
+    this.searchTypes = [
+      {id: 1, name: 'Name'},
+      {id: 2, name: 'Email'},
+  ];
 
-
+  this.initializeSearchForm();
     this.getOrganizatioNavigation();
     this.getSuperVisors();
-    this.getEmployees();
+    
 
     this.dropdownEmailAttachmentSettings = {
       singleSelection: false,
@@ -185,7 +197,6 @@ export class EmployeeComponent implements OnInit {
   }
 
   checkIsSupervisor(event) {
-    console.log('test');
   }
 
   get f() {
@@ -193,8 +204,8 @@ export class EmployeeComponent implements OnInit {
   }
 
   getEmployees() {
-    debugger
-    this.employeeService.getAllEmployees(this.pagination.currentPage, this.pagination.itemsPerPage)
+    
+    this.employeeService.getAllEmployees(this.pagination.currentPage, this.pagination.itemsPerPage,this.searchTypeId.value,this.searchValue.value)
       .subscribe((res: PaginatedResult<EmployeeModel[]>) => {
         this.employees = res.result;
         this.pagination = res.pagination;
@@ -269,6 +280,18 @@ export class EmployeeComponent implements OnInit {
   }
 
 
+  initializeSearchForm() {
+
+    this.searchForm = new FormGroup({
+      searchTypeId: this.searchTypeId,
+      searchValue: this.searchValue
+    });
+
+
+  }
+
+
+
   // Edit
   EditData(content, id: string) {
     this.selectedEmployeeId = id;
@@ -297,9 +320,11 @@ export class EmployeeComponent implements OnInit {
       payTypeCheck: data.payType == 'Salary' ? true : false,
       pay: data.pay,
       overTimeRate: data.overTimeRate
-      // orgPermissionId:data.employeepermissions
-    });
+        });
   }
+
+
+
 
   getEmployeeById(id: string, content) {
     this.employeeService.getEmployeeById(id).subscribe(
@@ -359,6 +384,16 @@ export class EmployeeComponent implements OnInit {
     if (event !== undefined) {
       this.employeeForm.controls.state.setValue(event.name);
     }
+  }
+
+  onSearch(){
+
+
+this.getEmployees();
+    
+
+    
+
   }
 
   onSubmit() {
@@ -478,10 +513,9 @@ export class EmployeeComponent implements OnInit {
     this.employee == null;
   }
 
-
-
-
-
+  resetSearch() {
+    this.searchForm.reset();
+  }
 
   private openModal(content: any) {
     this.showTree = true;

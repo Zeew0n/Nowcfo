@@ -1,11 +1,77 @@
 <div class="">
-
-  
   <div class="btn-container">
     <button type="button" class="btn btn-green" (click)="open(content)">
       New Employee
     </button>
   </div>
+
+  <form
+  class="form-cfo"
+  [formGroup]="searchForm"
+  (ngSubmit)="onSearch()"
+>
+
+<div class="row">
+
+  <div class="col-sm-2">
+    <div class="form-group">
+      <label>Filter</label>
+      <ng-select [items]="searchTypes"
+      placeholder="Select Type"
+      bindLabel="name"
+      bindValue="id"
+      formControlName="searchTypeId"
+      class="cfo-select"
+      >
+      </ng-select>
+
+     
+    </div>
+  </div>
+
+  <div class="col-sm-2">
+    <div class="form-group">
+
+      <div class="input-group">
+        <div class="form-outline">
+          <input type="search" id="form1" placeholder="Search Value" formControlName="searchValue" class="form-control" [ngClass]="{
+            'invalid-input':
+              searchForm.controls.searchValue.touched &&
+              searchForm.controls.searchValue.errors?.required
+          }" />
+
+          <div
+          *ngIf="
+          searchForm.controls.searchValue.touched &&
+          searchForm.controls.searchValue.errors?.required
+          "
+          class="error-msg"
+        >
+          Search Value is Required!
+        </div>        
+
+          <label class="form-label" for="form1">Search</label>
+        </div>
+        <button type="submit"  [disabled]="searchForm.invalid" class="btn btn-primary">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <button
+type="button"
+class="btn btn-primary"
+(click)="resetSearch()"
+>
+Reset</button>
+
+</div>
+
+
+</form>
+
 
   <div class="content">
     <div class="title-container">
@@ -25,10 +91,6 @@
             <th scope="col">State</th>
             <th scope="col">Organization</th>
             <th scope="col">Designation</th>
-            <!-- <th scope="col">IsSuperVisor</th>
-            <th scope="col">PayType</th>
-            <th scope="col">Pay</th>
-            <th scope="col">Over Time Rate</th> -->
             <th scope="col">IsActive</th>
             <th scope="col">Actions</th>
           </tr>
@@ -45,11 +107,6 @@
             <td data-th="State">{{ employee.state }}</td>
             <td data-th="Organization Id ">{{ employee.organizationName }}</td>
             <td data-th="Designation Id ">{{ employee.designationName }}</td>
-            <!-- <td data-th="IsSuperViosr ">{{ employee.isSupervisor }}</td>
-            <td data-th="Pay Type ">{{ employee.payType }}</td>
-            <td data-th="Pay ">{{ employee.pay }}</td>
-            <td data-th="OverTime Rate">{{ employee.overTimeRate }}</td> -->
-
             <td data-th="IsActive ">{{ employee.isActive }}</td>
             <td data-th="Actions">
               <a
@@ -92,12 +149,8 @@
           (ngSubmit)="onSubmit()"
         >
 
-          <!-- {{ employeeForm.value | json }} -->
-          <!-- Selected Permissions: {{values}} -->
-
           <div class="form-group">
             <label>Employee Name</label>
-           <!-- {{employeeForm.value|json}} -->
             <input
               type="text"
               formControlName="employeeName"
@@ -177,6 +230,7 @@
             </div>
           </div>
 
+
           <div class="row">
             <div class="col-sm-6">
               <div class="form-group">
@@ -215,7 +269,7 @@
                   [ngClass]="{
                     'invalid-input':
                       employeeForm.controls.city.touched &&
-                      employeeForm.controls.city.errors?.email
+                      employeeForm.controls.city.errors
                   }"
                 />
                 <div
@@ -256,6 +310,8 @@
               </div>
             </div>
           </div>
+          
+        
 
           <div class="form-group">
             <label>State</label>
@@ -271,9 +327,23 @@
               [tabIndex]="7"
               placeholder="Select State"
               (change)="onStateChange($event)"
-              class="cfo-select"
+              class="cfo-select" [ngClass]="{
+                'invalid-input':
+                  employeeForm.controls.state.errors?.required
+              }"
             >
             </ng-select>
+
+            <div
+            *ngIf="
+
+              employeeForm.controls.state.errors?.required
+            "
+            class="error-msg"
+          >
+            State is required!
+          </div>
+
           </div>
 
           <div class="row">
