@@ -30,6 +30,7 @@ export class OrganizationComponent implements OnInit {
   selectorganization;
   selectedOrgId;
   orgEmployees;
+  organizationIdx: number;
 
   constructor(
     private fb: FormBuilder,
@@ -41,9 +42,9 @@ export class OrganizationComponent implements OnInit {
   ) {
     this.route.params.subscribe((params) => {
       if ( params.id !== undefined) {
-      this.selectedOrgId = params.id;
-      this.getEmployeeList();
-     // alert("mike check");
+        this.selectedOrgId = params.id;
+        this.getSingleOrganization(params.id);
+        this.getEmployeeList();
       }
     });
   }
@@ -53,7 +54,6 @@ export class OrganizationComponent implements OnInit {
   EventValue: any = 'Save';
 
   ngOnInit() {
-    //  this.UserForm.controls.password.setValidators(null);
     if (!this.selectedOrgId) {
       this.getOrganizations();
     }
@@ -199,17 +199,18 @@ export class OrganizationComponent implements OnInit {
     this.organization = null;
   }
 
-  openEditModal(content, organization: any) {
+  openEditModal(content, organization: OrganizationModel) {
     this.isEdit = true;
     this.selectorganization = organization;
     console.log(organization);
     this.EventValue = 'Update';
     this.OrganizationForm.patchValue({
-      OrganizationId: organization.OrganizationId,
+      OrganizationId: organization.organizationId,
       organizationName: organization.organizationName,
       hasParent: organization.hasParent,
       parentOrganizationId: organization.parentOrganizationId,
     });
+
     if (this.selectorganization.hasParent) {
       this.OrganizationForm.controls.parentOrganizationId.setValidators([
         Validators.required,
@@ -217,6 +218,7 @@ export class OrganizationComponent implements OnInit {
     } else {
       this.OrganizationForm.controls.parentOrganizationId.setValidators([]);
     }
+
     this.OrganizationForm.controls.parentOrganizationId.updateValueAndValidity();
     this.modalService.open(content, {
       ariaLabelledBy: 'modal-basic-title',
@@ -239,6 +241,18 @@ export class OrganizationComponent implements OnInit {
           this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
         }
       );
+  }
+  getSingleOrganization(id) {
+      this.organizationService
+       .getOrganizationById(id)
+       .subscribe(
+       (res) => {
+        this.organization = res;
+       },
+       (err) => {
+        console.error(err);
+      }
+    );
   }
 
   getEmployeeList() {

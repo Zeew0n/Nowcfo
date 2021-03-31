@@ -56,7 +56,7 @@ export class SideNavComponent implements OnInit {
       }
       this.router.navigateByUrl('employee/employee-information');
     }
-    if (menu === 'designation') {
+    if (menu === 'org-role') {
       this.expandOrgNav = false;
       if (mainTag.classList.contains('main-content-slide')) {
         mainTag.classList.remove('main-content-slide');
