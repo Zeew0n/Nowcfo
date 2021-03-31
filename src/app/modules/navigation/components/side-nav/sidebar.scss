@@ -26,8 +26,12 @@
   .left-nav {
     width: 300px;
     background: #6e6e6e;
-  }
 
+    
+  }
+  .form-check-label {
+    cursor: pointer;
+  }
   .left-nav-inner {
     width: 300px;
     background: #f3f3f3;
@@ -48,7 +52,7 @@
     }
 
     li.active {
-      & > .nav-inner {
+      &>.nav-inner {
         display: block;
       }
     }
@@ -60,6 +64,7 @@
     font-size: 16px;
     font-weight: 300;
   }
+
   .nav-bottom {
     margin-top: 150px;
   }
