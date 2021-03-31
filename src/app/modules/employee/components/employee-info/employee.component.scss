@@ -1,3 +1,17 @@
-.invalid-input{
+.invalid-input {
     border-color: red;
+}
+
+.clear-out {
+    cursor: pointer;
+    height: 40px;
+    padding: 0 20px;
+}
+
+.search-field {
+    justify-content: flex-end;
+}
+
+.form-outline {
+    margin-right: auto;
 }
