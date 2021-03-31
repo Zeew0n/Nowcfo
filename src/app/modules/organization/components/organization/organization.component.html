@@ -50,6 +50,9 @@
       <div *ngIf="empList">
       <div class="table-responsive" *ngIf="orgEmployees.organization||orgEmployees.childOrganization">
         <h4>{{orgEmployees.organization}}</h4>
+        <button type="button" class="btn btn-green">Assign Employee</button>
+        <button type="button" class="btn btn-green"  (click)="openEditModal(content, organization)">Edit Org Unit</button>
+        <button type="button" class="btn btn-red">Delete Org Unit</button>
         <table class="table table-harbor" >
           <thead>
             <tr>
@@ -121,15 +124,8 @@
             </ng-select>
             
             <div *ngIf="OrganizationForm.controls.parentOrganizationId.errors?.required"
-                            class="error-msg ">Parent Organization is required</div>
-                          
-                         
+                            class="error-msg ">Parent Organization is required</div>       
           </div>
-
-          <!-- <button type="submit" class="btn btn-primary">{{EventValue}}</button>
-                <button type="button" class="btn btn-info" (click)="modal.close('Close Button Clicked')">
-                  <i class="fa fa-times"></i> Cancel
-                </button> -->
           <div class="float-right">
             <button type="submit" class="btn btn-green mr-3" [disabled]="submitted" (click)="onSubmit()">
               {{ EventValue }} 
