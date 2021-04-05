@@ -32,6 +32,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 
 import {TreeviewModule } from 'ngx-treeview';
 import { EmployeeListsResolver } from './_resolver/employeeList';
+import AuthenticationService from './modules/user-account/services/authentication.service';
 
 
 
@@ -92,7 +93,7 @@ export function tokenGetter() {
     NgxPaginationModule,
     TreeviewModule.forRoot(),
   ],
-  providers: [EmployeeListsResolver,
+  providers: [EmployeeListsResolver, AuthenticationService,
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
   ],
   

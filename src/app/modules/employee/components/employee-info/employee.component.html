@@ -5,19 +5,17 @@
     </button>
   </div>
 
-
-
-
   <div class="content">
     <div class="title-container">
       <h1 class="page-title">Employee</h1>
-      <div class="content-right col-md-6">
-        <form [formGroup]="searchForm" (ngSubmit)="onSearch()" >
+      <div class="content-right col-md-8">
+        
+        <form class="form-cfo" [formGroup]="searchForm" (ngSubmit)="onSearch()" >
           <div class="row">
             <div class="col-sm-4 pr-0">
               <div class="form-group">
-                <!-- <label>Filter</label> -->
-                <ng-select [items]="searchTypes" placeholder="Select Type" bindLabel="name" bindValue="id"
+
+                <ng-select [items]="searchTypes" bindValue="id" bindLabel="name"  placeholder="Search Type" 
                   formControlName="searchTypeId" class="cfo-select">
                 </ng-select>
               </div>
@@ -26,21 +24,18 @@
               <div class="form-group">
                 <div class="input-group search-field">
                   <div class="form-outline">
-                    <!-- <label class="form-label" for="form1">Search</label> -->
-                    <input type="search" id="form1" placeholder="Search Value" formControlName="searchValue"
-                      class="form-control" [ngClass]="{
-                  'invalid-input':
+                    <input type="search" id="form1" formControlName="searchValue"
+                      class="form-control" placeholder="Search Value" [ngClass]="{
+                        'invalid-input':
+                        searchForm.controls.searchValue.touched &&
+                        searchForm.controls.searchValue.errors
+                      }" />
+                    <div *ngIf="
                     searchForm.controls.searchValue.touched &&
                     searchForm.controls.searchValue.errors?.required
-                }" />
-
-                    <div *ngIf="
-                searchForm.controls.searchValue.touched &&
-                searchForm.controls.searchValue.errors?.required
-                " class="error-msg">
+                      " class="error-msg">
                       Search Value is Required!
                     </div>
-                    
                   </div>
                   <button type="submit" [disabled]="searchForm.invalid" class="btn btn-primary">
                     <i class="fa fa-search"></i>
@@ -55,15 +50,17 @@
 
         </form>
       </div>
+
     </div>
+
     <div class="table-responsive">
       <table class="table table-harbor">
         <thead>
           <tr>
             <th scope="col">S.N</th>
-            <th scope="col">Name</th>
+            <th scope="col">Employee Name</th>
             <th scope="col">Email</th>
-            <th scope="col">Phone </th>
+            <th scope="col">Phone Number</th>
             <th scope="col">Address</th>
             <th scope="col">City</th>
             <th scope="col">Zip Code</th>
@@ -71,7 +68,7 @@
             <th scope="col">Organization</th>
             <th scope="col">Designation</th>
             <th scope="col">IsActive</th>
-            <th scope="col">Actions</th>
+            <th scope="col">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -88,11 +85,21 @@
             <td data-th="Designation Id ">{{ employee.designationName }}</td>
             <td data-th="IsActive ">{{ employee.isActive }}</td>
             <td data-th="Actions">
-              <a (click)="EditData(content, employee.employeeId)" class="icon-holder" href="javascript:void(0)"
-                title="edit"><i class="icon icon-pencil-create"></i></a>
+              <a
+                (click)="EditData(content, employee.employeeId)"
+                class="icon-holder"
+                href="javascript:void(0)"
+                title="edit"
+                ><i class="icon icon-pencil-create"></i
+              ></a>
               <span></span>
-              <a class="icon-holder" (click)="openDeleteModal(deletecontent,employee.employeeId)"
-                href="javascript:void(0)" title="delete"><i class="icon icon-circle-block"></i></a>
+              <a
+                class="icon-holder"
+                (click)="openDeleteModal(deletecontent, employee.employeeId)"
+                href="javascript:void(0)"
+                title="delete"
+                ><i class="icon icon-circle-block"></i
+              ></a>
             </td>
           </tr>
         </tbody>
@@ -105,13 +112,12 @@
         </pagination>
       </div>
 
-
+      
     </div>
     <ng-template #content let-modal>
       <div class="container">
-        <h3 class="modal-title" *ngIf="!isEdit"> {{values}} Create New Employee</h3>
-        <h3 class="modal-title" *ngIf="isEdit"> {{updatevalues}} Update Employee</h3>
-
+        <h3 class="modal-title" *ngIf="!isEdit"> Create New Employee</h3>
+        <h3 class="modal-title" *ngIf="isEdit"> Update Employee</h3>
         <form class="form-cfo" [formGroup]="employeeForm" (ngSubmit)="onSubmit()">
 
           <div class="form-group">
@@ -350,97 +356,48 @@
             </ng-select>
           </div>
 
-          <div class="form-group" *ngIf="!isEdit">
-            <ngx-treeview [config]="config" [items]="items" (filterChange)="onFilterChange($event)"
-              (selectedChange)="values = $event">
-            </ngx-treeview>
+
+            <div class="form-group" *ngIf="!isEdit">
+              <app-child
+              [fields]="field"
+              [showCheckBox]="showCheckBox"
+              (onChecked)="nodeChecked($event)"
+            ></app-child>
           </div>
 
 
           <div class="form-group" *ngIf="isEdit">
-            <ngx-treeview [config]="config" [items]="updateitems" (filterChange)="onFilterChange($event)"
-              (selectedChange)="updatevalues = $event">
-            </ngx-treeview>
+            <app-minichild
+            [fields]="field"
+              [showCheckBox]="showCheckBox"
+              (onChecked)="nodeChecked($event)"
+          ></app-minichild>
           </div>
 
 
-          <!-- <div class="form-group">
-            <label>SuperVisor</label>
-            <ng-select
-              [items]="supervisors"
-              placeholder="Select SuperVisor"
-              bindLabel="employeeName"
-              bindValue="employeeId"
-              formControlName="superVisorId"
-              class="cfo-select"
-            >
-            </ng-select>
-          </div>
-          <div class="example-config">
-            Checked keys: {{checkedKeys}}
-        </div> -->
-
-          <!--           
-              {{selectedIds|json}}
-        <div class="form-group" *ngIf="!isEdit">
-          <div *ngFor="let item of items">
-            <p (click)="selectParent(item.value)">{{item.text}}</p>
-            <app-child *ngIf="item.children?.length>0" [selectedItemIds]=selectedIds [isFirstChild]="true" (id)="onIdFromChild($event)" [children]=item.children></app-child>
-          </div>
-          </div>
-
-          <div class="form-group" *ngIf="isEdit">
-            <div *ngFor="let item of items">
-              <p>{{item.name}}</p>
-            </div>
-            </div>  -->
 
 
-          <!-- <div class="form-group" *ngIf="!isEdit">
-              <ngx-treeview [config]="config" [items]="items" (filterChange)="onFilterChange($event)"
-              (selectedChange)="values = $event">
-            </ngx-treeview>
-            </div>
-
-
-            <div class="form-group" *ngIf="isEdit">
-              <ngx-treeview [config]="config" [items]="updateitems" (filterChange)="onFilterChange($event)"
-              (selectedChange)="updatevalues = $event">
-            </ngx-treeview>
-            </div> -->
-
-
-          <!-- // onSelect($event) -->
-
-          <!-- <ngx-treeview [config]="config" [items]="items" 
-              (selectedChange)="onSelectedChange($event)" (change)="onSelect($event)">
-            </ngx-treeview> -->
-
-          <!-- <div class="form-group" *ngIf="showTree">
-            <kendo-treeview 
-            [nodes]="data"
-            [children]="children"
-            [hasChildren]="hasChildren"
-            textField="text" 
-            kendoTreeViewExpandable
-            [expandBy]="'id'"
-            (expand)="expandNode($event)"
-            kendoTreeViewCheckable
-            [(checkedKeys)] = "checkedKeys"
-            [checkBy] = "'id'"
-            [isChecked] = "isChecked"
-            (checkedChange) = "checkChange($event)">
-            </kendo-treeview>
-            </div> -->
-
+          <!-- <app-child
+            [fields]="field"
+            [showCheckBox]="showCheckBox"
+            (onChecked)="nodeChecked($event)"
+          ></app-child> -->
+          
 
           <div class="float-right">
-            <button type="submit" class="btn btn-green mr-3" [disabled]="employeeForm.invalid">
+            <button
+              type="submit"
+              class="btn btn-green mr-3"
+              [disabled]="employeeForm.invalid"
+            >
               {{ EventValue }}
             </button>
 
-            <!-- [disabled]="employeeForm.invalid" -->
-            <button type="button" class="btn btn-gray" (click)="modal.close('Close Button Clicked')">
+            <button
+              type="button"
+              class="btn btn-gray"
+              (click)="modal.close('Close Button Clicked')"
+            >
               Cancel
             </button>
           </div>
@@ -458,7 +415,11 @@
           <button type="submit" (click)="Delete()" class="btn btn-green mr-3">
             {{ EventValue }}
           </button>
-          <button type="button" class="btn btn-gray" (click)="modal.close('Close Button Clicked')">
+          <button
+            type="button"
+            class="btn btn-gray"
+            (click)="modal.close('Close Button Clicked')"
+          >
             Cancel
           </button>
         </div>

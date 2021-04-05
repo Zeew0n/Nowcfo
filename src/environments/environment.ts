@@ -4,7 +4,7 @@
 
 export const environment = {
     production: false,
-    API_URL: 'https://orgmanager-production-api.azurewebsites.net/api/'
+    API_URL: 'http://localhost:5000/api/'
 };
 
 /*

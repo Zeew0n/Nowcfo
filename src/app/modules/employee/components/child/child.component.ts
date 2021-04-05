@@ -1,49 +1,33 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { TreeViewComponent } from '@syncfusion/ej2-angular-navigations';
 
 @Component({
   selector: 'app-child',
   templateUrl: './child.component.html',
   styleUrls: ['./child.component.scss']
 })
+
 export class ChildComponent implements OnInit {
-@Input() children;
-@Input() isFirstChild;
-@Input() selectedItemIds;
-@Output() id =new EventEmitter<any>();
-@Output() childId =new EventEmitter<any>();
+
+
+
+
+@Input() fields;
+@Input() showCheckBox;
+@Output() onChecked = new EventEmitter<Array<any>>();
+private treeElement: TreeViewComponent;
+  @ViewChild('treeview') set content(tree: TreeViewComponent) {
+    if(tree) {
+        this.treeElement = tree;
+    }
+ }
 
  constructor() { }
 
   ngOnInit(): void {
   }
 
-  sendIdToParent(item){
-    const match = this.selectedItemIds.find(x=>x===item.value);
-    if(!match){
-      this.id.emit(item);
+  public nodeChecked(args): void{
+    this.onChecked.emit(this.treeElement.checkedNodes);
   }
-  }
-  
-  onIdFromChild(item){
-    const child = this.children.find(x=>x.value===item.value);
-    if(child){
-    if(child.level==2){
-      this.id.emit(item);
-    }else{
-    if(child && !child.isSelected){
-    this.childId.emit(item);
-    }
-  }
-  } else{
-    const child = this.children.find(x=>x.value===item.parentOrganizationId);
-    if(child.level==2){
-      this.id.emit(item);
-    }else{
-    if(child && !child.isSelected){
-    this.childId.emit(item);
-    }
-  }
-  }
-  }
-
 }

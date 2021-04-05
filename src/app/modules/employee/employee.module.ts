@@ -8,19 +8,19 @@ import { EmployeeRoutingModule } from './employee.routing';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { ChildComponent } from './components/child/child.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import { TreeviewModule } from 'ngx-treeview';
 import { EmployeeComponent } from './components/employee-info/employee.component';
 import { EmployeeRoleComponent } from './components/employee-role/employeerole.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { EmployeeListsResolver } from 'src/app/_resolver/employeeList';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
-
+import { MiniChildComponent } from './components/minichild/minichild.component';
+import { TreeViewModule } from '@syncfusion/ej2-angular-navigations';
 
 
 @NgModule({
     imports: [
         CommonModule,
-        TreeviewModule.forRoot(),
+        TreeViewModule,
         EmployeeRoutingModule,
         FormsModule,
         NgSelectModule,
@@ -29,9 +29,8 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
         NgMultiSelectDropDownModule,
         PaginationModule.forRoot(),
         NgxPaginationModule
-        
     ],
-    declarations: [EmployeeComponent,ChildComponent,EmployeeRoleComponent],
+    declarations: [EmployeeComponent, ChildComponent,MiniChildComponent,EmployeeRoleComponent],
     providers: [EmployeeListsResolver]
 })
 export class EmployeeModule { }

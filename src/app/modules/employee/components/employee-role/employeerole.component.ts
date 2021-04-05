@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {
   FormControl,
   FormBuilder,
@@ -11,13 +11,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DesignationModel } from 'src/app/models/designation.model';
 import { TreeviewConfig, TreeviewItem } from 'ngx-treeview';
 import { DesignationService } from '../../services/employeerole.service';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
+import { fakeAsync } from '@angular/core/testing';
 
 @Component({
   selector: 'app-employeerole',
   styleUrls: ['employeerole.component.scss'],
   templateUrl: './employeerole.component.html',
 })
-export class EmployeeRoleComponent {
+export class EmployeeRoleComponent implements OnInit {
   designation: DesignationModel = new DesignationModel();
   designations: DesignationModel[];
 
@@ -37,7 +39,8 @@ export class EmployeeRoleComponent {
     private modalService: NgbModal,
     private toastr: ToastrService,
     private designationService: DesignationService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private ngxLoader: NgxUiLoaderService
   ) {}
 
 
@@ -91,6 +94,7 @@ export class EmployeeRoleComponent {
 
 
   Delete() {
+    this.ngxLoader.start();
     this.designationService.DeleteDesignation(this.selectedDesignationId).subscribe(
       (result) => {
         if (result == null) {
@@ -100,10 +104,12 @@ export class EmployeeRoleComponent {
         } else {
           this.toastr.success('something went wrong.', 'error!');
         }
+        this.ngxLoader.stop();
       },
       (error) => {
         console.log(error.errorMessage);
         this.toastr.error('Cannot delete role', 'error!');
+        this.ngxLoader.stop();
       }
     );
   }
@@ -116,6 +122,7 @@ export class EmployeeRoleComponent {
   }
 
   onSubmit() {
+    this.ngxLoader.start();
     const createForm = this.designationForm.value;
     console.log(createForm);
 
@@ -131,12 +138,14 @@ export class EmployeeRoleComponent {
             this.toastr.success('Designation Added Successfully.', 'Success!');
             this.modalService.dismissAll();
             this.getRoles();
+            this.ngxLoader.stop();
           },
           (error) => {
             console.log(error);
             this.isSubmitting = false;
             this.modalService.dismissAll();
             this.toastr.error(error.error.errorMessage, 'Error!');
+            this.ngxLoader.stop();
           }
         );
       }
@@ -154,6 +163,7 @@ export class EmployeeRoleComponent {
           this.toastr.success('Designation Updated Successfully.', 'Success!');
           this.modalService.dismissAll();
           this.getRoles();
+          this.ngxLoader.stop();
         },
         (error) => {
           this.toastr.error(
@@ -162,13 +172,14 @@ export class EmployeeRoleComponent {
               : 'designation Update failed',
             'Error!'
           );
+          this.ngxLoader.stop();
         }
       );
     }
   }
 }
 
-  private getDismissReason(reason: any): string {
+  getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
     } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
@@ -196,11 +207,7 @@ export class EmployeeRoleComponent {
       designationId: designation.designationId,
       isActive:designation.isActive
     });
-    this.modalService.open(content, {
-      ariaLabelledBy: 'modal-basic-title',
-      windowClass: 'modal-cfo',
-      backdrop: 'static'
-    });
+    this.openModal(content);
   }
 
 
@@ -208,14 +215,14 @@ export class EmployeeRoleComponent {
     console.log('filter:', value);
   }
 
-  
-  
-  private openModal(content: any) {
+
+  openModal(content: any) {
     this.modalService
       .open(content, {
         ariaLabelledBy: 'modal-basic-title',
         windowClass: 'modal-cfo',
-        backdrop: 'static'
+        backdropClass: 'static',
+        backdrop: false
       })
       .result.then(
         (result) => {
