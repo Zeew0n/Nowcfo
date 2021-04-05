@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {
   FormControl,
   FormBuilder,
@@ -11,15 +11,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DesignationModel } from 'src/app/models/designation.model';
 import { TreeviewConfig, TreeviewItem } from 'ngx-treeview';
 import { DesignationService } from '../../services/employeerole.service';
-import { NgxUiLoaderService } from 'ngx-ui-loader';
-import { fakeAsync } from '@angular/core/testing';
 
 @Component({
   selector: 'app-employeerole',
   styleUrls: ['employeerole.component.scss'],
   templateUrl: './employeerole.component.html',
 })
-export class EmployeeRoleComponent implements OnInit {
+export class EmployeeRoleComponent {
   designation: DesignationModel = new DesignationModel();
   designations: DesignationModel[];
 
@@ -39,8 +37,7 @@ export class EmployeeRoleComponent implements OnInit {
     private modalService: NgbModal,
     private toastr: ToastrService,
     private designationService: DesignationService,
-    private route: ActivatedRoute,
-    private ngxLoader: NgxUiLoaderService
+    private route: ActivatedRoute
   ) {}
 
 
@@ -94,7 +91,6 @@ export class EmployeeRoleComponent implements OnInit {
 
 
   Delete() {
-    this.ngxLoader.start();
     this.designationService.DeleteDesignation(this.selectedDesignationId).subscribe(
       (result) => {
         if (result == null) {
@@ -104,12 +100,10 @@ export class EmployeeRoleComponent implements OnInit {
         } else {
           this.toastr.success('something went wrong.', 'error!');
         }
-        this.ngxLoader.stop();
       },
       (error) => {
         console.log(error.errorMessage);
         this.toastr.error('Cannot delete role', 'error!');
-        this.ngxLoader.stop();
       }
     );
   }
@@ -122,7 +116,6 @@ export class EmployeeRoleComponent implements OnInit {
   }
 
   onSubmit() {
-    this.ngxLoader.start();
     const createForm = this.designationForm.value;
     console.log(createForm);
 
@@ -138,14 +131,12 @@ export class EmployeeRoleComponent implements OnInit {
             this.toastr.success('Designation Added Successfully.', 'Success!');
             this.modalService.dismissAll();
             this.getRoles();
-            this.ngxLoader.stop();
           },
           (error) => {
             console.log(error);
             this.isSubmitting = false;
             this.modalService.dismissAll();
             this.toastr.error(error.error.errorMessage, 'Error!');
-            this.ngxLoader.stop();
           }
         );
       }
@@ -163,7 +154,6 @@ export class EmployeeRoleComponent implements OnInit {
           this.toastr.success('Designation Updated Successfully.', 'Success!');
           this.modalService.dismissAll();
           this.getRoles();
-          this.ngxLoader.stop();
         },
         (error) => {
           this.toastr.error(
@@ -172,14 +162,13 @@ export class EmployeeRoleComponent implements OnInit {
               : 'designation Update failed',
             'Error!'
           );
-          this.ngxLoader.stop();
         }
       );
     }
   }
 }
 
-  getDismissReason(reason: any): string {
+  private getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
     } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
@@ -207,7 +196,11 @@ export class EmployeeRoleComponent implements OnInit {
       designationId: designation.designationId,
       isActive:designation.isActive
     });
-    this.openModal(content);
+    this.modalService.open(content, {
+      ariaLabelledBy: 'modal-basic-title',
+      windowClass: 'modal-cfo',
+      backdrop: 'static'
+    });
   }
 
 
@@ -215,14 +208,14 @@ export class EmployeeRoleComponent implements OnInit {
     console.log('filter:', value);
   }
 
-
-  openModal(content: any) {
+  
+  
+  private openModal(content: any) {
     this.modalService
       .open(content, {
         ariaLabelledBy: 'modal-basic-title',
         windowClass: 'modal-cfo',
-        backdropClass: 'static',
-        backdrop: false
+        backdrop: 'static'
       })
       .result.then(
         (result) => {

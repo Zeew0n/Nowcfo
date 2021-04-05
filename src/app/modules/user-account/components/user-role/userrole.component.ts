@@ -13,7 +13,6 @@ import { MenuModel } from 'src/app/models/menu.model';
 import { RolePermissionModel } from 'src/app/models/role-permission';
 import { RoleService } from '../../services/userrole.service';
 import AuthenticationService from '../../services/authentication.service';
-import { NgxUiLoaderService } from 'ngx-ui-loader';
 @Component({
   selector: 'app-userrole',
   styleUrls: ['userrole.component.scss'],
@@ -42,8 +41,7 @@ export class UserRoleComponent implements OnInit {
     private toastr: ToastrService,
     private roleService: RoleService,
     private authService: AuthenticationService,
-    private route: ActivatedRoute,
-    private ngxLoaderService: NgxUiLoaderService,
+    private route: ActivatedRoute
   ) {}
 
   /* Form Declarations */
@@ -137,10 +135,8 @@ export class UserRoleComponent implements OnInit {
           this.modalService.dismissAll();
           this.toastr.success('Role deleted successfully.', 'success!');
           this.getRoles();
-          this.ngxLoaderService.stop();
         } else {
           this.toastr.success('something went wrong.', 'error!');
-          this.ngxLoaderService.stop();
         }
       },
       (error) => {
@@ -157,9 +153,9 @@ export class UserRoleComponent implements OnInit {
   }
 
   onSubmit() {
-    this.ngxLoaderService.start();
     const createForm = this.roleForm.value;
     console.log(createForm);
+
     if (!this.isEdit) {
       if (this.roleForm.valid) {
         const model = new RoleModel();
@@ -170,14 +166,12 @@ export class UserRoleComponent implements OnInit {
             this.toastr.success('Role Added Successfully.', 'Success!');
             this.modalService.dismissAll();
             this.getRoles();
-            this.ngxLoaderService.stop();
           },
           (error) => {
             console.log(error);
             this.isSubmitting = false;
             this.modalService.dismissAll();
             this.toastr.error(error.error.errorMessage, 'Error!');
-            this.ngxLoaderService.stop();
           }
         );
       }
@@ -192,7 +186,6 @@ export class UserRoleComponent implements OnInit {
             this.toastr.success('Role Updated Successfully.', 'Success!');
             this.modalService.dismissAll();
             this.getRoles();
-            this.ngxLoaderService.stop();
           },
           (error) => {
             this.toastr.error(
@@ -201,7 +194,6 @@ export class UserRoleComponent implements OnInit {
                 : 'Role Update failed',
               'Error!'
             );
-            this.ngxLoaderService.stop();
           }
         );
       }
@@ -209,7 +201,6 @@ export class UserRoleComponent implements OnInit {
   }
 
   onRoleAssginedSubmit(): void {
-    this.ngxLoaderService.start();
     const model = new RolePermissionModel();
     const createRolePermissionForm = this.rolePermissionForm.value;
     model.roleId = createRolePermissionForm.roleId;
@@ -221,14 +212,12 @@ export class UserRoleComponent implements OnInit {
           this.submitted = true;
           this.toastr.success('Role Permision Created Successfully.', 'Success!');
           this.modalService.dismissAll();
-          this.ngxLoaderService.stop();
         },
         (error) => {
           console.log(error);
           this.isSubmitting = false;
           this.modalService.dismissAll();
           this.toastr.error(error?.error?.errorMessage, 'Error!');
-          this.ngxLoaderService.stop();
         }
       );
     }
@@ -238,14 +227,12 @@ export class UserRoleComponent implements OnInit {
           this.submitted = true;
           this.toastr.success('Role Permision Updated Successfully.', 'Success!');
           this.modalService.dismissAll();
-          this.ngxLoaderService.stop();
         },
         (error) => {
           console.log(error);
           this.isSubmitting = false;
           this.modalService.dismissAll();
           this.toastr.error(error.error.errorMessage, 'Error!');
-          this.ngxLoaderService.stop();
         }
       );
     }
@@ -276,7 +263,11 @@ export class UserRoleComponent implements OnInit {
       roleName: role.roleName,
       roleId: role.roleId,
     });
-    this.openModal(content);
+    this.modalService.open(content, {
+      ariaLabelledBy: 'modal-basic-title',
+      windowClass: 'modal-cfo',
+      backdropClass: 'static',
+    });
   }
 
   EditPermission(content: any, role: RoleModel) {
@@ -294,23 +285,25 @@ export class UserRoleComponent implements OnInit {
           result.menuIds.includes(item.id)
         );
         console.log(this.checkedMenuList);
-       
       },
       (error) => {
         console.log(error);
-        this.ngxLoaderService.stop();
       }
     );
-    this.openModal(content);
+
+    this.modalService.open(content, {
+      ariaLabelledBy: 'modal-basic-title',
+      windowClass: 'modal-cfo',
+      backdropClass: 'static',
+    });
   }
 
   openModal(content: any) {
     this.modalService
       .open(content, {
         ariaLabelledBy: 'modal-basic-title',
-        backdropClass: 'static',
         windowClass: 'modal-cfo',
-        backdrop: false,
+        backdrop: 'static',
       })
       .result.then(
         (result) => {

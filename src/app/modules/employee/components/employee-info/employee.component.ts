@@ -18,27 +18,23 @@ import {
   NgbDateStruct,
 } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import {
-  ActivatedRoute,
-  ChildrenOutletContexts,
-  Data,
-  Router,
-} from '@angular/router';
+import { ActivatedRoute, ChildrenOutletContexts, Data, Router } from '@angular/router';
+import { RoleModel } from 'src/app/models/role.model';
 import { EmployeeModel } from 'src/app/models/employee.model';
 import { DesignationModel } from 'src/app/models/designation.model';
 
 import { OrganizationModel } from 'src/app/models/organization.model';
-
+import { DownlineTreeviewItem, TreeviewConfig, TreeviewItem, TreeviewHelper } from 'ngx-treeview';
 import csc from 'country-state-city';
+
+import { EmployeeUpdateModel } from 'src/app/models/EmployeeUpdateModel';
 import { analyzeNgModules } from '@angular/compiler';
 import { Observable, of } from 'rxjs';
+import { KendoNavModel } from 'src/app/models/KendoNavModel';
 import { EmployeeService } from '../../services/employee.service';
 import { NavigationService } from 'src/app/modules/navigation/services/navigation.service';
 import AuthenticationService from 'src/app/modules/user-account/services/authentication.service';
-import {
-  PaginatedResult,
-  Pagination,
-} from 'src/app/models/Pagination/Pagination';
+import { PaginatedResult, Pagination } from 'src/app/models/Pagination/Pagination';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 @Component({
   selector: 'app-employee-list',
@@ -46,66 +42,82 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
   templateUrl: './employee.component.html',
 })
 export class EmployeeComponent implements OnInit {
-  constructor(
-    private fb: FormBuilder,
-    private modalService: NgbModal,
-    private ngxLoaderService: NgxUiLoaderService,
-    private toastr: ToastrService,
-    private employeeService: EmployeeService,
-    private navigationService: NavigationService,
-    private authService: AuthenticationService,
-    private route: ActivatedRoute
-  ) {}
-
-  get f() {
-    return this.employeeForm.controls;
-  }
 
   employee: EmployeeModel = new EmployeeModel();
   employees: EmployeeModel[];
   designations: DesignationModel[];
   organizations: OrganizationModel[];
   supervisors: EmployeeModel[];
+  dropdownEmailAttachmentSettings: any = {};
 
+  // Added for dropdown
+  title = 'dropdowmcheckbox';
   disabled = false;
+  showFilter = false;
+  limitSelection = false;
   cities: any = [];
+  selectedItems: any = [];
+  dropdownSettings: any = {};
+  emailAttachmentList: Array<any> = [];
   employeeId = '';
+  isSubmitting: boolean; // Form submission variable
   pagination: Pagination;
-  searchTypes: any = [];
-  closeResult = '';
+  
+  searchTypes: any=[];
+  
+  closeResult = ''; // close result for modal
+  submitted = false;
   userId = '';
   isEdit = false;
   stateList: Array<any>;
+  simpleItems = [];
+  isUpdate = false;
   selectemployee;
   selectedEmployeeId: string;
+  selectedIds = [];
+  showTree = false;
+  selectedCity: any;
+
+
+  // for treeview
   values: number[];
+  updatevalues: number[];
+  items: TreeviewItem[] = [];
+  updateitems: TreeviewItem[] = [];
+  config = TreeviewConfig.create({
+    hasAllCheckBox: true,
+    hasFilter: true,
+    hasCollapseExpand: true,
+    decoupleChildFromParent: false,
+    maxHeight: 400,
+  });
 
-  countries: Object[] = [];
-  public field = {
-    dataSource: this.countries,
-    id: 'id',
-    parentID: 'pid',
-    text: 'name',
-    hasChildren: 'hasChild',
-    isChecked: 'isChecked',
-  };
-  emppermissions: string[] = [];
+  constructor(
+    private fb: FormBuilder,
+    private modalService: NgbModal,
+    private ngxService: NgxUiLoaderService,
+    private toastr: ToastrService,
+    private employeeService: EmployeeService,
+    private navigationService: NavigationService,
+    private authService: AuthenticationService,
+    private route: ActivatedRoute
+  ) {
 
+  }
 
-  public nodeChecked(checkedValues): void {
-    this.values = checkedValues;
-    }
-
-  public showCheckBox = true;
 
   /* Form Declarations */
   searchForm: FormGroup;
   employeeForm: FormGroup;
   EventValue: any = 'Save';
   isActive: boolean;
+  hasUser = false;
+  hasAdmin = false;
+  hasSuperAdmin = false;
 
   employeeName = new FormControl('', [Validators.required]);
-  searchTypeId = new FormControl(null, [Validators.required]);
+
+  searchTypeId = new FormControl('', [Validators.required]);
   searchValue = new FormControl('', [Validators.required]);
   email = new FormControl('', [Validators.required, Validators.email]);
   phone = new FormControl('', [Validators.required]);
@@ -120,102 +132,100 @@ export class EmployeeComponent implements OnInit {
   payTypeCheck = new FormControl(false);
   pay = new FormControl(true, [Validators.required]);
   overTimeRate = new FormControl('', [Validators.required]);
+  orgPermissionId = new FormControl();
+
 
   ngOnInit() {
+
     this.getOrganizations();
     this.getDesignations();
     this.initializeemployeeForm();
-    this.route.data.subscribe((data: Data) => {
+    this.route.data.subscribe((data: Data )=> {
       this.employees = data.employees.result;
       console.log(this.employees);
       this.pagination = data.employees.pagination;
     });
 
     this.searchTypes = [
-      { id: 1, name: 'Name' },
-      { id: 2, name: 'Email' },
-    ];
+      {id: 1, name: 'Name'},
+      {id: 2, name: 'Email'},
+  ];
 
-    this.initializeSearchForm();
+  this.initializeSearchForm();
+    this.getOrganizatioNavigation();
     this.getSuperVisors();
-    this.getSyncHierarchy();
+    
+
+    this.dropdownEmailAttachmentSettings = {
+      singleSelection: false,
+      idField: 'item_id',
+      textField: 'item_text',
+      selectAllText: 'Select All',
+      unSelectAllText: 'UnSelect All',
+      itemsShowLimit: 3,
+      allowSearchFilter: true
+    };
+  }
+
+
+  getOrganizatioNavigation() {
+    this.navigationService.getOrganizationNavigation().subscribe(
+      (res: TreeviewItem[]) => {
+        this.items.length = 0;
+        res.forEach((data) => {
+          const item = new TreeviewItem({
+            text: data.text,
+            value: data.value,
+            collapsed: true,
+            children: data.children,
+          });
+          console.log(item);
+          this.items.push(item);
+
+        });
+      },
+      (error) => console.error(error)
+    );
+  }
+
+  onSelect(event){
+    console.log(event);
+  }
+
+  onFilterChange(value: string): void {
+    console.log('filter:', value);
+  }
+
+  checkIsSupervisor(event) {
+  }
+
+  get f() {
+    return this.employeeForm.controls;
   }
 
   getEmployees() {
-    this.employeeService
-      .getPaginatedEmployees(
-        this.pagination.currentPage,
-        this.pagination.itemsPerPage,
-        this.searchTypeId.value,
-        this.searchValue.value
-      )
-      .subscribe(
-        (res: PaginatedResult<EmployeeModel[]>) => {
-          this.employees = res.result;
-          this.pagination = res.pagination;
-        },
-        (error) => {
-          this.toastr.error(error);
-        }
-      );
+    
+    this.employeeService.getAllEmployees(this.pagination.currentPage, this.pagination.itemsPerPage,this.searchTypeId.value,this.searchValue.value)
+      .subscribe((res: PaginatedResult<EmployeeModel[]>) => {
+        this.employees = res.result;
+        this.pagination = res.pagination;
+    }, error => {
+      this.toastr.error(error);
+    });
   }
+
 
   pageChanged(event: any): void {
     this.pagination.currentPage = event.page;
     this.getEmployees();
   }
 
-  getSyncHierarchy() {
-    this.employeeService.GetSyncTreeView().subscribe(
-      (result) => {
-        result.forEach((element) => {
-          this.countries.push(element);
-        });
-      },
-      (error) => console.error
-    );
-  }
 
-  getEmployeePermissionNavigation(employeeId) {
-    this.countries = [];
-    this.employeeService
-      .getEmployeePermissionNavigationById(employeeId)
-      .subscribe(
-        (result) => {
-          result.forEach((element) => {
-            this.countries.push(element);
-            this.field.dataSource = this.countries;
-          });
-        },
-        (error) => console.error
-      );
-  }
-
-  getCheckedPermission(employeeId) {
-    this.employeeService.getCheckedPermission(employeeId).subscribe(
-      (result) => {
-        result.forEach((element) => {
-          this.emppermissions.push(element.orgId);
-          console.log(this.emppermissions);
-        });
-      },
-      (error) => console.error
-    );
-  }
 
   getDesignations() {
     this.employeeService.getAllDesignations().subscribe(
       (result) => {
         this.designations = result;
-      },
-      (error) => console.error
-    );
-  }
-
-  getOrganizations() {
-    this.employeeService.GetAllOrganizations().subscribe(
-      (result) => {
-        this.organizations = result;
       },
       (error) => console.error
     );
@@ -230,9 +240,26 @@ export class EmployeeComponent implements OnInit {
     );
   }
 
+  getOrganizations() {
+    this.employeeService.GetAllOrganizations().subscribe(
+      (result) => {
+
+        this.organizations = result;
+        const count = result.length;
+        if (count > 0) {
+          this.emailAttachmentList = [];
+          for (let i = 0; i < count; i++) {
+            const element = result[i];
+            this.emailAttachmentList.push({ item_id: element.organizationId, item_text: element.organizationName });
+          }
+        }
+      },
+      (error) => console.error
+    );
+  }
+
   initializeemployeeForm() {
     this.stateList = csc.getStatesOfCountry('US');
-
     this.employeeForm = new FormGroup({
       employeeName: this.employeeName,
       email: this.email,
@@ -248,29 +275,35 @@ export class EmployeeComponent implements OnInit {
       payTypeCheck: this.payTypeCheck,
       pay: this.pay,
       overTimeRate: this.overTimeRate,
+      orgPermissionId: this.orgPermissionId
     });
   }
+
 
   initializeSearchForm() {
+
     this.searchForm = new FormGroup({
       searchTypeId: this.searchTypeId,
-      searchValue: this.searchValue,
+      searchValue: this.searchValue
     });
+
+
   }
 
-  //Edit
+
+
+  // Edit
   EditData(content, id: string) {
-    this.values = null;
-    this.isEdit = true;
-    this.getEmployeePermissionNavigation(id);
     this.selectedEmployeeId = id;
-    this.employeeService.previewdata.emit(this.selectedEmployeeId);
     this.resetFrom();
     this.employeeId = id;
+
+    this.isUpdate = true;
+    this.isEdit = true;
     this.getEmployeeById(id, content);
   }
 
-  displayFormData(data: EmployeeModel, id: any) {
+  private displayFormData(data: EmployeeUpdateModel, id: any) {
     this.employeeForm.patchValue({
       employeeName: data.employeeName,
       email: data.email,
@@ -286,27 +319,27 @@ export class EmployeeComponent implements OnInit {
       payType: data.payType,
       payTypeCheck: data.payType == 'Salary' ? true : false,
       pay: data.pay,
-      overTimeRate: data.overTimeRate,
-    });
+      overTimeRate: data.overTimeRate
+        });
   }
+
+
+
 
   getEmployeeById(id: string, content) {
     this.employeeService.getEmployeeById(id).subscribe(
-      (res: EmployeeModel) => {
-        if (res) this.isEdit = true;
+      (res: EmployeeUpdateModel) => {
+        if (res) {
+        this.isEdit = true;
+        }
         this.EventValue = 'Update';
         this.displayFormData(res, id);
         this.openModal(content);
       },
-      (error) => {
-        this.toastr.error(
-          error.error.errorMessage !== undefined
-            ? error.error.errorMessage
-            : 'Employee Create failed',
-          'Error!'
-        );
-      }
-    );
+      error => {
+        this.toastr.error(error.error.errorMessage !== undefined ?
+          error.error.errorMessage : 'Employee Create failed', 'Error!');
+      });
   }
 
   openDeleteModal(content, id) {
@@ -333,9 +366,13 @@ export class EmployeeComponent implements OnInit {
     );
   }
 
+
   open(content) {
+    this.isUpdate = false;
     this.resetFrom();
     this.isEdit = false;
+    this.userId = '';
+    this.employee == null;
     this.openModal(content);
   }
 
@@ -349,13 +386,22 @@ export class EmployeeComponent implements OnInit {
     }
   }
 
-  onSearch() {
-    this.getEmployees();
+  onSearch(){
+
+
+this.getEmployees();
+    
+
+    
+
   }
 
   onSubmit() {
+
     const createForm = this.employeeForm.value;
-    if (!this.isEdit) {
+    console.log(createForm);
+
+    if (!this.isUpdate) {
       if (this.employeeForm.valid) {
         const model = {
           employeeName: createForm.employeeName,
@@ -373,17 +419,20 @@ export class EmployeeComponent implements OnInit {
           pay: createForm.pay,
           overTimeRate: createForm.overTimeRate,
           payType: '',
-          employeepermissions: this.values,
+          employeepermissions: this.values
         };
 
         if (model.payTypeCheck) {
           model.payType = 'Salary';
-        } else {
+        }
+        else {
           model.payType = 'Hourly';
         }
 
+
         this.employeeService.CreateEmployee(model).subscribe(
           (res) => {
+            this.submitted = true;
             this.toastr.success('Employee Added Successfully.', 'Success!');
             this.modalService.dismissAll();
             this.getEmployees();
@@ -391,6 +440,7 @@ export class EmployeeComponent implements OnInit {
 
           (error) => {
             console.log(error);
+            this.isSubmitting = false;
             this.modalService.dismissAll();
             this.toastr.error(error.error.errorMessage, 'Error!');
           }
@@ -398,6 +448,8 @@ export class EmployeeComponent implements OnInit {
       }
     } else {
       if (this.employeeForm.valid) {
+
+
         const model = {
           employeeName: createForm.employeeName,
           email: createForm.email,
@@ -414,17 +466,17 @@ export class EmployeeComponent implements OnInit {
           pay: createForm.pay,
           overTimeRate: createForm.overTimeRate,
           payType: '',
-          employeepermissions: this.values,
+          employeepermissions: this.updatevalues,
         };
 
         if (model.payTypeCheck) {
           model.payType = 'Salary';
-        } else {
+        }
+        else {
           model.payType = 'Hourly';
         }
 
         this.employeeId = this.selectedEmployeeId;
-
         this.employeeService.updateEmployee(this.employeeId, model).subscribe(
           (res) => {
             this.toastr.success('Employee Updated Successfully.', 'Success!');
@@ -444,7 +496,7 @@ export class EmployeeComponent implements OnInit {
     }
   }
 
-  getDismissReason(reason: any): string {
+  private getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
     } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
@@ -455,21 +507,23 @@ export class EmployeeComponent implements OnInit {
   }
 
   resetFrom() {
-
     this.employeeForm.reset();
     this.EventValue = 'Save';
+    this.submitted = false;
+    this.employee == null;
   }
 
   resetSearch() {
     this.searchForm.reset();
-    this.ngOnInit();
   }
 
-  openModal(content: any) {
+  private openModal(content: any) {
+    this.showTree = true;
     this.modalService
       .open(content, {
         ariaLabelledBy: 'modal-basic-title',
         windowClass: 'modal-cfo',
+        backdrop: 'static'
       })
       .result.then(
         (result) => {
@@ -481,273 +535,11 @@ export class EmployeeComponent implements OnInit {
       );
   }
 
-  // initializeemployeeForm() {
-  //   this.stateList = csc.getStatesOfCountry('US');
-  //   this.employeeForm = new FormGroup({
-  //     employeeName: this.employeeName,
-  //     email: this.email,
-  //     phone: this.phone,
-  //     address: this.address,
-  //     city: this.city,
-  //     zipCode: this.zipCode,
-  //     state: this.state,
-  //     organizationId: this.organizationId,
-  //     designationId: this.designationId,
-  //     isSupervisor: this.isSupervisor,
-  //     superVisorId: this.superVisorId,
-  //     payTypeCheck: this.payTypeCheck,
-  //     pay: this.pay,
-  //     overTimeRate: this.overTimeRate,
-  //     orgPermissionId: this.orgPermissionId,
-  //   });
-  // }
+  onIdFromChild(event){
+    this.selectedIds.push(event);
+  }
 
-  // initializeSearchForm() {
-  //   this.searchForm = new FormGroup({
-  //     searchTypeId: this.searchTypeId,
-  //     searchValue: this.searchValue,
-  //   });
-  // }
-
-  // // Edit
-  // EditData(content, id: string) {
-  //   this.selectedEmployeeId = id;
-  //   this.resetFrom();
-  //   this.employeeId = id;
-
-  //   this.isUpdate = true;
-  //   this.isEdit = true;
-  //   this.getEmployeeById(id, content);
-  // }
-
-  // private displayFormData(data: EmployeeUpdateModel, id: any) {
-  //   this.employeeForm.patchValue({
-  //     employeeName: data.employeeName,
-  //     email: data.email,
-  //     phone: data.phone,
-  //     address: data.address,
-  //     city: data.city,
-  //     zipCode: data.zipCode,
-  //     state: data.state,
-  //     organizationId: data.organizationId,
-  //     designationId: data.designationId,
-  //     isSupervisor: data.isSupervisor,
-  //     superVisorId: data.superVisorId,
-  //     payType: data.payType,
-  //     payTypeCheck: data.payType == 'Salary' ? true : false,
-  //     pay: data.pay,
-  //     overTimeRate: data.overTimeRate,
-  //   });
-  // }
-
-  // getEmployeeById(id: string, content) {
-  //   this.employeeService.getEmployeeById(id).subscribe(
-  //     (res: EmployeeUpdateModel) => {
-  //       if (res) {
-  //         this.isEdit = true;
-  //       }
-  //       this.EventValue = 'Update';
-  //       this.displayFormData(res, id);
-  //       this.openModal(content);
-  //     },
-  //     (error) => {
-  //       this.toastr.error(
-  //         error.error.errorMessage !== undefined
-  //           ? error.error.errorMessage
-  //           : 'Employee Create failed',
-  //         'Error!'
-  //       );
-  //     }
-  //   );
-  // }
-
-  // openDeleteModal(content, id) {
-  //   this.EventValue = 'Delete';
-  //   this.selectedEmployeeId = id;
-  //   this.openModal(content);
-  // }
-
-  // Delete() {
-  //   this.ngxLoaderService.start();
-  //   this.employeeService.DeleteEmployee(this.selectedEmployeeId).subscribe(
-  //     (result) => {
-  //       if (result == null) {
-  //         this.modalService.dismissAll();
-  //         this.toastr.success('Employee delete successfully.', 'success!');
-  //         this.getEmployees();
-  //         this.ngxLoaderService.stop();
-  //       } else {
-  //         this.toastr.success('something went wrong.', 'error!');
-  //       }
-  //     },
-  //     (error) => {
-  //       console.log(error.errorMessage);
-  //       this.toastr.error('Cannot delete employee', 'error!');
-  //       this.ngxLoaderService.stop();
-  //     }
-  //   );
-  // }
-
-  // open(content) {
-  //   this.isUpdate = false;
-  //   this.resetFrom();
-  //   this.isEdit = false;
-  //   this.userId = '';
-  //   this.employee == null;
-  //   this.openModal(content);
-  // }
-
-  // /**
-  //  * Triggers on state option change
-  //  * @param event
-  //  */
-  // onStateChange(event) {
-  //   if (event !== undefined) {
-  //     this.employeeForm.controls.state.setValue(event.name);
-  //   }
-  // }
-
-  // onSearch() {
-  //   this.getEmployees();
-  // }
-
-  // onSubmit() {
-  //   this.ngxLoaderService.start();
-  //   const createForm = this.employeeForm.value;
-  //   console.log(createForm);
-
-  //   if (!this.isUpdate) {
-  //     if (this.employeeForm.valid) {
-  //       const model = {
-  //         employeeName: createForm.employeeName,
-  //         email: createForm.email,
-  //         phone: createForm.phone,
-  //         address: createForm.address,
-  //         city: createForm.city,
-  //         zipCode: createForm.zipCode,
-  //         state: createForm.state,
-  //         organizationId: createForm.organizationId,
-  //         designationId: createForm.designationId,
-  //         isSupervisor: createForm.isSupervisor,
-  //         superVisorId: createForm.superVisorId,
-  //         payTypeCheck: createForm.payTypeCheck ? true : false,
-  //         pay: createForm.pay,
-  //         overTimeRate: createForm.overTimeRate,
-  //         payType: '',
-  //         employeepermissions: this.values,
-  //       };
-
-  //       if (model.payTypeCheck) {
-  //         model.payType = 'Salary';
-  //       } else {
-  //         model.payType = 'Hourly';
-  //       }
-
-  //       this.employeeService.CreateEmployee(model).subscribe(
-  //         (res) => {
-  //           this.toastr.success('Employee Added Successfully.', 'Success!');
-  //           this.modalService.dismissAll();
-  //           this.getEmployees();
-  //           this.ngxLoaderService.stop();
-  //         },
-
-  //         (error) => {
-  //           console.log(error);
-  //           this.modalService.dismissAll();
-  //           this.toastr.error(error.error.errorMessage, 'Error!');
-  //           this.ngxLoaderService.stop();
-  //         }
-  //       );
-  //     }
-  //   } else {
-  //     if (this.employeeForm.valid) {
-  //       const model = {
-  //         employeeName: createForm.employeeName,
-  //         email: createForm.email,
-  //         phone: createForm.phone,
-  //         address: createForm.address,
-  //         city: createForm.city,
-  //         zipCode: createForm.zipCode,
-  //         state: createForm.state,
-  //         organizationId: createForm.organizationId,
-  //         designationId: createForm.designationId,
-  //         isSupervisor: createForm.isSupervisor,
-  //         superVisorId: createForm.superVisorId,
-  //         payTypeCheck: createForm.payTypeCheck ? true : false,
-  //         pay: createForm.pay,
-  //         overTimeRate: createForm.overTimeRate,
-  //         payType: '',
-  //         employeepermissions: this.updatevalues,
-  //       };
-
-  //       if (model.payTypeCheck) {
-  //         model.payType = 'Salary';
-  //       } else {
-  //         model.payType = 'Hourly';
-  //       }
-
-  //       this.employeeId = this.selectedEmployeeId;
-  //       this.employeeService.updateEmployee(this.employeeId, model).subscribe(
-  //         (res) => {
-  //           this.toastr.success('Employee Updated Successfully.', 'Success!');
-  //           this.modalService.dismissAll();
-  //           this.getEmployees();
-  //           this.ngxLoaderService.stop();
-  //         },
-  //         (error) => {
-  //           this.toastr.error(
-  //             error.error.errorMessage !== undefined
-  //               ? error.error.errorMessage
-  //               : 'Employee Update failed',
-  //             'Error!'
-  //           );
-  //           this.ngxLoaderService.stop();
-  //         }
-  //       );
-  //     }
-  //   }
-  // }
-
-  // private getDismissReason(reason: any): string {
-  //   if (reason === ModalDismissReasons.ESC) {
-  //     return 'by pressing ESC';
-  //   } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-  //     return 'by clicking on a backdrop';
-  //   } else {
-  //     return `with: ${reason}`;
-  //   }
-  // }
-
-  // resetFrom() {
-  //   this.employeeForm.reset();
-  //   this.EventValue = 'Save';
-  //   this.employee == null;
-  // }
-
-  // resetSearch() {
-  //   this.searchForm.reset();
-  // }
-
-  // private openModal(content: any) {
-  //   this.showTree = true;
-  //   this.modalService
-  //     .open(content, {
-  //       ariaLabelledBy: 'modal-basic-title',
-  //       backdropClass: 'static',
-  //       windowClass: 'modal-cfo',
-  //       backdrop: false,
-  //     })
-  //     .result.then(
-  //       (result) => {
-  //         this.closeResult = `Closed with: ${result}`;
-  //       },
-  //       (reason) => {
-  //         this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-  //       }
-  //     );
-  // }
-
-  // onIdFromChild(event) {
-  //   this.selectedIds.push(event);
-  // }
 }
+
+
+

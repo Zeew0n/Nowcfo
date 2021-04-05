@@ -261,7 +261,12 @@ export class  UserInformationComponent implements OnInit{
       city: userinformation.city,
       zipCode: userinformation.zipCode,
     });
-    this.openModal(content);
+    this.modalService.open(content, {
+      ariaLabelledBy: 'modal-basic-title',
+      backdrop: false,
+      windowClass: 'modal-cfo',
+      backdropClass: 'static'
+    });
   }
 
   private openModal(content: any) {

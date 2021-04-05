@@ -17,8 +17,9 @@ export class EmployeeListsResolver implements Resolve<EmployeeModel[]> {
   ) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<EmployeeModel[]> {
+    
     return this.employeeService
-      .getPaginatedEmployees(this.pageNumber, this.pageSize,null,null)
+      .getAllEmployees(this.pageNumber, this.pageSize,null,null)
       .pipe(
         catchError(error => {
           this.toastr.error('Problem retrieving data');

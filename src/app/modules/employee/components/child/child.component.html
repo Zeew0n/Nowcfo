@@ -1,1 +1,4 @@
-<div id='treeparent'><ejs-treeview #treeview id='treeelement' [fields]='fields' [showCheckBox]='showCheckBox' (nodeChecked)='nodeChecked($event)' ></ejs-treeview></div>
+<div class="pl-2" *ngFor="let item of children">
+    <span (click)="isFirstChild?sendIdToParent(item):onIdFromChild(item)">{{item.text}}</span>
+    <app-child *ngIf="item.children?.length>0" (childId)="sendIdToParent($event)" [children]=item.children></app-child>
+</div>

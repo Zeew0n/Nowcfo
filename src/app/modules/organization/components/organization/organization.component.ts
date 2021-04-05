@@ -12,75 +12,60 @@ import { OrganizationModel } from 'src/app/models/organization.model';
 import { OrganizationService } from '../../services/organization.service';
 import AuthenticationService from 'src/app/modules/user-account/services/authentication.service';
 import { NavigationService } from 'src/app/modules/navigation/services/navigation.service';
-import { EmployeeService } from 'src/app/modules/employee/services/employee.service';
-import { EmployeeModel } from 'src/app/models/employee.model';
-import { NgxUiLoaderService } from 'ngx-ui-loader';
-
 @Component({
   selector: 'app-organization-list',
   styleUrls: ['organization.component.scss'],
   templateUrl: './organization.component.html',
 })
 export class OrganizationComponent implements OnInit {
-  constructor(
-    private fb: FormBuilder,
-    private modalService: NgbModal,
-    private toastr: ToastrService,
-    private organizationService: OrganizationService,
-    private route: ActivatedRoute,
-    private navigationService: NavigationService,
-    private employeeService: EmployeeService,
-    private ngxLoaderService: NgxUiLoaderService,
-  ) {
-    this.route.params.subscribe((params) => {
-      if (params.id !== undefined) {
-        this.selectedOrgId = params.id;
-        this.getSingleOrganization(params.id);
-        this.getEmployeeList();
-      }
-    });
-  }
   organization: OrganizationModel = new OrganizationModel();
   organizations: OrganizationModel[];
-  employeeList: EmployeeModel[];
-  employee: EmployeeModel;
   orgList;
   empList;
 
   closeResult = ''; // close result for modal
-  loadingIcon = false;
   submitted = false;
   isEdit = false;
 
   selectorganization;
   selectedOrgId;
   orgEmployees;
+  organizationIdx: number;
+
+  constructor(
+    private fb: FormBuilder,
+    private modalService: NgbModal,
+    private toastr: ToastrService,
+    private organizationService: OrganizationService,
+    private route: ActivatedRoute,
+    private navigationService: NavigationService
+  ) {
+    this.route.params.subscribe((params) => {
+      if ( params.id !== undefined) {
+        this.selectedOrgId = params.id;
+        this.getSingleOrganization(params.id);
+        this.getEmployeeList();
+      }
+    });
+  }
 
   /* Form Declarations */
   OrganizationForm: FormGroup;
-  employeeAssignForm: FormGroup;
   EventValue: any = 'Save';
-  oldValue = '';
-  timeOutVariable: any;
 
   ngOnInit() {
-    this.getOrganizations();
+    if (!this.selectedOrgId) {
+      this.getOrganizations();
+    }
     this.initializeorganizationForm();
-    this.initializeEmployeeAssignForm();
   }
 
   initializeorganizationForm() {
     this.OrganizationForm = new FormGroup({
-      organizationId: new FormControl(''), // you can remove orgId
+      organizationId: new FormControl(''),
       organizationName: new FormControl('', [Validators.required]),
       hasParent: new FormControl(''),
       parentOrganizationId: new FormControl(''),
-    });
-  }
-
-  initializeEmployeeAssignForm() {
-    this.employeeAssignForm = this.fb.group({
-      employeeId: [null, [Validators.required]],
     });
   }
 
@@ -102,7 +87,6 @@ export class OrganizationComponent implements OnInit {
   }
 
   Delete() {
-    this.ngxLoaderService.start();
     this.organizationService.deleteOrganization(this.selectedOrgId).subscribe(
       (result) => {
         if (result == null) {
@@ -112,39 +96,12 @@ export class OrganizationComponent implements OnInit {
         } else {
           this.toastr.success('something went wrong.', 'error!');
         }
-        this.ngxLoaderService.stop();
       },
       (error) => {
         console.log(error.errorMessage);
         this.toastr.error('Cannot delete Parent Organization', 'error!');
-        this.ngxLoaderService.stop();
       }
     );
-  }
-
-  employeeAssignSubmit(){
-    this.ngxLoaderService.start();
-    const employeeAssign = this.employeeAssignForm.value;
-    const employee = new EmployeeModel();
-    employee.organizationId = this.selectedOrgId;
-    employee.employeeId = employeeAssign.employeeId;
-    this.employeeService
-        .AssignEmployee(employee)
-        .subscribe(
-          (res) => {
-            this.submitted = true;
-            this.toastr.success('Employee Assigned to Organization Successfully.', 'Success!');
-            this.modalService.dismissAll();
-            this.ngxLoaderService.stop();
-          },
-          (err) => {
-            console.log(err);
-            this.submitted = false;
-            this.modalService.dismissAll();
-            this.toastr.error(err.error.errorMessage, 'Error!');
-            this.ngxLoaderService.stop();
-          }
-        );
   }
 
   openCreateModal(content) {
@@ -166,7 +123,6 @@ export class OrganizationComponent implements OnInit {
   }
 
   onSubmit() {
-    this.ngxLoaderService.start();
     const createForm = this.OrganizationForm.value;
     console.log(createForm);
     if (!this.isEdit) {
@@ -184,10 +140,8 @@ export class OrganizationComponent implements OnInit {
             this.toastr.success('User Added Successfully.', 'Success!');
             this.modalService.dismissAll();
             this.getOrganizations();
-            this.ngxLoaderService.stop();
           },
           (error) => {
-            this.ngxLoaderService.stop();
             console.log(error);
             this.submitted = false;
             this.modalService.dismissAll();
@@ -213,7 +167,6 @@ export class OrganizationComponent implements OnInit {
             );
             this.modalService.dismissAll();
             this.getOrganizations();
-            this.ngxLoaderService.stop();
           },
           (error) => {
             this.toastr.error(
@@ -222,7 +175,6 @@ export class OrganizationComponent implements OnInit {
                 : 'Organization Update failed',
               'Error!'
             );
-            this.ngxLoaderService.stop();
           }
         );
       }
@@ -246,10 +198,6 @@ export class OrganizationComponent implements OnInit {
     this.submitted = false;
     this.organization = null;
   }
-  openAssignEmployeeModal(content, organization: OrganizationModel) {
-    this.getNonPaginatedEmployees();
-    this.openModal(content);
-  }
 
   openEditModal(content, organization: OrganizationModel) {
     this.isEdit = true;
@@ -272,7 +220,10 @@ export class OrganizationComponent implements OnInit {
     }
 
     this.OrganizationForm.controls.parentOrganizationId.updateValueAndValidity();
-    this.openModal(content);
+    this.modalService.open(content, {
+      ariaLabelledBy: 'modal-basic-title',
+      windowClass: 'modal-cfo',
+    });
   }
 
   openModal(content: any) {
@@ -280,7 +231,6 @@ export class OrganizationComponent implements OnInit {
       .open(content, {
         ariaLabelledBy: 'modal-basic-title',
         windowClass: 'modal-cfo',
-        backdropClass: 'static',
         backdrop: false,
       })
       .result.then(
@@ -293,11 +243,13 @@ export class OrganizationComponent implements OnInit {
       );
   }
   getSingleOrganization(id) {
-    this.organizationService.getOrganizationById(id).subscribe(
-      (res) => {
+      this.organizationService
+       .getOrganizationById(id)
+       .subscribe(
+       (res) => {
         this.organization = res;
-      },
-      (err) => {
+       },
+       (err) => {
         console.error(err);
       }
     );
@@ -318,73 +270,4 @@ export class OrganizationComponent implements OnInit {
         }
       );
   }
-  searchEmployee(event) {
-    this.loadingIcon = true;
-    if (this.timeOutVariable) {
-      clearTimeout(this.timeOutVariable);
-    }
-    const value = event.target.value;
-    if (value === '' || event.key === 'Backspace') {
-      this.timeOutVariable = setTimeout(() => this.getEmployee(value), 400);
-    } else {
-      this.timeOutVariable = setTimeout(() => this.getEmployee(value), 400);
-    }
-  }
-  getSelectedEmployee(event){
-  }
-  getEmployee(value) {
-    this.employeeService.getEmployeesBySearchValue(value).subscribe(
-      (res) => {
-        console.log(res);
-        this.employeeList = res;
-        this.loadingIcon = false;
-      },
-      (err) => {
-        console.log(err);
-        this.loadingIcon = false;
-      }
-    );
-  }
-
-  getAllEmployees() {
-    this.employeeService.getAllEmployees().subscribe(
-      (res) => {
-        this.employeeList = res;
-        console.clear();
-        console.log(res);
-      },
-      (err) => {
-        console.log(err);
-        this.toastr.error(err);
-      }
-    );
-  }
-  // NonPaginated
-  getNonPaginatedEmployees() {
-    this.employeeService.getNonPaginatedEmployees().subscribe(
-      (res) => {
-        this.employeeList = res;
-        console.clear();
-        console.log(res);
-      },
-      (err) => {
-        console.log(err);
-        this.toastr.error(err);
-      }
-    );
-  }
-
-  // getNonPaginatedEmployees() {
-  //   this.employeeService.getEmployeesBySearchValue("")
-  //   .subscribe(
-  //     (res) => {
-  //       this.employeeList = res;
-  //       console.clear();
-  //       console.log(res);
-  //     },
-  //     (err) => {
-  //       console.log(err);
-  //       this.toastr.error(err);
-  //     });
-  // }
 }
