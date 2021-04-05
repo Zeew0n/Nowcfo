@@ -2,11 +2,7 @@
     border-color: red;
 }
 
-.clear-out {
-    cursor: pointer;
-    height: 40px;
-    padding: 0 20px;
-}
+
 
 .search-field {
     justify-content: flex-end;
@@ -14,4 +10,35 @@
 
 .form-outline {
     margin-right: auto;
+}
+
+.search-form {
+    display: flex;
+    flex-direction: row;
+
+    .cfo-select {
+        width: 200px;
+        margin-right: 10px;
+    }
+
+    .form-control {
+        width: 200px;
+        margin-right: 10px;
+        height: 36px;
+    }
+
+    .error-msg {
+        font-size: 12px;
+        color: #dc3545;
+    }
+
+    .btn {
+        height: 36px;
+    }
+
+    .clear-out {
+        cursor: pointer;
+        padding: 0 20px;
+        margin-left: 10px;
+    }
 }
