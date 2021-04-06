@@ -22,9 +22,6 @@ private treeElement: TreeViewComponent;
     if(tree) {
         this.treeElement = tree;
         this.treeElement.checkedNodes = this.fields.dataSource.filter(x=>x.isChecked).map(x=>x.id);
-        this.employeeService.previewdata.subscribe(message => this.employeeId = message);
-
-        this.treeElement.checkedNodes= this.employeeorgpermissions;
     }
 
 
@@ -35,21 +32,7 @@ private treeElement: TreeViewComponent;
 
   ngOnInit(): void {
 
-    this.employeeService.previewdata.subscribe(message => this.employeeId = message);
   }
-
-
-  getCheckedPermission(employeeId) {
-     this.employeeService.getCheckedPermission(employeeId).subscribe(
-       (result) => {
-         result.forEach(element => {
-           this.employeeorgpermissions.push(element.orgId);
-           console.log(this.employeeorgpermissions);
-         });
-       },
-       (error) => console.error
-     );
-   }
 
 
   public nodeChecked(args): void{
