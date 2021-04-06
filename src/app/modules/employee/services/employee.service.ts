@@ -96,7 +96,7 @@ export class EmployeeService extends HttpGenericCrudService<EmployeeModel>{
     }
 
     getEmployeePermissionNavigationById(employeeId) {
-        return this.httpClient.get<OrganizationSyncFusionModel[]>(`employee/test/${employeeId}`);
+        return this.httpClient.get<OrganizationSyncFusionModel[]>(`employee/EmployeePermission/${employeeId}`);
     }
 
     updateEmployee(id, data) {
