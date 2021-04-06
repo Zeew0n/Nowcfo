@@ -1,378 +1,581 @@
 <div class="">
-    <div class="btn-container">
-        <button type="button" class="btn btn-green" (click)="open(content)">
-            New Employee
-        </button>
+  <div class="btn-container">
+    <button type="button" class="btn btn-green" (click)="open(content)">
+      New Employee
+    </button>
+  </div>
+
+  <div class="content">
+    <div class="title-container">
+      <h1 class="page-title">Employee</h1>
+      <div class="content-right">
+        <form
+          class="form-cfo"
+          [formGroup]="searchForm"
+          (ngSubmit)="onSearch()"
+          class="search-form"
+        >
+          <ng-select
+            [items]="searchTypes"
+            bindValue="id"
+            bindLabel="name"
+            placeholder="Search Type"
+            formControlName="searchTypeId"
+            class="cfo-select"
+          >
+          </ng-select>
+          <div>
+            <input
+              type="search"
+              id="form1"
+              formControlName="searchValue"
+              class="form-control"
+              placeholder="Search Value"
+              [ngClass]="{
+                'invalid-input':
+                  searchForm.controls.searchValue.touched &&
+                  searchForm.controls.searchValue.errors
+              }"
+            />
+            <div
+              *ngIf="
+                searchForm.controls.searchValue.touched &&
+                searchForm.controls.searchValue.errors?.required
+              "
+              class="error-msg"
+            >
+              Search Value is Required!
+            </div>
+          </div>
+          <button
+            type="submit"
+            [disabled]="searchForm.invalid"
+            class="btn btn-primary"
+          >
+            <i class="fa fa-search"></i>
+          </button>
+
+          <button class="btn btn-danger clear-out" (click)="resetSearch()">
+            Reset
+          </button>
+        </form>
+      </div>
     </div>
 
-    <div class="content">
-        <div class="title-container">
-            <h1 class="page-title">Employee</h1>
-            <div class="content-right">
+    <div class="table-responsive">
+      <table class="table table-harbor">
+        <thead>
+          <tr>
+            <th scope="col">S.N</th>
+            <th scope="col">Employee Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Phone Number</th>
+            <th scope="col">Address</th>
+            <th scope="col">City</th>
+            <th scope="col">Zip Code</th>
+            <th scope="col">State</th>
+            <th scope="col">Organization</th>
+            <th scope="col">Designation</th>
+            <!-- <th scope="col">IsActive</th> -->
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let employee of employees; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td data-th="Employee Name ">{{ employee.employeeName }}</td>
+            <td data-th="Email ">{{ employee.email }}</td>
+            <td data-th="Phone Number ">{{ employee.phone }}</td>
+            <td data-th="Address ">{{ employee.address }}</td>
+            <td data-th="City">{{ employee.city }}</td>
+            <td data-th="Zip Code ">{{ employee.zipCode }}</td>
+            <td data-th="State">{{ employee.state }}</td>
+            <td data-th="Organization Id ">{{ employee.organizationName }}</td>
+            <td data-th="Designation Id ">{{ employee.designationName }}</td>
+            <!-- <td data-th="IsActive ">{{ employee.isActive }}</td> -->
+            <td data-th="Actions">
+              <a
+                (click)="EditData(content, employee.employeeId)"
+                class="icon-holder"
+                href="javascript:void(0)"
+                title="edit"
+                ><i class="icon icon-pencil-create"></i
+              ></a>
+              <span></span>
+              <a
+                class="icon-holder"
+                (click)="openDeleteModal(deletecontent, employee.employeeId)"
+                href="javascript:void(0)"
+                title="delete"
+                ><i class="icon icon-circle-block"></i
+              ></a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
-                <form class="form-cfo" [formGroup]="searchForm" (ngSubmit)="onSearch()" class="search-form">
+      <div class="pagination-nowcfo pagination">
+        <pagination
+          [boundaryLinks]="true"
+          [totalItems]="pagination.totalItems"
+          [itemsPerPage]="pagination.itemsPerPage"
+          [(ngModel)]="pagination.currentPage"
+          (pageChanged)="pageChanged($event)"
+          previousText="&lsaquo;"
+          nextText="&rsaquo;"
+          firstText="&laquo;"
+          lastText="&raquo;"
+        >
+        </pagination>
+      </div>
+    </div>
+    <ng-template #content let-modal>
+      <div class="container">
+        <h3 class="modal-title" *ngIf="!isEdit">Create New Employee</h3>
+        <h3 class="modal-title" *ngIf="isEdit">Update Employee</h3>
+        <form
+          class="form-cfo"
+          [formGroup]="employeeForm"
+          (ngSubmit)="onSubmit()"
+        >
+          <div class="form-group">
+            <label>Employee Name</label>
+            <input
+              type="text"
+              formControlName="employeeName"
+              class="form-control"
+              placeholder="Employee Name"
+              [ngClass]="{
+                'invalid-input':
+                  employeeForm.controls.employeeName.touched &&
+                  employeeForm.controls.employeeName.errors
+              }"
+            />
+            <div
+              *ngIf="
+                employeeForm.controls.employeeName.touched &&
+                employeeForm.controls.employeeName.errors?.required
+              "
+              class="error-msg"
+            >
+              Name is required
+            </div>
+          </div>
 
-                    <ng-select [items]="searchTypes" bindValue="id" bindLabel="name" placeholder="Search Type"
-                        formControlName="searchTypeId" class="cfo-select">
-                    </ng-select>
-                    <div>
-                        <input type="search" id="form1" formControlName="searchValue" class="form-control"
-                            placeholder="Search Value" [ngClass]="{
-                            'invalid-input':
-                            searchForm.controls.searchValue.touched &&
-                            searchForm.controls.searchValue.errors
-                            }" />
-                        <div *ngIf="
-                            searchForm.controls.searchValue.touched &&
-                            searchForm.controls.searchValue.errors?.required
-                            " class="error-msg">
-                            Search Value is Required!
-                        </div>
-                    </div>
-                    <button type="submit" [disabled]="searchForm.invalid" class="btn btn-primary">
-                        <i class="fa fa-search"></i>
-                    </button>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Email</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  formControlName="email"
+                  placeholder="Email"
+                  [ngClass]="{
+                    'invalid-input':
+                      employeeForm.controls.email.touched &&
+                      employeeForm.controls.email.errors?.required
+                  }"
+                />
 
-                    <button class="btn btn-danger clear-out" (click)="resetSearch()">
-                        Reset</button>
-                </form>
+                <div
+                  *ngIf="
+                    (employeeForm.controls.email.touched &&
+                      employeeForm.controls.email.errors?.email) ||
+                    (employeeForm.controls.email.touched &&
+                      employeeForm.controls.email.errors?.required)
+                  "
+                  class="error-msg"
+                >
+                  Email is invalid!
+                </div>
+              </div>
             </div>
 
-        </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Phone Number</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="phone"
+                  placeholder="Phone Number"
+                  [ngClass]="{
+                    'invalid-input':
+                      employeeForm.controls.phone.touched &&
+                      employeeForm.controls.phone.errors
+                  }"
+                />
+                <div
+                  *ngIf="
+                    employeeForm.controls.phone.touched &&
+                    employeeForm.controls.phone.errors?.required
+                  "
+                  class="error-msg"
+                >
+                  Phone Number is Required!
+                </div>
+              </div>
+            </div>
+          </div>
 
-        <div class="table-responsive">
-            <table class="table table-harbor">
-                <thead>
-                    <tr>
-                        <th scope="col">S.N</th>
-                        <th scope="col">Employee Name</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Phone Number</th>
-                        <th scope="col">Address</th>
-                        <th scope="col">City</th>
-                        <th scope="col">Zip Code</th>
-                        <th scope="col">State</th>
-                        <th scope="col">Organization</th>
-                        <th scope="col">Designation</th>
-                        <th scope="col">IsActive</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let employee of employees; let i = index">
-                        <td>{{ i + 1 }}</td>
-                        <td data-th="Employee Name ">{{ employee.employeeName }}</td>
-                        <td data-th="Email ">{{ employee.email }}</td>
-                        <td data-th="Phone Number ">{{ employee.phone }}</td>
-                        <td data-th="Address ">{{ employee.address }}</td>
-                        <td data-th="City">{{ employee.city }}</td>
-                        <td data-th="Zip Code ">{{ employee.zipCode }}</td>
-                        <td data-th="State">{{ employee.state }}</td>
-                        <td data-th="Organization Id ">{{ employee.organizationName }}</td>
-                        <td data-th="Designation Id ">{{ employee.designationName }}</td>
-                        <td data-th="IsActive ">{{ employee.isActive }}</td>
-                        <td data-th="Actions">
-                            <a (click)="EditData(content, employee.employeeId)" class="icon-holder"
-                                href="javascript:void(0)" title="edit"><i class="icon icon-pencil-create"></i></a>
-                            <span></span>
-                            <a class="icon-holder" (click)="openDeleteModal(deletecontent, employee.employeeId)"
-                                href="javascript:void(0)" title="delete"><i class="icon icon-circle-block"></i></a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <div class="pagination-nowcfo pagination">
-                <pagination [boundaryLinks]="true" [totalItems]="pagination.totalItems"
-                    [itemsPerPage]="pagination.itemsPerPage" [(ngModel)]="pagination.currentPage"
-                    (pageChanged)="pageChanged($event)" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;"
-                    lastText="&raquo;">
-                </pagination>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Address</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="address"
+                  placeholder="Address"
+                  [ngClass]="{
+                    'invalid-input':
+                      employeeForm.controls.address.touched &&
+                      employeeForm.controls.address.errors?.required
+                  }"
+                />
+                <div
+                  *ngIf="
+                    employeeForm.controls.address.touched &&
+                    employeeForm.controls.address.errors?.required
+                  "
+                  class="error-msg"
+                >
+                  Address is Required!
+                </div>
+              </div>
             </div>
 
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>City</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="city"
+                  placeholder="City"
+                  [ngClass]="{
+                    'invalid-input':
+                      employeeForm.controls.city.touched &&
+                      employeeForm.controls.city.errors
+                  }"
+                />
+                <div
+                  *ngIf="
+                    employeeForm.controls.city.touched &&
+                    employeeForm.controls.city.errors?.required
+                  "
+                  class="error-msg"
+                >
+                  City is Required!
+                </div>
+              </div>
+            </div>
 
-        </div>
-        <ng-template #content let-modal>
-            <div class="container">
-                <h3 class="modal-title" *ngIf="!isEdit">  Create New Employee</h3>
-                <h3 class="modal-title" *ngIf="isEdit"> Update Employee</h3>
-                <form class="form-cfo" [formGroup]="employeeForm" (ngSubmit)="onSubmit()">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Zip Code</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="zipCode"
+                  placeholder="zipCode"
+                  [ngClass]="{
+                    'invalid-input':
+                      employeeForm.controls.zipCode.touched &&
+                      employeeForm.controls.zipCode.errors?.required
+                  }"
+                />
+                <div
+                  *ngIf="
+                    employeeForm.controls.zipCode.touched &&
+                    employeeForm.controls.zipCode.errors?.required
+                  "
+                  class="error-msg"
+                >
+                  ZipCode is Required!
+                </div>
+              </div>
+            </div>
+          </div>
 
-                    <div class="form-group">
-                        <label>Employee Name</label>
-                        <input type="text" formControlName="employeeName" class="form-control"
-                            placeholder="Employee Name" [ngClass]="{
-'invalid-input':
-employeeForm.controls.employeeName.touched &&
-employeeForm.controls.employeeName.errors
-}" />
-                        <div *ngIf="
-employeeForm.controls.employeeName.touched &&
-employeeForm.controls.employeeName.errors?.required
-" class="error-msg">
-                            Name is required
-                        </div>
-                    </div>
+          <div class="form-group">
+            <label>State</label>
+            <ng-select
+              [items]="stateList"
+              bindLabel="name"
+              bindValue="name"
+              style="width: 100%"
+              [searchable]="true"
+              [dropdownPosition]="'bottom'"
+              formControlName="state"
+              [selectOnTab]="true"
+              [tabIndex]="7"
+              placeholder="Select State"
+              (change)="onStateChange($event)"
+              class="cfo-select"
+              [ngClass]="{
+                'invalid-input': employeeForm.controls.state.errors?.required
+              }"
+            >
+            </ng-select>
 
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Email</label>
-                                <input type="email" class="form-control" formControlName="email" placeholder="Email"
-                                    [ngClass]="{
-'invalid-input':
-employeeForm.controls.email.touched &&
-employeeForm.controls.email.errors?.required
-}" />
+            <div
+              *ngIf="employeeForm.controls.state.errors?.required"
+              class="error-msg"
+            >
+              State is required!
+            </div>
+          </div>
 
-                                <div *ngIf="
-(employeeForm.controls.email.touched &&
-employeeForm.controls.email.errors?.email) ||
-(employeeForm.controls.email.touched &&
-employeeForm.controls.email.errors?.required)
-" class="error-msg">
-                                    Email is invalid!
-                                </div>
-                            </div>
-                        </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Designation</label>
+                <ng-select
+                  [items]="designations"
+                  bindLabel="designationName"
+                  bindValue="designationId"
+                  placeholder="Select Role"
+                  formControlName="designationId"
+                  class="cfo-select"
+                  [ngClass]="{
+                    'invalid-input':
+                      employeeForm.controls.designationId.errors?.required
+                  }"
+                >
+                </ng-select>
 
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Phone Number</label>
-                                <input type="text" class="form-control" formControlName="phone"
-                                    placeholder="Phone Number" [ngClass]="{
-'invalid-input':
-employeeForm.controls.phone.touched &&
-employeeForm.controls.phone.errors
-}" />
-                                <div *ngIf="
-employeeForm.controls.phone.touched &&
-employeeForm.controls.phone.errors?.required
-" class="error-msg">
-                                    Phone Number is Required!
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div
+                  *ngIf="employeeForm.controls.designationId.errors?.required"
+                  class="error-msg"
+                >
+                  Role is required!
+                </div>
+              </div>
+            </div>
 
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Designation</label>
+                <ng-select
+                  [items]="designations"
+                  bindLabel="designationName"
+                  bindValue="designationId"
+                  placeholder="Select Role"
+                  formControlName="designationId"
+                  class="cfo-select"
+                  [ngClass]="{
+                    'invalid-input':
+                      employeeForm.controls.designationId.errors?.required
+                  }"
+                >
+                </ng-select>
 
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Address</label>
-                                <input type="text" class="form-control" formControlName="address" placeholder="Address"
-                                    [ngClass]="{
-'invalid-input':
-employeeForm.controls.address.touched &&
-employeeForm.controls.address.errors?.required
-}" />
-                                <div *ngIf="
-employeeForm.controls.address.touched &&
-employeeForm.controls.address.errors?.required
-" class="error-msg">
-                                    Address is Required!
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>City</label>
-                                <input type="text" class="form-control" formControlName="city" placeholder="City"
-                                    [ngClass]="{
-'invalid-input':
-employeeForm.controls.city.touched &&
-employeeForm.controls.city.errors
-}" />
-                                <div *ngIf="
-employeeForm.controls.city.touched &&
-employeeForm.controls.city.errors?.required
-" class="error-msg">
-                                    City is Required!
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Zip Code</label>
-                                <input type="text" class="form-control" formControlName="zipCode" placeholder="zipCode"
-                                    [ngClass]="{
-'invalid-input':
-employeeForm.controls.zipCode.touched &&
-employeeForm.controls.zipCode.errors?.required
-}" />
-                                <div *ngIf="
-employeeForm.controls.zipCode.touched &&
-employeeForm.controls.zipCode.errors?.required
-" class="error-msg">
-                                    ZipCode is Required!
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-                    <div class="form-group">
-                        <label>State</label>
-                        <ng-select [items]="stateList" bindLabel="name" bindValue="name" style="width: 100%"
-                            [searchable]="true" [dropdownPosition]="'bottom'" formControlName="state"
-                            [selectOnTab]="true" [tabIndex]="7" placeholder="Select State"
-                            (change)="onStateChange($event)" class="cfo-select" [ngClass]="{
-'invalid-input':
-employeeForm.controls.state.errors?.required
-}">
-                        </ng-select>
-
-                        <div *ngIf="
-
-employeeForm.controls.state.errors?.required
-" class="error-msg">
-                            State is required!
-                        </div>
-
-                    </div>
-
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Designation</label>
-                                <ng-select [items]="designations" bindLabel="designationName" bindValue="designationId"
-                                    placeholder="Select Role" formControlName="designationId" class="cfo-select"
-                                    [ngClass]="{
-'invalid-input':
-employeeForm.controls.designationId.errors?.required
-}">
-                                </ng-select>
-
-                                <div *ngIf="
-
-employeeForm.controls.designationId.errors?.required
-" class="error-msg">
-                                    Role is required!
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <label>Pay Type</label>
-                            <div class="can-toggle">
-                                <input name="payTypeCheck" id="payTypeCheck" formControlName="payTypeCheck"
-                                    type="checkbox" />
-                                <label for="payTypeCheck">
-                                    <div class="can-toggle__switch" data-checked="Salary" data-unchecked="Hourly"></div>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Pay</label>
-                                <input type="text" class="form-control" formControlName="pay" placeholder="Pay"
-                                    [ngClass]="{
-'invalid-input':
-employeeForm.controls.pay.touched &&
-employeeForm.controls.pay.errors?.required
-}" />
-                                <div *ngIf="
-employeeForm.controls.pay.touched &&
-employeeForm.controls.pay.errors?.required
-" class="error-msg">
-                                    Pay Scale is Required!
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>OverTime Rate</label>
-                                <input type="text" class="form-control" formControlName="overTimeRate"
-                                    placeholder="Over Time Rate" [ngClass]="{
-'invalid-input':
-employeeForm.controls.overTimeRate.touched &&
-employeeForm.controls.overTimeRate.errors?.required
-}" />
-                                <div *ngIf="
-employeeForm.controls.overTimeRate.touched &&
-employeeForm.controls.overTimeRate.errors?.required
-" class="error-msg">
-                                    OverTime Rate is Required!
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-6">
-                            <div class="custom-checkbox">
-                                <input type="checkbox" id="checkboxSuperVisorId" value="1"
-                                    formControlName="isSupervisor" />
-                                <span>Is Supervisor</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>SuperVisor</label>
-                        <ng-select [items]="supervisors" placeholder="Select SuperVisor" bindLabel="employeeName"
-                            bindValue="employeeId" formControlName="superVisorId" class="cfo-select">
-                        </ng-select>
-                    </div>
+                <div
+                  *ngIf="employeeForm.controls.designationId.errors?.required"
+                  class="error-msg"
+                >
+                  Role is required!
+                </div>
+              </div>
+            </div>
+          </div>
 
 
-                    <div class="form-group" *ngIf="!isEdit">
-                        <app-child [fields]="field" [showCheckBox]="showCheckBox" (onChecked)="nodeChecked($event)">
-                        </app-child>
-                    </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Employee Type</label>
+                <ng-select
+                  [items]="employeeTypes"
+                  bindLabel="name"
+                  bindValue="id"
+                  placeholder="Select Employee Type"
+                  formControlName="employeeType"
+                  class="cfo-select"
+                  [ngClass]="{
+                    'invalid-input':
+                      employeeForm.controls.employeeType.errors?.required
+                  }"
+                >
+                </ng-select>
+
+                <div
+                  *ngIf="employeeForm.controls.employeeType.errors?.required"
+                  class="error-msg"
+                >
+                  Employee Type is required!
+                </div>
+              </div>
+            </div>
+          </div>
 
 
-                    <div class="form-group" *ngIf="isEdit">
-                        <app-minichild [fields]="field" [showCheckBox]="showCheckBox" (onChecked)="nodeChecked($event)">
-                        </app-minichild>
-                    </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <label>Pay Type</label>
+              <div class="can-toggle">
+                <input
+                  name="payTypeCheck"
+                  id="payTypeCheck"
+                  formControlName="payTypeCheck"
+                  type="checkbox"
+                />
+                <label for="payTypeCheck">
+                  <div
+                    class="can-toggle__switch"
+                    data-checked="Salary"
+                    data-unchecked="Hourly"
+                  ></div>
+                </label>
+              </div>
+            </div>
+          </div>
 
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Pay</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="pay"
+                  placeholder="Pay"
+                  [ngClass]="{
+                    'invalid-input':
+                      employeeForm.controls.pay.touched &&
+                      employeeForm.controls.pay.errors?.required
+                  }"
+                />
+                <div
+                  *ngIf="
+                    employeeForm.controls.pay.touched &&
+                    employeeForm.controls.pay.errors?.required
+                  "
+                  class="error-msg"
+                >
+                  Pay Scale is Required!
+                </div>
+              </div>
+            </div>
 
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>OverTime Rate</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="overTimeRate"
+                  placeholder="Over Time Rate"
+                  [ngClass]="{
+                    'invalid-input':
+                      employeeForm.controls.overTimeRate.touched &&
+                      employeeForm.controls.overTimeRate.errors?.required
+                  }"
+                />
+                <div
+                  *ngIf="
+                    employeeForm.controls.overTimeRate.touched &&
+                    employeeForm.controls.overTimeRate.errors?.required
+                  "
+                  class="error-msg"
+                >
+                  OverTime Rate is Required!
+                </div>
+              </div>
+            </div>
 
+            <div class="col-sm-6">
+              <div class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  id="checkboxSuperVisorId"
+                  value="1"
+                  formControlName="isSupervisor"
+                />
+                <span>Is Supervisor</span>
+              </div>
+            </div>
+          </div>
 
-                    <!-- <app-child
+          <div class="form-group">
+            <label>SuperVisor</label>
+            <ng-select
+              [items]="supervisors"
+              placeholder="Select SuperVisor"
+              bindLabel="employeeName"
+              bindValue="employeeId"
+              formControlName="superVisorId"
+              class="cfo-select"
+            >
+            </ng-select>
+          </div>
+
+          <div class="form-group" *ngIf="!isEdit">
+            <app-child
+              [fields]="field"
+              [showCheckBox]="showCheckBox"
+              (onChecked)="nodeChecked($event)"
+            >
+            </app-child>
+          </div>
+
+          <div class="form-group" *ngIf="isEdit">
+            <app-minichild
+              [fields]="field"
+              [showCheckBox]="showCheckBox"
+              (onChecked)="nodeChecked($event)"
+            >
+            </app-minichild>
+          </div>
+
+          <!-- <app-child
 [fields]="field"
 [showCheckBox]="showCheckBox"
 (onChecked)="nodeChecked($event)"
 ></app-child> -->
 
+          <div class="float-right">
+            <button
+              type="submit"
+              class="btn btn-green mr-3"
+              [disabled]="employeeForm.invalid"
+            >
+              {{ EventValue }}
+            </button>
 
-                    <div class="float-right">
-                        <button type="submit" class="btn btn-green mr-3" [disabled]="employeeForm.invalid">
-                            {{ EventValue }}
-                        </button>
+            <button
+              type="button"
+              class="btn btn-gray"
+              (click)="modal.close('Close Button Clicked')"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </ng-template>
 
-                        <button type="button" class="btn btn-gray" (click)="modal.close('Close Button Clicked')">
-                            Cancel
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </ng-template>
-
-        <ng-template #deletecontent let-modal>
-            <div class="container">
-                <h3 class="modal-title">
-                    This action is permanent. Are you sure you want to delete this
-                    Employee?
-                </h3>
-                <div class="float-right">
-                    <button type="submit" (click)="Delete()" class="btn btn-green mr-3">
-                        {{ EventValue }}
-                    </button>
-                    <button type="button" class="btn btn-gray" (click)="modal.close('Close Button Clicked')">
-                        Cancel
-                    </button>
-                </div>
-            </div>
-        </ng-template>
-    </div>
+    <ng-template #deletecontent let-modal>
+      <div class="container">
+        <h3 class="modal-title">
+          This action is permanent. Are you sure you want to delete this
+          Employee?
+        </h3>
+        <div class="float-right">
+          <button type="submit" (click)="Delete()" class="btn btn-green mr-3">
+            {{ EventValue }}
+          </button>
+          <button
+            type="button"
+            class="btn btn-gray"
+            (click)="modal.close('Close Button Clicked')"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </ng-template>
+  </div>
 </div>

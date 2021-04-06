@@ -6,7 +6,6 @@ import { Observable } from 'rxjs';
 import { DesignationModel } from 'src/app/models/designation.model';
 import { EmployeeModel } from 'src/app/models/employee.model';
 import { OrganizationModel } from 'src/app/models/organization.model';
-import { EmployeeUpdateModel } from 'src/app/models/EmployeeUpdateModel';
 import { OrganizationSyncFusionModel } from 'src/app/models/organization-syncfusion.model';
 import { PaginatedResult } from 'src/app/models/Pagination/Pagination';
 import { map } from 'rxjs/operators';
@@ -68,14 +67,14 @@ export class EmployeeService extends HttpGenericCrudService<EmployeeModel>{
         }
 
 
-    getEmployeeById(id: string): Observable<EmployeeUpdateModel> {
+    getEmployeeById(id: string): Observable<EmployeeModel> {
 
-        return this.httpClient.get<EmployeeUpdateModel>(`employee/${id}`);
+        return this.httpClient.get<EmployeeModel>(`employee/${id}`);
       }
 
 
 
-    GetAllDesignations(): Observable<DesignationModel[]> {
+    getAllDesignations(): Observable<DesignationModel[]> {
         return this.httpClient.get<DesignationModel[]>('designation');
     }
 
@@ -85,23 +84,23 @@ export class EmployeeService extends HttpGenericCrudService<EmployeeModel>{
 
 
 
-    GetAllOrganizations(): Observable<OrganizationModel[]> {
+    getAllOrganizations(): Observable<OrganizationModel[]> {
         return this.httpClient.get<OrganizationModel[]>('organization');
     }
 
-    GetSyncTreeView(): Observable<OrganizationSyncFusionModel[]> {
+    getSyncTreeView(): Observable<OrganizationSyncFusionModel[]> {
         return this.httpClient.get<OrganizationSyncFusionModel[]>('employee/SyncHierarchy');
     }
 
 
-    CreateEmployee(data)
+    createEmployee(data)
     {
        console.log(data);
        return this.httpClient.post('employee', data);
     }
 
 
-    DeleteEmployee(id)
+    deleteEmployee(id)
     {
         return this.httpClient.delete('employee/' + id);
     }
@@ -110,13 +109,7 @@ export class EmployeeService extends HttpGenericCrudService<EmployeeModel>{
 
         return this.httpClient.get<OrganizationSyncFusionModel[]>(`employee/test/${employeeId}`);
       }
-
-
-      getCheckedPermission(employeeId) {
-
-        return this.httpClient.get<UserPermissionModel[]>(`employee/employeepermission/${employeeId}`);
-      }
-
+      
 
 
       updateEmployee(id, data) {

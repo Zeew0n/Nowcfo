@@ -13,7 +13,6 @@ import { EmployeeModel } from 'src/app/models/employee.model';
 import { DesignationModel } from 'src/app/models/designation.model';
 import { OrganizationModel } from 'src/app/models/organization.model';
 import csc from 'country-state-city';
-import { EmployeeUpdateModel } from 'src/app/models/EmployeeUpdateModel';
 import { EmployeeService } from '../../services/employee.service';
 import {
   PaginatedResult,
@@ -36,6 +35,7 @@ export class EmployeeComponent implements OnInit {
   employeeId = '';
   pagination: Pagination;
   searchTypes: any = [];
+  employeeTypes: any=[];
   closeResult = ''; // close result for modal
   submitted = false;
   isEdit = false;
@@ -64,13 +64,12 @@ export class EmployeeComponent implements OnInit {
     expanded: 'expanded',
   };
 
-  emppermissions: string[] = [];
   showCheckBox = true;
 
   employeeForm: FormGroup;
   searchForm: FormGroup;
   EventValue: any = 'Save';
-  isActive: boolean;
+  //isActive: boolean;
 
   searchTypeId = new FormControl(null, [Validators.required]);
   searchValue = new FormControl('', [Validators.required]);
@@ -104,6 +103,16 @@ export class EmployeeComponent implements OnInit {
       { id: 1, name: 'Name' },
       { id: 2, name: 'Email' },
     ];
+
+    
+    this.employeeTypes = [
+      { id: 1, name: 'Full-Time' },
+      { id: 2, name: 'Part-Time' },
+      { id: 3, name: 'Hybrid' },
+      { id: 4, name: 'Vendor' },
+    ];
+
+
 
     this.initializeSearchForm();
     this.getSuperVisors();
@@ -139,7 +148,7 @@ export class EmployeeComponent implements OnInit {
   }
 
   getSyncHierarchy() {
-    this.employeeService.GetSyncTreeView().subscribe(
+    this.employeeService.getSyncTreeView().subscribe(
       (result) => {
         result.forEach((element) => {
           this.countries.push(element);
@@ -164,20 +173,8 @@ export class EmployeeComponent implements OnInit {
       );
   }
 
-  getCheckedPermission(employeeId) {
-    this.employeeService.getCheckedPermission(employeeId).subscribe(
-      (result) => {
-        result.forEach((element) => {
-          this.emppermissions.push(element.orgId);
-          console.log(this.emppermissions);
-        });
-      },
-      () => console.error
-    );
-  }
-
   getDesignations() {
-    this.employeeService.GetAllDesignations().subscribe(
+    this.employeeService.getAllDesignations().subscribe(
       (result) => {
         this.designations = result;
       },
@@ -186,7 +183,7 @@ export class EmployeeComponent implements OnInit {
   }
 
   getOrganizations() {
-    this.employeeService.GetAllOrganizations().subscribe(
+    this.employeeService.getAllOrganizations().subscribe(
       (result) => {
         this.organizations = result;
       },
@@ -235,10 +232,7 @@ export class EmployeeComponent implements OnInit {
   EditData(content, id: string) {
     this.values = null;
     this.isEdit = true;
-    // this.messageEvent.emit(id);
-
     this.getEmployeePermissionNavigation(id);
-    // this.getCheckedPermission(id);
     this.selectedEmployeeId = id;
     this.employeeService.previewdata.emit(this.selectedEmployeeId);
     this.resetFrom();
@@ -246,7 +240,7 @@ export class EmployeeComponent implements OnInit {
     this.getEmployeeById(id, content);
   }
 
-  private displayFormData(data: EmployeeUpdateModel, id: any) {
+  private displayFormData(data: EmployeeModel, id: any) {
     this.employeeForm.patchValue({
       employeeName: data.employeeName,
       email: data.email,
@@ -263,16 +257,14 @@ export class EmployeeComponent implements OnInit {
       payTypeCheck: data.payType == 'Salary' ? true : false,
       pay: data.pay,
       overTimeRate: data.overTimeRate,
-      employeeType: data,
+      employeeType: data.employeeType,
     });
   }
 
   getEmployeeById(id: string, content) {
     this.employeeService.getEmployeeById(id).subscribe(
-      (res: EmployeeUpdateModel) => {
-        if (res) {
-          this.isEdit = true;
-        }
+      (res: EmployeeModel) => {
+        this.isEdit = true;
         this.EventValue = 'Update';
         this.displayFormData(res, id);
         this.openModal(content);
@@ -295,7 +287,7 @@ export class EmployeeComponent implements OnInit {
   }
 
   Delete() {
-    this.employeeService.DeleteEmployee(this.selectedEmployeeId).subscribe(
+    this.employeeService.deleteEmployee(this.selectedEmployeeId).subscribe(
       (result) => {
         if (result == null) {
           this.modalService.dismissAll();
@@ -347,6 +339,7 @@ export class EmployeeComponent implements OnInit {
           payTypeCheck: createForm.payTypeCheck ? true : false,
           pay: createForm.pay,
           overTimeRate: createForm.overTimeRate,
+          employeeType: createForm.employeeType,
           payType: '',
           employeepermissions: this.values,
         };
@@ -357,7 +350,7 @@ export class EmployeeComponent implements OnInit {
           model.payType = 'Hourly';
         }
 
-        this.employeeService.CreateEmployee(model).subscribe(
+        this.employeeService.createEmployee(model).subscribe(
           () => {
             this.submitted = true;
             this.toastr.success('Employee Added Successfully.', 'Success!');
@@ -388,6 +381,7 @@ export class EmployeeComponent implements OnInit {
           payTypeCheck: createForm.payTypeCheck ? true : false,
           pay: createForm.pay,
           overTimeRate: createForm.overTimeRate,
+          employeeType:createForm.employeeType,
           payType: '',
           employeepermissions: this.values,
         };
