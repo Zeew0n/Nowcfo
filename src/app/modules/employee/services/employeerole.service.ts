@@ -9,9 +9,11 @@ import { DesignationModel } from 'src/app/models/designation.model';
   providedIn: 'root',
 })
 export class DesignationService extends HttpGenericCrudService<DesignationModel> {
+
   constructor(httpClient: HttpClient) {
     super(httpClient, environment.API_URL, 'designation/');
   }
+
   protected setHeader() {
     const httpOptions = {
       headers: new HttpHeaders({
@@ -22,19 +24,20 @@ export class DesignationService extends HttpGenericCrudService<DesignationModel>
   }
 
 
-  GetAllRoles(): Observable<DesignationModel[]> {
+  getAllRoles(): Observable<DesignationModel[]> {
     return this.httpClient.get<DesignationModel[]>('designation');
   }
 
-  CreateDesignation(data) {
+  createDesignation(data) {
     return this.httpClient.post('designation/', data);
   }
 
-  DeleteDesignation(id) {
-    return this.httpClient.delete('designation/'+id);
+  deleteDesignation(id) {
+    return this.httpClient.delete('designation/' + id);
   }
 
-  UpdateDesignation(id, data: DesignationModel) {
+  updateDesignation(id, data: DesignationModel) {
     return this.httpClient.put('designation/' + id, data);
   }
+
 }
