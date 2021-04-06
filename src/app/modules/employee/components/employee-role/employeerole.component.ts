@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {
   FormControl,
   FormBuilder,
@@ -9,25 +9,19 @@ import { NgbModal,ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DesignationModel } from 'src/app/models/designation.model';
-import { TreeviewConfig, TreeviewItem } from 'ngx-treeview';
 import { DesignationService } from '../../services/employeerole.service';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 @Component({
   selector: 'app-employeerole',
   styleUrls: ['employeerole.component.scss'],
   templateUrl: './employeerole.component.html',
 })
-export class EmployeeRoleComponent {
+export class EmployeeRoleComponent implements OnInit{
   designation: DesignationModel = new DesignationModel();
   designations: DesignationModel[];
-
-  isSubmitting: boolean; // Form submission variable
   closeResult = ''; // close result for modal
-  submitted = false;
-
-  // designationId: number;
   isEdit = false;
-  isUpdate = false;
 
   selectemployeerole;
   selectedDesignationId: number;
@@ -37,30 +31,15 @@ export class EmployeeRoleComponent {
     private modalService: NgbModal,
     private toastr: ToastrService,
     private designationService: DesignationService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private ngxUiLoaderService: NgxUiLoaderService,
   ) {}
 
-
-  //For TreeView Checklist
-
-  items: TreeviewItem[] = [];
-
-  config = TreeviewConfig.create({
-    hasAllCheckBox: false,
-    hasFilter: true,
-    hasCollapseExpand: false,
-    decoupleChildFromParent: false,
-    maxHeight: 400,
-  });
-
-
-  /* Form Declarations */
   designationForm: FormGroup;
   EventValue: any = 'Save';
 
   designationId = new FormControl('');
   designationName = new FormControl('', [Validators.required]);
-  isActive = new FormControl(true);
 
   ngOnInit() {
     this.getRoles();
@@ -68,7 +47,7 @@ export class EmployeeRoleComponent {
   }
 
   getRoles() {
-    this.designationService.GetAllRoles().subscribe(
+    this.designationService.getAllRoles().subscribe(
       (result) => {
         this.designations = result;
       },
@@ -80,7 +59,6 @@ export class EmployeeRoleComponent {
     this.designationForm = new FormGroup({
       designationId: this.designationId,
       designationName: this.designationName,
-      isActive: this.isActive
     });
   }
   openDeleteModal(content, id) {
@@ -89,9 +67,9 @@ export class EmployeeRoleComponent {
     this.openModal(content);
   }
 
-
   Delete() {
-    this.designationService.DeleteDesignation(this.selectedDesignationId).subscribe(
+    this.ngxUiLoaderService.start();
+    this.designationService.deleteDesignation(this.selectedDesignationId).subscribe(
       (result) => {
         if (result == null) {
           this.modalService.dismissAll();
@@ -100,15 +78,17 @@ export class EmployeeRoleComponent {
         } else {
           this.toastr.success('something went wrong.', 'error!');
         }
+        this.ngxUiLoaderService.stop();
       },
       (error) => {
         console.log(error.errorMessage);
         this.toastr.error('Cannot delete role', 'error!');
+        this.ngxUiLoaderService.stop();
       }
     );
   }
+
   open(content) {
-    this.isUpdate = false;
     this.resetFrom();
     this.isEdit = false;
     this.designation = null;
@@ -116,44 +96,40 @@ export class EmployeeRoleComponent {
   }
 
   onSubmit() {
+    this.ngxUiLoaderService.start();
     const createForm = this.designationForm.value;
     console.log(createForm);
-
     if (!this.isEdit) {
       if (this.designationForm.valid) {
         const model = new DesignationModel();
-
         model.designationName = createForm.designationName;
-        model.isActive = createForm.isActive ? true : false;
-        this.designationService.CreateDesignation(model).subscribe(
+        this.designationService.createDesignation(model).subscribe(
           (res) => {
-            this.submitted = true;
             this.toastr.success('Designation Added Successfully.', 'Success!');
             this.modalService.dismissAll();
             this.getRoles();
+            this.ngxUiLoaderService.stop();
           },
           (error) => {
             console.log(error);
-            this.isSubmitting = false;
             this.modalService.dismissAll();
             this.toastr.error(error.error.errorMessage, 'Error!');
+            this.ngxUiLoaderService.stop();
           }
         );
       }
     } else {
 
       if (this.designationForm.valid) {
-
      const model = new DesignationModel();
-
      model.designationName = createForm.designationName;
-     model.isActive = createForm.isActive;
      model.id = this.selectemployeerole.designationId;
-     this.designationService.UpdateDesignation(model.id, model).subscribe(
+     this.designationService.updateDesignation(model.id, model).subscribe(
         (res) => {
           this.toastr.success('Designation Updated Successfully.', 'Success!');
           this.modalService.dismissAll();
           this.getRoles();
+          this.ngxUiLoaderService.stop();
         },
         (error) => {
           this.toastr.error(
@@ -162,13 +138,14 @@ export class EmployeeRoleComponent {
               : 'designation Update failed',
             'Error!'
           );
+          this.ngxUiLoaderService.stop();
         }
       );
     }
   }
 }
 
-  private getDismissReason(reason: any): string {
+ getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
     } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
@@ -181,12 +158,10 @@ export class EmployeeRoleComponent {
   resetFrom() {
     this.designationForm.reset();
     this.EventValue = 'Save';
-    this.submitted = false;
     this.designation = null;
   }
 
   EditData(content, designation: any) {
-    this.isUpdate = true;
     this.isEdit = true;
     this.selectemployeerole = designation;
     console.log(designation);
@@ -194,13 +169,8 @@ export class EmployeeRoleComponent {
     this.designationForm.patchValue({
       designationName: designation.designationName,
       designationId: designation.designationId,
-      isActive:designation.isActive
     });
-    this.modalService.open(content, {
-      ariaLabelledBy: 'modal-basic-title',
-      windowClass: 'modal-cfo',
-      backdrop: 'static'
-    });
+    this.openModal(content);
   }
 
 
@@ -208,14 +178,13 @@ export class EmployeeRoleComponent {
     console.log('filter:', value);
   }
 
-  
-  
-  private openModal(content: any) {
+  openModal(content: any) {
     this.modalService
       .open(content, {
         ariaLabelledBy: 'modal-basic-title',
         windowClass: 'modal-cfo',
-        backdrop: 'static'
+        backdropClass: 'static',
+        backdrop: false
       })
       .result.then(
         (result) => {
