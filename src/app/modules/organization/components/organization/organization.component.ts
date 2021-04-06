@@ -129,7 +129,7 @@ export class OrganizationComponent implements OnInit {
     employee.organizationId = this.selectedOrgId;
     employee.employeeId = employeeAssign.employeeId;
     this.employeeService
-        .AssignEmployee(employee)
+        .assignEmployee(employee)
         .subscribe(
           (res) => {
             this.submitted = true;
@@ -247,7 +247,7 @@ export class OrganizationComponent implements OnInit {
     this.organization = null;
   }
   openAssignEmployeeModal(content, organization: OrganizationModel) {
-    this.getNonPaginatedEmployees();
+    this.getAllEmployees();
     this.openModal(content);
   }
 
@@ -318,6 +318,7 @@ export class OrganizationComponent implements OnInit {
         }
       );
   }
+
   searchEmployee(event) {
     this.loadingIcon = true;
     if (this.timeOutVariable) {
@@ -330,8 +331,10 @@ export class OrganizationComponent implements OnInit {
       this.timeOutVariable = setTimeout(() => this.getEmployee(value), 400);
     }
   }
+
   getSelectedEmployee(event){
   }
+
   getEmployee(value) {
     this.employeeService.getEmployeesBySearchValue(value).subscribe(
       (res) => {
@@ -359,32 +362,5 @@ export class OrganizationComponent implements OnInit {
       }
     );
   }
-  // NonPaginated
-  getNonPaginatedEmployees() {
-    this.employeeService.getNonPaginatedEmployees().subscribe(
-      (res) => {
-        this.employeeList = res;
-        console.clear();
-        console.log(res);
-      },
-      (err) => {
-        console.log(err);
-        this.toastr.error(err);
-      }
-    );
-  }
 
-  // getNonPaginatedEmployees() {
-  //   this.employeeService.getEmployeesBySearchValue("")
-  //   .subscribe(
-  //     (res) => {
-  //       this.employeeList = res;
-  //       console.clear();
-  //       console.log(res);
-  //     },
-  //     (err) => {
-  //       console.log(err);
-  //       this.toastr.error(err);
-  //     });
-  // }
 }

@@ -18,6 +18,7 @@ import {
   PaginatedResult,
   Pagination,
 } from 'src/app/models/Pagination/Pagination';
+import { OrganizationService } from 'src/app/modules/organization/services/organization.service';
 
 @Component({
   selector: 'app-employee-list',
@@ -49,6 +50,7 @@ export class EmployeeComponent implements OnInit {
     private modalService: NgbModal,
     private toastr: ToastrService,
     private employeeService: EmployeeService,
+    private organizationService: OrganizationService,
     private route: ActivatedRoute
   ) {}
 
@@ -104,7 +106,6 @@ export class EmployeeComponent implements OnInit {
       { id: 2, name: 'Email' },
     ];
 
-    
     this.employeeTypes = [
       { id: 1, name: 'Full-Time' },
       { id: 2, name: 'Part-Time' },
@@ -118,14 +119,14 @@ export class EmployeeComponent implements OnInit {
     this.getSuperVisors();
     this.getSyncHierarchy();
   }
-  
+
   nodeChecked(checkedValues): void {
     this.values = checkedValues;
   }
 
   getEmployees() {
     this.employeeService
-      .getAllEmployees(
+      .getPaginatedEmployees(
         this.pagination.currentPage,
         this.pagination.itemsPerPage,
         this.searchTypeId.value,
@@ -183,7 +184,7 @@ export class EmployeeComponent implements OnInit {
   }
 
   getOrganizations() {
-    this.employeeService.getAllOrganizations().subscribe(
+    this.organizationService.getAllOrganizations().subscribe(
       (result) => {
         this.organizations = result;
       },
