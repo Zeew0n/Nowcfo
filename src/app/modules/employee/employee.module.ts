@@ -14,13 +14,15 @@ import { EmployeeRoleComponent } from './components/employee-role/employeerole.c
 import { NgxPaginationModule } from 'ngx-pagination';
 import { EmployeeListsResolver } from 'src/app/_resolver/employeeList';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { TreeViewModule } from '@syncfusion/ej2-angular-navigations';
+import { MiniChildComponent } from './components/minichild/minichild.component';
 
 
 
 @NgModule({
     imports: [
         CommonModule,
-        TreeviewModule.forRoot(),
+        TreeViewModule,
         EmployeeRoutingModule,
         FormsModule,
         NgSelectModule,
@@ -31,7 +33,7 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
         NgxPaginationModule
         
     ],
-    declarations: [EmployeeComponent,ChildComponent,EmployeeRoleComponent],
+    declarations: [EmployeeComponent,ChildComponent,MiniChildComponent,EmployeeRoleComponent],
     providers: [EmployeeListsResolver]
 })
 export class EmployeeModule { }
