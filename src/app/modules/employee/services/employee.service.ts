@@ -9,7 +9,6 @@ import { OrganizationModel } from 'src/app/models/organization.model';
 import { OrganizationSyncFusionModel } from 'src/app/models/organization-syncfusion.model';
 import { PaginatedResult } from 'src/app/models/Pagination/Pagination';
 import { map } from 'rxjs/operators';
-import { UserPermissionModel } from 'src/app/models/userpermission.model';
 
 
 @Injectable({
@@ -33,7 +32,12 @@ export class EmployeeService extends HttpGenericCrudService<EmployeeModel>{
         };
         return httpOptions;
     }
-    getAllEmployees(
+
+    getAllEmployees(){
+      return this.httpClient.get<EmployeeModel[]>('employee');
+    }
+
+    getPaginatedEmployees(
         page?,
         itemsPerPage?,
         searchTypeId?,
@@ -52,7 +56,7 @@ export class EmployeeService extends HttpGenericCrudService<EmployeeModel>{
 
         }
         return this.httpClient
-          .get<EmployeeModel[]>('employee', { observe: 'response', params })
+          .get<EmployeeModel[]>('employee/PaginatedEmployees', { observe: 'response', params })
           .pipe(
             map(response => {
               paginatedResult.result = response.body;
@@ -68,11 +72,8 @@ export class EmployeeService extends HttpGenericCrudService<EmployeeModel>{
 
 
     getEmployeeById(id: string): Observable<EmployeeModel> {
-
         return this.httpClient.get<EmployeeModel>(`employee/${id}`);
-      }
-
-
+    }
 
     getAllDesignations(): Observable<DesignationModel[]> {
         return this.httpClient.get<DesignationModel[]>('designation');
@@ -82,39 +83,31 @@ export class EmployeeService extends HttpGenericCrudService<EmployeeModel>{
         return this.httpClient.get<EmployeeModel[]>('employee/listallsupervisors/');
     }
 
-
-
-    getAllOrganizations(): Observable<OrganizationModel[]> {
-        return this.httpClient.get<OrganizationModel[]>('organization');
-    }
-
     getSyncTreeView(): Observable<OrganizationSyncFusionModel[]> {
         return this.httpClient.get<OrganizationSyncFusionModel[]>('employee/SyncHierarchy');
     }
 
-
-    createEmployee(data)
-    {
-       console.log(data);
+    createEmployee(data){
        return this.httpClient.post('employee', data);
     }
 
-
-    deleteEmployee(id)
-    {
+    deleteEmployee(id) {
         return this.httpClient.delete('employee/' + id);
     }
 
     getEmployeePermissionNavigationById(employeeId) {
-
         return this.httpClient.get<OrganizationSyncFusionModel[]>(`employee/test/${employeeId}`);
-      }
-      
+    }
 
-
-      updateEmployee(id, data) {
+    updateEmployee(id, data) {
         return this.httpClient.put('employee/' + id, data);
-      }
+    }
 
+    getEmployeesBySearchValue(searchText: string): Observable<EmployeeModel[]> {
+      return this.httpClient.get<EmployeeModel[]>('employee/EmployeesAutocomplete/' + searchText);
+    }
 
+    assignEmployee(data) {
+      return this.httpClient.put('employee/AssignEmployee', data);
+    }
 }
