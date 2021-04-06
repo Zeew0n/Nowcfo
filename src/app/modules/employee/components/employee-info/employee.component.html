@@ -94,8 +94,8 @@
         </div>
         <ng-template #content let-modal>
             <div class="container">
-                <h3 class="modal-title" *ngIf="!isEdit"> {{values}} Create New Employee</h3>
-                <h3 class="modal-title" *ngIf="isEdit"> {{values}} Update Employee</h3>
+                <h3 class="modal-title" *ngIf="!isEdit">  Create New Employee</h3>
+                <h3 class="modal-title" *ngIf="isEdit"> Update Employee</h3>
                 <form class="form-cfo" [formGroup]="employeeForm" (ngSubmit)="onSubmit()">
 
                     <div class="form-group">
