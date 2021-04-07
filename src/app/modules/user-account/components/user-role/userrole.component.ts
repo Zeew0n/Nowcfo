@@ -113,8 +113,8 @@ export class UserRoleComponent implements OnInit {
 
   initializeRolePermissionForm() {
     this.rolePermissionForm = this.fb.group({
-      roleId: new FormControl(''),
-      menuIds: new FormControl(''),
+      roleId: new FormControl(null, [Validators.required]),
+      menuIds: new FormControl(null, [Validators.required]),
     });
   }
 
@@ -130,8 +130,9 @@ export class UserRoleComponent implements OnInit {
     this.openModal(content);
   }
 
-  Delete() {
-    this.roleService.DeleteRole(this.selectedRole).subscribe(
+  delete() {
+    this.ngxLoaderService.start();
+    this.roleService.deleteRole(this.selectedRole).subscribe(
       (result) => {
         if (result == null) {
           this.modalService.dismissAll();
@@ -164,7 +165,7 @@ export class UserRoleComponent implements OnInit {
       if (this.roleForm.valid) {
         const model = new RoleModel();
         model.roleName = createForm.roleName;
-        this.roleService.CreateRole(model).subscribe(
+        this.roleService.createRole(model).subscribe(
           (res) => {
             this.submitted = true;
             this.toastr.success('Role Added Successfully.', 'Success!');
@@ -187,7 +188,7 @@ export class UserRoleComponent implements OnInit {
         model.roleName = createForm.roleName;
         model.roleId = createForm.roleId;
 
-        this.roleService.UpdateRole(model).subscribe(
+        this.roleService.updateRole(model).subscribe(
           (res) => {
             this.toastr.success('Role Updated Successfully.', 'Success!');
             this.modalService.dismissAll();
@@ -268,7 +269,7 @@ export class UserRoleComponent implements OnInit {
     this.role = null;
   }
 
-  EditData(content, role: any) {
+  editData(content, role: any) {
     this.isEdit = true;
     this.selectrole = this.role;
     this.EventValue = 'Update';
@@ -279,7 +280,7 @@ export class UserRoleComponent implements OnInit {
     this.openModal(content);
   }
 
-  EditPermission(content: any, role: RoleModel) {
+  editPermission(content: any, role: RoleModel) {
     this.disableRoleDdl = true;
     this.isEdit = true;
     this.EventValue = 'Update';
@@ -294,11 +295,9 @@ export class UserRoleComponent implements OnInit {
           result.menuIds.includes(item.id)
         );
         console.log(this.checkedMenuList);
-       
       },
       (error) => {
         console.log(error);
-        this.ngxLoaderService.stop();
       }
     );
     this.openModal(content);
