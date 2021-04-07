@@ -19,7 +19,7 @@ export class EmployeeModel extends BaseEntity {
     superVisorId: string;
     payType: string;
     pay: string;
-    employeeType:string;
+    employeeType:number;
     overTimeRate: string;
     employeepermissions: EmployeePermission[];
 

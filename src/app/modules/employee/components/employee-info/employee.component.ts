@@ -19,6 +19,7 @@ import {
   Pagination,
 } from 'src/app/models/Pagination/Pagination';
 import { OrganizationService } from 'src/app/modules/organization/services/organization.service';
+import { EmployeeTypeModel } from 'src/app/models/employeetype.model';
 
 @Component({
   selector: 'app-employee-list',
@@ -31,12 +32,12 @@ export class EmployeeComponent implements OnInit {
   designations: DesignationModel[];
   organizations: OrganizationModel[];
   supervisors: EmployeeModel[];
+  employeeTypes: EmployeeTypeModel[];
   disabled = false;
   cities: any = [];
   employeeId = '';
   pagination: Pagination;
   searchTypes: any = [];
-  employeeTypes: any=[];
   closeResult = ''; // close result for modal
   submitted = false;
   isEdit = false;
@@ -106,15 +107,9 @@ export class EmployeeComponent implements OnInit {
       { id: 2, name: 'Email' },
     ];
 
-    this.employeeTypes = [
-      { id: 1, name: 'Full-Time' },
-      { id: 2, name: 'Part-Time' },
-      { id: 3, name: 'Hybrid' },
-      { id: 4, name: 'Vendor' },
-    ];
 
 
-
+    this.getEmployeeTypes();
     this.initializeSearchForm();
     this.getSuperVisors();
     this.getSyncHierarchy();
@@ -178,6 +173,17 @@ export class EmployeeComponent implements OnInit {
     this.employeeService.getAllDesignations().subscribe(
       (result) => {
         this.designations = result;
+      },
+      () => console.error
+    );
+  }
+
+
+  
+  getEmployeeTypes() {
+    this.employeeService.getAllEmployeeTypes().subscribe(
+      (result) => {
+        this.employeeTypes = result;
       },
       () => console.error
     );
