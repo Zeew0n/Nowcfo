@@ -68,6 +68,7 @@ export class EmployeeComponent implements OnInit {
   };
 
   showCheckBox = true;
+  //autoCheck =true;
 
   employeeForm: FormGroup;
   searchForm: FormGroup;
