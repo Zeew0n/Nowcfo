@@ -271,62 +271,74 @@
                 </div>
               </div>
             </div>
+            </div>
 
-            <div class="col-sm-6">
-              <div class="form-group">
-                <label>Zip Code</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  formControlName="zipCode"
-                  placeholder="zipCode"
-                  [ngClass]="{
-                    'invalid-input':
+
+
+
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label>Zip Code</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="zipCode"
+                    placeholder="zipCode"
+                    [ngClass]="{
+                      'invalid-input':
+                        employeeForm.controls.zipCode.touched &&
+                        employeeForm.controls.zipCode.errors?.required
+                    }"
+                  />
+                  <div
+                    *ngIf="
                       employeeForm.controls.zipCode.touched &&
                       employeeForm.controls.zipCode.errors?.required
-                  }"
-                />
-                <div
-                  *ngIf="
-                    employeeForm.controls.zipCode.touched &&
-                    employeeForm.controls.zipCode.errors?.required
-                  "
-                  class="error-msg"
-                >
-                  ZipCode is Required!
+                    "
+                    class="error-msg"
+                  >
+                    ZipCode is Required!
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
 
-          <div class="form-group">
-            <label>State</label>
-            <ng-select
-              [items]="stateList"
-              bindLabel="name"
-              bindValue="name"
-              style="width: 100%"
-              [searchable]="true"
-              [dropdownPosition]="'bottom'"
-              formControlName="state"
-              [selectOnTab]="true"
-              [tabIndex]="7"
-              placeholder="Select State"
-              (change)="onStateChange($event)"
-              class="cfo-select"
-              [ngClass]="{
-                'invalid-input': employeeForm.controls.state.errors?.required
-              }"
-            >
-            </ng-select>
+              <div class="col-sm-6">
+                <div class="form-group">
+                <label>State</label>
+                <ng-select
+                  [items]="stateList"
+                  bindLabel="name"
+                  bindValue="name"
+                  style="width: 100%"
+                  [searchable]="true"
+                  [dropdownPosition]="'bottom'"
+                  formControlName="state"
+                  [selectOnTab]="true"
+                  [tabIndex]="7"
+                  placeholder="Select State"
+                  (change)="onStateChange($event)"
+                  class="cfo-select"
+                  [ngClass]="{
+                    'invalid-input': employeeForm.controls.state.errors?.required
+                  }"
+                >
+                </ng-select>
+    
+                <div
+                  *ngIf="employeeForm.controls.state.errors?.required"
+                  class="error-msg"
+                >
+                  State is required!
+                </div>
+              </div>
+</div>
+              </div>
+            
+           
+ 
 
-            <div
-              *ngIf="employeeForm.controls.state.errors?.required"
-              class="error-msg"
-            >
-              State is required!
-            </div>
-          </div>
+        
 
           <div class="row">
             <div class="col-sm-6">
@@ -357,26 +369,26 @@
 
             <div class="col-sm-6">
               <div class="form-group">
-                <label>Designation</label>
+                <label>Organization</label>
                 <ng-select
-                  [items]="designations"
-                  bindLabel="designationName"
-                  bindValue="designationId"
-                  placeholder="Select Role"
-                  formControlName="designationId"
+                  [items]="organizations"
+                  bindLabel="organizationName"
+                  bindValue="organizationId"
+                  placeholder="Select Organization"
+                  formControlName="organizationId"
                   class="cfo-select"
                   [ngClass]="{
                     'invalid-input':
-                      employeeForm.controls.designationId.errors?.required
+                      employeeForm.controls.organizationId.errors?.required
                   }"
                 >
                 </ng-select>
 
                 <div
-                  *ngIf="employeeForm.controls.designationId.errors?.required"
+                  *ngIf="employeeForm.controls.organizationId.errors?.required"
                   class="error-msg"
                 >
-                  Role is required!
+                  Organization is required!
                 </div>
               </div>
             </div>
@@ -390,8 +402,8 @@
                 <ng-select
                   [items]="employeeTypes"
                   bindLabel="name"
-                  bindValue="id"
-                  placeholder="Select Employee Type"
+                  bindValue="employeeType"
+                  placeholder="Employee Type"
                   formControlName="employeeType"
                   class="cfo-select"
                   [ngClass]="{
@@ -409,10 +421,7 @@
                 </div>
               </div>
             </div>
-          </div>
 
-
-          <div class="row">
             <div class="col-sm-6">
               <label>Pay Type</label>
               <div class="can-toggle">
@@ -432,6 +441,8 @@
               </div>
             </div>
           </div>
+
+
 
           <div class="row">
             <div class="col-sm-6">
