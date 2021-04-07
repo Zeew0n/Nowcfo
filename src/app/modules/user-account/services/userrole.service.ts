@@ -32,16 +32,23 @@ export class RoleService extends HttpGenericCrudService<RoleModel> {
     return this.httpClient.get<MenuModel[]>('role/menus');
   }
 
-  CreateRole(data) {
+  createRole(data) {
     return this.httpClient.post('role/Create', data);
   }
 
-  DeleteRole(Id) {
+  deleteRole(Id) {
     return this.httpClient.delete('role/deleterole/' + Id);
   }
 
-  UpdateRole(data: RoleModel) {
+  updateRole(data: RoleModel) {
     return this.httpClient.put('role/UpdateRole', data);
+  }
+  getRoleById(id: string): Observable<RoleModel> {
+    return this.httpClient.get<RoleModel>('role/Role' + id);
+  }
+
+  getRolePermission(id: string): Observable<RolePermissionModel>{
+    return this.httpClient.get<RolePermissionModel>('role/ReadRolePermission/' + id);
   }
 
   addPermissionPermission(data: RolePermissionModel){
@@ -50,12 +57,5 @@ export class RoleService extends HttpGenericCrudService<RoleModel> {
 
   editRolePermission(data: RolePermissionModel){
     return this.httpClient.put('role/UpdateRolePermission', data);
-  }
-
-  getRoleById(id: string): Observable<RoleModel> {
-    return this.httpClient.get<RoleModel>('role/Role' + id);
-  }
-  getRolePermission(id: string): Observable<RolePermissionModel>{
-    return this.httpClient.get<RolePermissionModel>('RolePermission/ReadRolePermission/' + id);
   }
 }
