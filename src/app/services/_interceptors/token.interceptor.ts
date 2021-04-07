@@ -1,5 +1,3 @@
-
-
 import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
@@ -19,7 +17,7 @@ export class TokenInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // add authorization header with jwt token if available
-    debugger
+    
     request = this.addRequestUri(request);
     const token = this.authService.getJwtToken();
     if (token) {
@@ -27,7 +25,7 @@ export class TokenInterceptor implements HttpInterceptor {
     }
 
     return next.handle(request).pipe(catchError(error => {
-      debugger
+      
       if (error instanceof HttpErrorResponse && error.status === 401) {
         return this.handle401Error(request, next);
       } else if (error instanceof HttpErrorResponse && error.status === 403) {
@@ -41,7 +39,7 @@ export class TokenInterceptor implements HttpInterceptor {
 
   private handle401Error(request: HttpRequest<any>, next: HttpHandler) {
 
-    debugger
+    
     
     if (!this.isRefreshing) {
       this.isRefreshing = true;
