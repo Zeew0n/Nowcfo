@@ -113,7 +113,7 @@ export class EmployeeComponent implements OnInit {
     this.getEmployeeTypes();
     this.initializeSearchForm();
     this.getSuperVisors();
-    this.getSyncHierarchy();
+    //this.getSyncHierarchy();
   }
 
   nodeChecked(checkedValues): void {
@@ -240,9 +240,9 @@ export class EmployeeComponent implements OnInit {
   EditData(content, id: string) {
     this.values = null;
     this.isEdit = true;
-    this.getEmployeePermissionNavigation(id);
+    //this.getEmployeePermissionNavigation(id);
     this.selectedEmployeeId = id;
-    this.employeeService.previewdata.emit(this.selectedEmployeeId);
+    //this.employeeService.previewdata.emit(this.selectedEmployeeId);
     this.resetFrom();
     this.employeeId = id;
     this.getEmployeeById(id, content);
@@ -349,7 +349,7 @@ export class EmployeeComponent implements OnInit {
           overTimeRate: createForm.overTimeRate,
           employeeType: createForm.employeeType,
           payType: '',
-          employeepermissions: this.values,
+          //employeepermissions: this.values,
         };
 
         if (model.payTypeCheck) {
@@ -391,7 +391,7 @@ export class EmployeeComponent implements OnInit {
           overTimeRate: createForm.overTimeRate,
           employeeType:createForm.employeeType,
           payType: '',
-          employeepermissions: this.values,
+         // employeepermissions: this.values,
         };
 
         if (model.payTypeCheck) {
