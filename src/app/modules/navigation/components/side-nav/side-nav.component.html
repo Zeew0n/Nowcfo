@@ -7,33 +7,22 @@
           Home <span class="sr-only">(current)</span>
         </a>
       </li>
-      <li class="nav-item" *ngFor="let menu of menus">
-        
+      <li class="nav-item " *ngFor="let menu of menus">
         <a
           class="nav-link"
+          [ngClass]="menu.MenuName=='Admin'?'nav-bottom':''"
           routerlinkactive="active"
           (click)="toggleOrganizationNav(menu)"
+          [routerLink]="menu.NavigateUrl"
         >
-          <i class="icon icon-user"></i>
-          {{ menu }}
-        </a>
-      </li>
-    </ul>
-    <span class="admin-text"></span>
-    <ul class="nav flex-column">
-      <li class="nav-item" *ngFor="let admin of admins">
-        <a
-          class="nav-link"
-          [routerLink]="['/user-information']"
-          routerLinkActive="active"
-        >
-          <i class="icon icon-user"></i>
-          {{ admin }}
+          <i class="icon fa {{menu.Icon}}"></i>
+          {{ menu.MenuName }}
         </a>
       </li>
     </ul>
   </div>
   <div class="sidebar left-nav-inner" [ngClass]="expandOrgNav ? 'd-block' : ''">
+    <a class="fa fa-close submenu-icon" (click)="toggleOrganizationNav('')"></a>
     <ngx-treeview
       [itemTemplate]="itemTemplate"
       (valueChange)="onValueChange($event)"

@@ -14,6 +14,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { UserRoleComponent } from './components/user-role/userrole.component';
 import { SideNavComponent } from '../navigation/components/side-nav/side-nav.component';
+import { AdminUserComponent } from './components/admin-user/admin-user.component';
 
 @NgModule({
     imports: [
@@ -26,7 +27,7 @@ import { SideNavComponent } from '../navigation/components/side-nav/side-nav.com
         NgMultiSelectDropDownModule,
         
     ],
-    declarations: [LoginComponent, LoginPageComponent, SignupComponent, ChangePasswordComponent,UserInformationComponent,UserRoleComponent],
+    declarations: [LoginComponent, LoginPageComponent, SignupComponent, ChangePasswordComponent,UserInformationComponent,UserRoleComponent, AdminUserComponent],
     providers: []
 })
 export class UserAccountModule { }
