@@ -26,8 +26,6 @@
   .left-nav {
     width: 300px;
     background: #6e6e6e;
-
-    
   }
   .form-check-label {
     cursor: pointer;
@@ -52,7 +50,7 @@
     }
 
     li.active {
-      &>.nav-inner {
+      & > .nav-inner {
         display: block;
       }
     }
@@ -117,4 +115,12 @@
   font-size: 16px;
   text-transform: uppercase;
   color: #b2b2b2;
+}
+
+.submenu-icon {
+  position: absolute;
+  right: 15px;
+  top: 105px;
+  z-index: 99;
+  cursor: pointer;
 }
