@@ -10,6 +10,7 @@ import { OrganizationSyncFusionModel } from 'src/app/models/organization-syncfus
 import { PaginatedResult } from 'src/app/models/Pagination/Pagination';
 import { map } from 'rxjs/operators';
 import { EmployeeTypeModel } from 'src/app/models/employeetype.model';
+import { EmployeeStatusTypeModel } from 'src/app/models/employeestatus.model';
 
 
 @Injectable({
@@ -87,6 +88,11 @@ export class EmployeeService extends HttpGenericCrudService<EmployeeModel>{
     getAllEmployeeTypes(): Observable<EmployeeTypeModel[]> {
       return this.httpClient.get<EmployeeTypeModel[]>('employee/GetEmployeeTypes/');
   }
+
+  getAllEmployeeStatusTypes(): Observable<EmployeeStatusTypeModel[]> {
+    return this.httpClient.get<EmployeeStatusTypeModel[]>('employee/GetEmployeeStatusTypes/');
+}
+
 
     getSyncTreeView(): Observable<OrganizationSyncFusionModel[]> {
         return this.httpClient.get<OrganizationSyncFusionModel[]>('employee/SyncHierarchy');

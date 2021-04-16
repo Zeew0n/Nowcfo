@@ -1,4 +1,4 @@
 export class EmployeeTypeModel {
-    employeeType: number;
-    name: string;
+    employeeTypeId: number;
+    employeeTypeName: string;
   }

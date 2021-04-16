@@ -20,6 +20,7 @@ import {
 } from 'src/app/models/Pagination/Pagination';
 import { OrganizationService } from 'src/app/modules/organization/services/organization.service';
 import { EmployeeTypeModel } from 'src/app/models/employeetype.model';
+import { EmployeeStatusTypeModel } from 'src/app/models/employeestatus.model';
 
 @Component({
   selector: 'app-employee-list',
@@ -33,6 +34,7 @@ export class EmployeeComponent implements OnInit {
   organizations: OrganizationModel[];
   supervisors: EmployeeModel[];
   employeeTypes: EmployeeTypeModel[];
+  employeeStatusTypes: EmployeeStatusTypeModel[];
   disabled = false;
   cities: any = [];
   employeeId = '';
@@ -44,8 +46,6 @@ export class EmployeeComponent implements OnInit {
   stateList: Array<any>;
   selectemployee;
   selectedEmployeeId: string;
-  values: number[];
-  @Output() messageEvent = new EventEmitter<string>();
 
   constructor(
     private modalService: NgbModal,
@@ -55,20 +55,6 @@ export class EmployeeComponent implements OnInit {
     private route: ActivatedRoute
   ) {}
 
-  countries: Object[] = [];
-
-  field = {
-    dataSource: this.countries,
-    id: 'id',
-    parentID: 'pid',
-    text: 'name',
-    hasChildren: 'hasChild',
-    isChecked: 'isChecked',
-    expanded: 'expanded',
-  };
-
-  showCheckBox = true;
-  //autoCheck =true;
 
   employeeForm: FormGroup;
   searchForm: FormGroup;
@@ -91,7 +77,8 @@ export class EmployeeComponent implements OnInit {
   isSupervisor = new FormControl('');
   payTypeCheck = new FormControl(false);
   pay = new FormControl(true, [Validators.required]);
-  employeeType = new FormControl(null, [Validators.required]);
+  employeeTypeId = new FormControl(null, [Validators.required]);
+  statusId= new FormControl(null, [Validators.required]);
   overTimeRate = new FormControl('', [Validators.required]);
 
   ngOnInit() {
@@ -108,17 +95,13 @@ export class EmployeeComponent implements OnInit {
       { id: 2, name: 'Email' },
     ];
 
-
-
     this.getEmployeeTypes();
+    this.getEmployeeStatusTypes();
     this.initializeSearchForm();
     this.getSuperVisors();
-    //this.getSyncHierarchy();
   }
 
-  nodeChecked(checkedValues): void {
-    this.values = checkedValues;
-  }
+ 
 
   getEmployees() {
     this.employeeService
@@ -144,31 +127,9 @@ export class EmployeeComponent implements OnInit {
     this.getEmployees();
   }
 
-  getSyncHierarchy() {
-    this.employeeService.getSyncTreeView().subscribe(
-      (result) => {
-        result.forEach((element) => {
-          this.countries.push(element);
-        });
-      },
-      () => console.error
-    );
-  }
+  
 
-  getEmployeePermissionNavigation(employeeId) {
-    this.countries = [];
-    this.employeeService
-      .getEmployeePermissionNavigationById(employeeId)
-      .subscribe(
-        (result) => {
-          result.forEach((element) => {
-            this.countries.push(element);
-            this.field.dataSource = this.countries;
-          });
-        },
-        () => console.error
-      );
-  }
+
 
   getDesignations() {
     this.employeeService.getAllDesignations().subscribe(
@@ -189,6 +150,19 @@ export class EmployeeComponent implements OnInit {
       () => console.error
     );
   }
+
+
+  getEmployeeStatusTypes() {
+    this.employeeService.getAllEmployeeStatusTypes().subscribe(
+      (result) => {
+        this.employeeStatusTypes = result;
+      },
+      () => console.error
+    );
+  }
+
+
+
 
   getOrganizations() {
     this.organizationService.getAllOrganizations().subscribe(
@@ -225,7 +199,8 @@ export class EmployeeComponent implements OnInit {
       superVisorId: this.superVisorId,
       payTypeCheck: this.payTypeCheck,
       pay: this.pay,
-      employeeType: this.employeeType,
+      employeeTypeId: this.employeeTypeId,
+      statusId: this.statusId,
       overTimeRate: this.overTimeRate,
     });
   }
@@ -238,11 +213,8 @@ export class EmployeeComponent implements OnInit {
   }
 
   EditData(content, id: string) {
-    this.values = null;
     this.isEdit = true;
-    //this.getEmployeePermissionNavigation(id);
     this.selectedEmployeeId = id;
-    //this.employeeService.previewdata.emit(this.selectedEmployeeId);
     this.resetFrom();
     this.employeeId = id;
     this.getEmployeeById(id, content);
@@ -265,7 +237,8 @@ export class EmployeeComponent implements OnInit {
       payTypeCheck: data.payType == 'Salary' ? true : false,
       pay: data.pay,
       overTimeRate: data.overTimeRate,
-      employeeType: data.employeeType,
+      employeeTypeId: data.employeeTypeId,
+      statusId:data.statusId,
     });
   }
 
@@ -347,9 +320,9 @@ export class EmployeeComponent implements OnInit {
           payTypeCheck: createForm.payTypeCheck ? true : false,
           pay: createForm.pay,
           overTimeRate: createForm.overTimeRate,
-          employeeType: createForm.employeeType,
+          employeeTypeId: createForm.employeeTypeId,
+          statusId: createForm.statusId,
           payType: '',
-          //employeepermissions: this.values,
         };
 
         if (model.payTypeCheck) {
@@ -389,9 +362,9 @@ export class EmployeeComponent implements OnInit {
           payTypeCheck: createForm.payTypeCheck ? true : false,
           pay: createForm.pay,
           overTimeRate: createForm.overTimeRate,
-          employeeType:createForm.employeeType,
           payType: '',
-         // employeepermissions: this.values,
+          employeeTypeId: createForm.employeeTypeId,
+          statusId: createForm.statusId,
         };
 
         if (model.payTypeCheck) {

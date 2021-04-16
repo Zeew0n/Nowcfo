@@ -76,7 +76,8 @@
             <th scope="col">State</th>
             <th scope="col">Organization</th>
             <th scope="col">Designation</th>
-            <!-- <th scope="col">IsActive</th> -->
+            <th scope="col">Employee Type</th>
+            <th scope="col">Status</th>
             <th scope="col">Action</th>
           </tr>
         </thead>
@@ -92,7 +93,8 @@
             <td data-th="State">{{ employee.state }}</td>
             <td data-th="Organization Id ">{{ employee.organizationName }}</td>
             <td data-th="Designation Id ">{{ employee.designationName }}</td>
-            <!-- <td data-th="IsActive ">{{ employee.isActive }}</td> -->
+            <td data-th="Status ">{{ employee.employeeTypeName }}</td>
+            <td data-th="Status ">{{ employee.statusName }}</td>
             <td data-th="Actions">
               <a
                 (click)="EditData(content, employee.employeeId)"
@@ -101,14 +103,14 @@
                 title="edit"
                 ><i class="icon icon-pencil-create"></i
               ></a>
-              <span></span>
-              <a
+              <!-- <span></span> -->
+              <!-- <a
                 class="icon-holder"
                 (click)="openDeleteModal(deletecontent, employee.employeeId)"
                 href="javascript:void(0)"
                 title="delete"
                 ><i class="icon icon-circle-block"></i
-              ></a>
+              ></a> -->
             </td>
           </tr>
         </tbody>
@@ -176,6 +178,7 @@
                       employeeForm.controls.email.touched &&
                       employeeForm.controls.email.errors?.required
                   }"
+               
                 />
 
                 <div
@@ -401,20 +404,20 @@
                 <label>Employee Type</label>
                 <ng-select
                   [items]="employeeTypes"
-                  bindLabel="name"
-                  bindValue="employeeType"
+                  bindLabel="employeeTypeName"
+                  bindValue="employeeTypeId"
                   placeholder="Employee Type"
-                  formControlName="employeeType"
+                  formControlName="employeeTypeId"
                   class="cfo-select"
                   [ngClass]="{
                     'invalid-input':
-                      employeeForm.controls.employeeType.errors?.required
+                      employeeForm.controls.employeeTypeId.errors?.required
                   }"
                 >
                 </ng-select>
 
                 <div
-                  *ngIf="employeeForm.controls.employeeType.errors?.required"
+                  *ngIf="employeeForm.controls.employeeTypeId.errors?.required"
                   class="error-msg"
                 >
                   Employee Type is required!
@@ -441,8 +444,6 @@
               </div>
             </div>
           </div>
-
-
 
           <div class="row">
             <div class="col-sm-6">
@@ -497,31 +498,61 @@
               </div>
             </div>
 
+            </div>
+
+          <div class="row">
             <div class="col-sm-6">
-              <div class="custom-checkbox">
-                <input
-                  type="checkbox"
-                  id="checkboxSuperVisorId"
-                  value="1"
-                  formControlName="isSupervisor"
-                />
-                <span>Is Supervisor</span>
+              <div class="form-group">
+                <label>Employee Status</label>
+                <ng-select
+                  [items]="employeeStatusTypes"
+                  bindLabel="statusName"
+                  bindValue="statusId"
+                  placeholder="Status Type"
+                  formControlName="statusId"
+                  class="cfo-select"
+                  [ngClass]="{
+                    'invalid-input':
+                      employeeForm.controls.statusId.errors?.required
+                  }"
+                >
+                </ng-select>
+
+                <div
+                  *ngIf="employeeForm.controls.statusId.errors?.required"
+                  class="error-msg"
+                >
+                  Status Type is required!
+                </div>
               </div>
             </div>
+
+
+            <div class="col-sm-6">
+              <div class="form-group">
+                <div class="custom-checkbox">
+           
+                <input
+                type="checkbox"
+                id="checkboxSuperVisorId"
+                value="1"
+                formControlName="isSupervisor"
+              />
+              <span>Is Supervisor</span>
+               </div>
+              </div>
+            </div>
+            
+
           </div>
 
-          <div class="form-group">
-            <label>SuperVisor</label>
-            <ng-select
-              [items]="supervisors"
-              placeholder="Select SuperVisor"
-              bindLabel="employeeName"
-              bindValue="employeeId"
-              formControlName="superVisorId"
-              class="cfo-select"
-            >
-            </ng-select>
-          </div>
+
+
+      
+
+
+
+    
 
           <!-- <div class="form-group" *ngIf="!isEdit">
             <app-child
