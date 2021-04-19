@@ -3,6 +3,8 @@ import { OnInit } from '@angular/core';
 import { NavigationService } from '../../services/navigation.service';
 import { TreeviewConfig, TreeviewItem } from 'ngx-treeview';
 import { Router } from '@angular/router';
+import { MergeScanSubscriber } from 'rxjs/internal/operators/mergeScan';
+import { MenuModel } from 'src/app/models/menu.model';
 
 @Component({
   selector: 'app-side-nav',
@@ -17,7 +19,7 @@ export class SideNavComponent implements OnInit {
 
   expandOrgNav = false;
 
-  menus = JSON.parse(localStorage.getItem('sidemenu'));
+  menus = JSON.parse(localStorage.getItem('side_menu'));
 
   admins = ['Admin'];
 
@@ -34,28 +36,33 @@ export class SideNavComponent implements OnInit {
     maxHeight: 400,
   });
 
-  ngOnInit() {}
+  ngOnInit() {
+    
+  }
 
-  toggleOrganizationNav(menu: any) {
+  toggleOrganizationNav(menu: MenuModel) {
+    const menuName = menu.menuName.trim().toLowerCase();
     const mainTag = document.getElementById('mainTag') as any;
-
-    if ( typeof menu == 'string')
-    {
-      mainTag.classList.remove('main-content-slide');
-    }
-    else{
-      menu = menu.MenuName.trim().toLowerCase();
-    }
-    if (menu === 'organization' || menu === '') {
+    if (menuName === 'organization') {
       this.expandOrgNav = !this.expandOrgNav;
       this.getOrganizatioNavigation();
-      this.router.navigateByUrl('organization-information');
+      this.router.navigateByUrl(menu.navigateUrl);
       if (!mainTag.classList.contains('main-content-slide')) {
         mainTag.classList.add('main-content-slide');
       } else {
         mainTag.classList.remove('main-content-slide');
       }
     }
+    else{
+      this.expandOrgNav = false;
+      mainTag.classList.remove('main-content-slide');
+    }
+    this.router.navigateByUrl(`${menu.navigateUrl}?menuId=${menu.id}`);
+  }
+
+  collapseNavigationTree(){
+    this.expandOrgNav = false;
+    document.getElementById('mainTag').classList.remove('main-content-slide');
   }
 
   getOrganizatioNavigation() {

@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AppLayoutComponent } from './_layouts/app-layout/app-layout.component';
+import { AppLayoutComponent } from './shared/_layouts/app-layout/app-layout.component';
 import { LoginPageComponent } from './modules/user-account/components/login-page/login-page.component';
 import { ForgotPasswordComponent } from './modules/user-account/components/forgot-password/forgot-password.component';
 import { SignupComponent } from './modules/user-account/components/signup/signup.component';
 import { ResetPasswordComponent } from './modules/user-account/components/reset-password/reset-password.component';
 import { ConfirmSignupComponent } from './modules/user-account/components/confirm-signup/confirm-signup.component';
-import { AuthGuard } from './services/_guards/auth-guard';
+import { AuthGuard } from './shared/_guards/auth-guard';
 export const routes: Routes = [
   { path: '', component: LoginPageComponent },
   { path: 'login', component: LoginPageComponent },
@@ -20,8 +20,7 @@ export const routes: Routes = [
   {
     path: 'confirm/:uid/:uname/:token',
     component: ConfirmSignupComponent,
-  },
-  
+  }, 
   {
     path: '',
     component: AppLayoutComponent,
@@ -32,9 +31,6 @@ export const routes: Routes = [
           import('./modules/home/home.module').then((m) => m.HomeModule),
         canActivate: [AuthGuard],
       },
-      
-      
-  
       {
         path: 'employee',
         loadChildren: () =>

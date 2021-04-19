@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AuthGuard } from 'src/app/services/_guards/auth-guard';
-import { EmployeeListsResolver } from 'src/app/_resolver/employeeList';
+import { AuthGuard } from 'src/app/shared/_guards/auth-guard';
+import { EmployeeListsResolver } from 'src/app/shared/_resolver/employeeList';
 import { EmployeeComponent } from './components/employee-info/employee.component';
 import { EmployeeRoleComponent } from './components/employee-role/employeerole.component';
 const routes: Routes = [

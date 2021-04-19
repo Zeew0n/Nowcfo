@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AuthGuard } from 'src/app/services/_guards/auth-guard';
+import { AuthGuard } from 'src/app/shared/_guards/auth-guard';
 import { AdminUserComponent } from './components/admin-user/admin-user.component';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
 import { LoginComponent } from './components/login/login.component';
@@ -11,7 +11,7 @@ const routes: Routes = [
     {
       path: '',
       children: [
-        {path: '', component:LoginComponent},
+        {path: '', component: LoginComponent},
         {
           path: 'user-information',
           component: UserInformationComponent,
@@ -21,7 +21,7 @@ const routes: Routes = [
         {
             path: 'changepassword',
             component: ChangePasswordComponent,
-            canActivate:[AuthGuard],
+            canActivate: [AuthGuard],
           },
         {
           path: 'user-role',

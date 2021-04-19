@@ -3,7 +3,7 @@ import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { UserSignUpModel } from '../../../../models/user/user-signup.model';
-import { match_value } from '../../../../services/_validators/confirmation.validator';
+import { match_value } from '../../../../shared/_validators/confirmation.validator';
 import { ForgetPasswordService } from '../../services/forget-password.service';
 //import { UserRegistrationService } from '../../services/user-registration.service';
 

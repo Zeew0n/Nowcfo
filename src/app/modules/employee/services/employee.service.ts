@@ -1,7 +1,7 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { HttpGenericCrudService } from '../../../services/http-generic-crud.service';
+import { HttpGenericCrudService } from '../../../shared/http-generic-crud.service';
 import { Observable } from 'rxjs';
 import { DesignationModel } from 'src/app/models/designation.model';
 import { EmployeeModel } from 'src/app/models/employee.model';

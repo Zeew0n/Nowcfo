@@ -14,6 +14,7 @@ import { RolePermissionModel } from 'src/app/models/role-permission';
 import { RoleService } from '../../services/userrole.service';
 import AuthenticationService from '../../services/authentication.service';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
+import {Location} from '@angular/common';
 @Component({
   selector: 'app-userrole',
   styleUrls: ['userrole.component.scss'],
@@ -27,9 +28,8 @@ export class UserRoleComponent implements OnInit {
   dropdownPermissionSettings;
   rolePermissionForm: FormGroup;
 
-  isSubmitting: boolean; // Form submission variable
   closeResult = ''; // close result for modal
-  submitted = false;
+
 
   isEdit = false;
   disableRoleDdl = false;
@@ -44,6 +44,7 @@ export class UserRoleComponent implements OnInit {
     private authService: AuthenticationService,
     private route: ActivatedRoute,
     private ngxLoaderService: NgxUiLoaderService,
+    private location: Location
   ) {}
 
   /* Form Declarations */
@@ -55,7 +56,7 @@ export class UserRoleComponent implements OnInit {
 
   ngOnInit() {
     this.getRoles();
-    this.getMenus();
+    this.getMenusForPermission();
     this.initializeUserRoleForm();
     this.initializeRolePermissionForm();
     this.dropdownPermissionSettings = {
@@ -68,7 +69,9 @@ export class UserRoleComponent implements OnInit {
       allowSearchFilter: true,
     };
   }
-
+  backClicked() {
+    this.location.back();
+  }
   getRoles() {
     this.roleService.getAllRoles().subscribe(
       (result) => {
@@ -78,8 +81,8 @@ export class UserRoleComponent implements OnInit {
       (error) => console.error
     );
   }
-  getMenus() {
-    this.roleService.getAllMenus().subscribe(
+  getMenusForPermission() {
+    this.roleService.getParentMenusForPermission().subscribe(
       (result) => {
         this.menuList = result;
         console.table(this.menuList);
@@ -167,7 +170,6 @@ export class UserRoleComponent implements OnInit {
         model.roleName = createForm.roleName;
         this.roleService.createRole(model).subscribe(
           (res) => {
-            this.submitted = true;
             this.toastr.success('Role Added Successfully.', 'Success!');
             this.modalService.dismissAll();
             this.getRoles();
@@ -175,7 +177,6 @@ export class UserRoleComponent implements OnInit {
           },
           (error) => {
             console.log(error);
-            this.isSubmitting = false;
             this.modalService.dismissAll();
             this.toastr.error(error.error.errorMessage, 'Error!');
             this.ngxLoaderService.stop();
@@ -219,14 +220,12 @@ export class UserRoleComponent implements OnInit {
     if (!this.isEdit) {
       this.roleService.addPermissionPermission(model).subscribe(
         (res) => {
-          this.submitted = true;
           this.toastr.success('Role Permision Created Successfully.', 'Success!');
           this.modalService.dismissAll();
           this.ngxLoaderService.stop();
         },
         (error) => {
           console.log(error);
-          this.isSubmitting = false;
           this.modalService.dismissAll();
           this.toastr.error(error?.error?.errorMessage, 'Error!');
           this.ngxLoaderService.stop();
@@ -236,14 +235,12 @@ export class UserRoleComponent implements OnInit {
     else{
       this.roleService.editRolePermission(model).subscribe(
         (res) => {
-          this.submitted = true;
           this.toastr.success('Role Permision Updated Successfully.', 'Success!');
           this.modalService.dismissAll();
           this.ngxLoaderService.stop();
         },
         (error) => {
           console.log(error);
-          this.isSubmitting = false;
           this.modalService.dismissAll();
           this.toastr.error(error.error.errorMessage, 'Error!');
           this.ngxLoaderService.stop();
@@ -265,7 +262,6 @@ export class UserRoleComponent implements OnInit {
   resetFrom() {
     this.roleForm.reset();
     this.EventValue = 'Save';
-    this.submitted = false;
     this.role = null;
   }
 

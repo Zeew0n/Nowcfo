@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { match_value } from '../../../../services/_validators/confirmation.validator';
 import { ConfirmUserService } from '../../services/confirm-user.service';
 
 @Component({
