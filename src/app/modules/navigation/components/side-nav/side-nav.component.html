@@ -10,19 +10,18 @@
       <li class="nav-item " *ngFor="let menu of menus">
         <a
           class="nav-link"
-          [ngClass]="menu.MenuName=='Admin'?'nav-bottom':''"
+          [ngClass]="menu.menuName=='Admin'?'nav-bottom':''"
           routerlinkactive="active"
           (click)="toggleOrganizationNav(menu)"
-          [routerLink]="menu.NavigateUrl"
         >
-          <i class="icon fa {{menu.Icon}}"></i>
-          {{ menu.MenuName }}
+          <i class="icon fa {{menu.icon}}"></i>
+          {{menu.menuName}}
         </a>
       </li>
     </ul>
   </div>
   <div class="sidebar left-nav-inner" [ngClass]="expandOrgNav ? 'd-block' : ''">
-    <a class="fa fa-close submenu-icon" (click)="toggleOrganizationNav('')"></a>
+    <a class="fa fa-close submenu-icon" (click)="collapseNavigationTree()"></a>
     <ngx-treeview
       [itemTemplate]="itemTemplate"
       (valueChange)="onValueChange($event)"

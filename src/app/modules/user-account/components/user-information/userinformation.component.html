@@ -1,213 +1,347 @@
-<div class="">
-    <div class="btn-container">
-        <button type="button" class="btn btn-green" (click)="open(content)">
-            New User
-        </button>
-        
-    </div>
+<div class="btn-container">
+  <a [routerLink]="" (click)="backClicked()" class="go-back"><i class="fa fa-arrow-left"></i> Go Back</a>
+  <button type="button" class="btn btn-green" (click)="open(content)">
+    New User
+  </button>
+</div>
 
-    <div class="content">
-        <div class="title-container">
-            <h1 class="page-title">Users</h1>
+<div class="content">
+  <div class="title-container">
+    <h1 class="page-title">Users</h1>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-harbor">
+      <thead>
+        <tr>
+          <th scope="col">S.N</th>
+          <th scope="col">UserName</th>
+          <th scope="col">Name</th>
+          <th scope="col">Address</th>
+          <th scope="col">City</th>
+          <th scope="col">Zip</th>
+          <th scope="col">Email</th>
+          <th scope="col">Phone</th>
+          <th scope="col">Role</th>
+          <th scope="col">Status</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let userinformation of userinformations; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td data-th="UserName ">{{ userinformation.userName }}</td>
+          <td data-th="First Name ">
+            {{ userinformation.firstName + " " + userinformation.lastName }}
+          </td>
+          <td data-th="Address ">{{ userinformation.address }}</td>
+          <td data-th="City">{{ userinformation.city }}</td>
+          <td data-th="Zip ">{{ userinformation.zipCode }}</td>
+          <td data-th="Email ">{{ userinformation.email }}</td>
+          <td data-th="Phone Number ">{{ userinformation.phoneNumber }}</td>
+          <td data-th="IsActive ">{{ userinformation.role }}</td>
+          <td data-th="IsActive ">{{ userinformation.status }}</td>
+          <td data-th="Actions">
+            <a
+              (click)="EditData(content, userinformation)"
+              class="icon-holder"
+              href="javascript:void(0)"
+              title="edit"
+              ><i class="icon icon-pencil-create"></i
+            ></a>
+            <span></span>
+            <a
+              class="icon-holder"
+              (click)="openDeleteModal(deletecontent, userinformation.id)"
+              href="javascript:void(0)"
+              title="delete"
+              ><i class="icon icon-circle-block"></i
+            ></a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <ng-template #content let-modal>
+    <div class="container">
+      <h3 class="modal-title" *ngIf="!isEdit">Create New User</h3>
+      <h3 class="modal-title" *ngIf="isEdit">Update User</h3>
+
+      <form class="form-cfo" [formGroup]="userForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label>Username</label>
+          <input
+            type="text"
+            formControlName="userName"
+            [readonly]="disableSelect"
+            class="form-control"
+            placeholder="username"
+            [ngClass]="{
+              'invalid-input':
+                userForm.controls.userName.touched &&
+                userForm.controls.userName.errors
+            }"
+          />
+          <div
+            *ngIf="
+              userForm.controls.userName.touched &&
+              userForm.controls.userName.errors?.required
+            "
+            class="error-msg"
+          >
+            Username is required
+          </div>
         </div>
-        <div class="table-responsive">
-            <table class="table table-harbor">
-                <thead>
-                    <tr>
-                        <th scope="col">S.N</th>
-                        <th scope="col">UserName</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Address</th>
-                        <th scope="col">City</th>
-                        <th scope="col">Zip</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Phone</th>
-                        <th scope="col">Role</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let userinformation of userinformations;let i = index">
-                        <td>{{i+1}}</td>
-                        <td data-th="UserName ">{{userinformation.userName}}</td>
-                        <td data-th="First Name ">{{userinformation.firstName+" "+userinformation.lastName}}</td>
-                        <td data-th="Address ">{{userinformation.address}}</td>
-                        <td data-th="City">{{userinformation.city}}</td>
-                        <td data-th="Zip ">{{userinformation.zipCode}}</td>
-                        <td data-th="Email ">{{userinformation.email}}</td>
-                        <td data-th="Phone Number ">{{userinformation.phoneNumber}}</td>
-                        <td data-th="IsActive ">{{userinformation.role}}</td>
-                        <td data-th="IsActive ">{{userinformation.status}}</td>
-                        <td data-th="Actions">
-                            <a (click)="EditData(content, userinformation)" class="icon-holder"
-                                href="javascript:void(0)" title="edit"><i class="icon icon-pencil-create"></i></a>
-                            <span></span>
-                            <a class="icon-holder"  (click)="openDeleteModal(deletecontent,userinformation.id)" href="javascript:void(0)"
-                                title="delete"><i class="icon icon-circle-block"></i></a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <ng-template #content let-modal>
-            <div class="container">
 
-                <h3 class="modal-title" *ngIf="!isEdit">Create New User</h3>
-                <h3 class="modal-title" *ngIf="isEdit">Update User</h3>
-
-
-                <form class="form-cfo" [formGroup]="userForm" (ngSubmit)="onSubmit()">
-                    <div class="form-group">
-                        <label>Username</label>
-                        <input type="text" formControlName="userName" [readonly] = "disableSelect" class="form-control" placeholder="username"
-                            [ngClass]="{'invalid-input': userForm.controls.userName.touched && userForm.controls.userName.errors}">
-                        <div *ngIf="userForm.controls.userName.touched && userForm.controls.userName.errors?.required"
-                            class="error-msg ">Username is required</div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>First Name</label>
-                                <input type="text" class="form-control" formControlName="firstName"
-                                    placeholder="First Name"
-                                    [ngClass]="{'invalid-input': userForm.controls.firstName.touched && userForm.controls.firstName.errors}">
-                                <div *ngIf="userForm.controls.firstName.touched && userForm.controls.firstName.errors?.required"
-                                    class="error-msg">First Name is required</div>
-                            </div>
-
-                        </div>
-
-
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Last Name</label>
-                                <input type="text" class="form-control" formControlName="lastName"
-                                    placeholder="Last Name"
-                                    [ngClass]="{'invalid-input': userForm.controls.lastName.touched && userForm.controls.lastName.errors}">
-                                <div *ngIf="userForm.controls.lastName.touched && userForm.controls.lastName.errors?.required"
-                                    class="error-msg">Last name is required</div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Email</label>
-
-                                <input type="email" formControlName="email" class="form-control"
-                                    placeholder="Email"
-                                    [ngClass]="{'invalid-input': userForm.controls.email.touched && userForm.controls.email.errors}">
-                                <div *ngIf="userForm.controls.email.touched && userForm.controls.email.errors?.required || userForm.controls.email.touched &&
-                                userForm.controls.email.errors?.email"
-                                    class="error-msg">Email is Invalid!</div>
-                            </div>
-                        </div>
-            
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Phone Number</label>
-
-                                <input type="text" formControlName="phoneNumber" class="form-control"
-                                    placeholder="Phone"
-                                    [ngClass]="{'invalid-input': userForm.controls.phoneNumber.touched && userForm.controls.phoneNumber.errors}">
-                                <div *ngIf="userForm.controls.phoneNumber.touched && userForm.controls.phoneNumber.errors?.required"
-                                    class="error-msg">Phone number is required</div>
-                            </div>
-                        </div>
-                    </div>
-              
-
-
-                    <div class="form-group">
-                        <label>Address</label>
-                        <input type="text" class="form-control" formControlName="address" placeholder="Address"
-                            [ngClass]="{'invalid-input': userForm.controls.address.touched && userForm.controls.address.errors}">
-                        <div *ngIf="userForm.controls.address.touched && userForm.controls.address.errors?.required"
-                            class="error-msg">Address is Required!</div>
-
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>City</label>
-                                <input type="text" class="form-control" formControlName="city" placeholder="City"
-                                    [ngClass]="{'invalid-input': userForm.controls.city.touched && userForm.controls.city.errors}">
-                                <div *ngIf="userForm.controls.city.touched && userForm.controls.city.errors?.required"
-                                    class="error-msg">City is Required!</div>
-                            </div>
-                        </div>
-
-
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>ZipCode</label>
-                                <input type="text" class="form-control" formControlName="zipCode" placeholder="Zip Code"
-                                    [ngClass]="{'invalid-input': userForm.controls.zipCode.touched && userForm.controls.zipCode.errors}">
-                                <div *ngIf="userForm.controls.zipCode.touched && userForm.controls.zipCode.errors?.required"
-                                    class="error-msg">ZipCode is Required!</div>
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    <div class="form-group">
-                        <label>Role</label>
-                        <ng-select [items]="roles" bindLabel="roleName" bindValue="roleId"  placeholder="Select Role" formControlName="roleId" class="cfo-select"  [ngClass]="{
-                            'invalid-input':
-                            userForm.controls.roleId.errors?.required
-                          }" >
-                        </ng-select>
-                        <div
-                        *ngIf="
-        
-                        userForm.controls.roleId.errors?.required
-                        "
-                        class="error-msg"
-                      >
-                        Role is Required!
-                      </div>
-
-                        <!-- {{userForm.value|json}} -->
-                    </div>
-                    <div class="float-right">
-                        <button type="submit" class="btn btn-green mr-3" [disabled]="userForm.invalid">
-                            {{EventValue}}</button>
-
-                        <button type="button" class="btn btn-gray" (click)="modal.close('Close Button Clicked')">
-                            Cancel
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </ng-template>
-
-
-        <ng-template #deletecontent let-modal>
-            <div class="container">
-              <h3 class="modal-title">
-                This action is permanent. Are you sure you want to delete this
-                user?
-              </h3>
-              <div class="float-right">
-                <button type="submit" (click)="Delete()"  class="btn btn-green mr-3">
-                  {{ EventValue }}
-                </button>
-                <button
-                  type="button"
-                  class="btn btn-gray"
-                  (click)="modal.close('Close Button Clicked')"
-                >
-                  Cancel
-                </button>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>First Name</label>
+              <input
+                type="text"
+                class="form-control"
+                formControlName="firstName"
+                placeholder="First Name"
+                [ngClass]="{
+                  'invalid-input':
+                    userForm.controls.firstName.touched &&
+                    userForm.controls.firstName.errors
+                }"
+              />
+              <div
+                *ngIf="
+                  userForm.controls.firstName.touched &&
+                  userForm.controls.firstName.errors?.required
+                "
+                class="error-msg"
+              >
+                First Name is required
               </div>
             </div>
-          </ng-template>
+          </div>
 
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>Last Name</label>
+              <input
+                type="text"
+                class="form-control"
+                formControlName="lastName"
+                placeholder="Last Name"
+                [ngClass]="{
+                  'invalid-input':
+                    userForm.controls.lastName.touched &&
+                    userForm.controls.lastName.errors
+                }"
+              />
+              <div
+                *ngIf="
+                  userForm.controls.lastName.touched &&
+                  userForm.controls.lastName.errors?.required
+                "
+                class="error-msg"
+              >
+                Last name is required
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>Email</label>
+
+              <input
+                type="email"
+                formControlName="email"
+                class="form-control"
+                placeholder="Email"
+                [ngClass]="{
+                  'invalid-input':
+                    userForm.controls.email.touched &&
+                    userForm.controls.email.errors
+                }"
+              />
+              <div
+                *ngIf="
+                  (userForm.controls.email.touched &&
+                    userForm.controls.email.errors?.required) ||
+                  (userForm.controls.email.touched &&
+                    userForm.controls.email.errors?.email)
+                "
+                class="error-msg"
+              >
+                Email is Invalid!
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>Phone Number</label>
+
+              <input
+                type="text"
+                formControlName="phoneNumber"
+                class="form-control"
+                placeholder="Phone"
+                [ngClass]="{
+                  'invalid-input':
+                    userForm.controls.phoneNumber.touched &&
+                    userForm.controls.phoneNumber.errors
+                }"
+              />
+              <div
+                *ngIf="
+                  userForm.controls.phoneNumber.touched &&
+                  userForm.controls.phoneNumber.errors?.required
+                "
+                class="error-msg"
+              >
+                Phone number is required
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Address</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="address"
+            placeholder="Address"
+            [ngClass]="{
+              'invalid-input':
+                userForm.controls.address.touched &&
+                userForm.controls.address.errors
+            }"
+          />
+          <div
+            *ngIf="
+              userForm.controls.address.touched &&
+              userForm.controls.address.errors?.required
+            "
+            class="error-msg"
+          >
+            Address is Required!
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>City</label>
+              <input
+                type="text"
+                class="form-control"
+                formControlName="city"
+                placeholder="City"
+                [ngClass]="{
+                  'invalid-input':
+                    userForm.controls.city.touched &&
+                    userForm.controls.city.errors
+                }"
+              />
+              <div
+                *ngIf="
+                  userForm.controls.city.touched &&
+                  userForm.controls.city.errors?.required
+                "
+                class="error-msg"
+              >
+                City is Required!
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>ZipCode</label>
+              <input
+                type="text"
+                class="form-control"
+                formControlName="zipCode"
+                placeholder="Zip Code"
+                [ngClass]="{
+                  'invalid-input':
+                    userForm.controls.zipCode.touched &&
+                    userForm.controls.zipCode.errors
+                }"
+              />
+              <div
+                *ngIf="
+                  userForm.controls.zipCode.touched &&
+                  userForm.controls.zipCode.errors?.required
+                "
+                class="error-msg"
+              >
+                ZipCode is Required!
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Role</label>
+          <ng-select
+            [items]="roles"
+            bindLabel="roleName"
+            bindValue="roleId"
+            placeholder="Select Role"
+            formControlName="roleId"
+            class="cfo-select"
+            [ngClass]="{
+              'invalid-input': userForm.controls.roleId.errors?.required
+            }"
+          >
+          </ng-select>
+          <div
+            *ngIf="userForm.controls.roleId.errors?.required"
+            class="error-msg"
+          >
+            Role is Required!
+          </div>
+
+          <!-- {{userForm.value|json}} -->
+        </div>
+        <div class="float-right">
+          <button
+            type="submit"
+            class="btn btn-green mr-3"
+            [disabled]="userForm.invalid"
+          >
+            {{ EventValue }}
+          </button>
+
+          <button
+            type="button"
+            class="btn btn-gray"
+            (click)="modal.close('Close Button Clicked')"
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
     </div>
+  </ng-template>
+
+  <ng-template #deletecontent let-modal>
+    <div class="container">
+      <h3 class="modal-title">
+        This action is permanent. Are you sure you want to delete this user?
+      </h3>
+      <div class="float-right">
+        <button type="submit" (click)="Delete()" class="btn btn-green mr-3">
+          {{ EventValue }}
+        </button>
+        <button
+          type="button"
+          class="btn btn-gray"
+          (click)="modal.close('Close Button Clicked')"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  </ng-template>
 </div>

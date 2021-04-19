@@ -15,7 +15,6 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { UserRoleComponent } from './components/user-role/userrole.component';
 import { SideNavComponent } from '../navigation/components/side-nav/side-nav.component';
 import { AdminUserComponent } from './components/admin-user/admin-user.component';
-
 @NgModule({
     imports: [
         CommonModule,
@@ -25,9 +24,9 @@ import { AdminUserComponent } from './components/admin-user/admin-user.component
         NgSelectModule,
         ToastrModule,
         NgMultiSelectDropDownModule,
-        
     ],
-    declarations: [LoginComponent, LoginPageComponent, SignupComponent, ChangePasswordComponent,UserInformationComponent,UserRoleComponent, AdminUserComponent],
+    declarations: [LoginComponent, LoginPageComponent, SignupComponent, ChangePasswordComponent,
+                   UserInformationComponent, UserRoleComponent, AdminUserComponent],
     providers: []
 })
 export class UserAccountModule { }

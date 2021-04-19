@@ -1,12 +1,12 @@
-import { HttpGenericCrudService } from "../../../services/http-generic-crud.service";
-import { Injectable } from "@angular/core";
-import { environment } from "../../../../environments/environment";
-import { BehaviorSubject } from "rxjs";
+import { HttpGenericCrudService } from '../../../shared/http-generic-crud.service';
+import { Injectable } from '@angular/core';
+import { environment } from '../../../../environments/environment';
+import { BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { AppUserModel } from "../../../models/app-user.model";
+import { AppUserModel } from '../../../models/app-user.model';
 import decode from 'jwt-decode';
-import { Router } from "@angular/router";
+import { Router } from '@angular/router';
 
 @Injectable({
     providedIn: 'root'
@@ -23,8 +23,8 @@ export default class AuthenticationService extends HttpGenericCrudService<AppUse
     authNavStatus$ = this._authNavStatusSource.asObservable();
 
     constructor(httpClient: HttpClient,
-        private jwtHelper: JwtHelperService,
-        public router: Router) {
+                private jwtHelper: JwtHelperService,
+                public router: Router) {
         super(
             httpClient,
             environment.API_URL,
@@ -40,7 +40,7 @@ export default class AuthenticationService extends HttpGenericCrudService<AppUse
     }
 
     checkPermission(user): boolean {
-        if (user=="User"||user=="Admin") {
+        if (user =='User'|| user =='Admin') {
             return true;
         } else {
            false;
@@ -48,7 +48,7 @@ export default class AuthenticationService extends HttpGenericCrudService<AppUse
     }
     login(data) {
         return this.httpClient.post('user/authenticate', data);
-    }                                             
+    }
 
     isTokenExpired(token: string) {
         return this.jwtHelper.isTokenExpired(token);
@@ -67,7 +67,7 @@ export default class AuthenticationService extends HttpGenericCrudService<AppUse
     }
 
     getRefreshToken() {
-        
+
         return localStorage.getItem(this.Ref_TOKEN);
     }
 

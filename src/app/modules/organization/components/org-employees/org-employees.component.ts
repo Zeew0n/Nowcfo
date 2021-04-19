@@ -9,6 +9,7 @@ export class OrgEmployeesComponent implements OnInit {
   @Input() orgList;
   constructor() {
     this.orgList;
+    console.log(this.orgList);
    }
 
   ngOnInit(): void {

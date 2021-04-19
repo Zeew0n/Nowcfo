@@ -3,8 +3,8 @@ import { Resolve, Router, ActivatedRouteSnapshot,RouterStateSnapshot } from '@an
 import { ToastrService } from 'ngx-toastr';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { EmployeeModel } from '../models/employee.model';
-import { EmployeeService } from '../modules/employee/services/employee.service';
+import { EmployeeModel } from '../../models/employee.model';
+import { EmployeeService } from '../../modules/employee/services/employee.service';
 @Injectable()
 export class EmployeeListsResolver implements Resolve<EmployeeModel[]> {
 

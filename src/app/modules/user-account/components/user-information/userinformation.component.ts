@@ -24,6 +24,7 @@ import { UserInformationModel } from 'src/app/models/userinformation.model';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { UserInformationService } from '../../services/userinformation.service';
 import AuthenticationService from '../../services/authentication.service';
+import {Location} from '@angular/common';
 @Component({
   selector: 'app-userinformation-list',
   styleUrls: ['userinformation.component.scss'],
@@ -50,7 +51,8 @@ export class  UserInformationComponent implements OnInit{
     private userInformationService: UserInformationService,
     private authService: AuthenticationService,
     private route: ActivatedRoute,
-    private loader: NgxUiLoaderService
+    private loader: NgxUiLoaderService,
+    private location: Location,
   ) {}
 
   /* Form Declarations */
@@ -76,6 +78,10 @@ export class  UserInformationComponent implements OnInit{
     this.getUsers();
     this.initializeuserinformationForm();
     this.getRoles();
+  }
+
+  backClicked() {
+    this.location.back();
   }
 
 

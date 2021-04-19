@@ -1,4 +1,9 @@
+<!-- {{orgList|json}} -->
 <div *ngFor="let org of orgList">
+  <a [routerLink]="['/organization-information',org.organizationId]">{{org.organization}}</a>
+</div>  
+
+<!-- <div *ngFor="let org of orgList">
   <div class="table-responsive" *ngIf="org.organization||org.childOrganization">
     <div class="table-responsive">
       <h4>{{org.organization}}</h4>
@@ -26,4 +31,4 @@
       </table>
     </div>
     <app-org-employees *ngIf="org.childOrganization.length>0" [orgList]="org.childOrganization"></app-org-employees>
-  </div>
+  </div> -->

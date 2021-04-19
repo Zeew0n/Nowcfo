@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { HttpGenericCrudService } from '../../../services/http-generic-crud.service';
+import { HttpGenericCrudService } from '../../../shared/http-generic-crud.service';
 import { Observable } from 'rxjs';
 import { OrganizationModel } from 'src/app/models/organization.model';
 

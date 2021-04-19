@@ -99,6 +99,7 @@
             </tr>
           </thead>
           <tbody>
+            <tr *ngIf="orgEmployees.employees.length<=0">No Employees</tr>
             <tr *ngFor="let orgEmp of orgEmployees.employees; let i = index">
               <td>{{ i + 1 }}</td>
               <td data-th="employeeName ">{{ orgEmp.employeeName }}</td>

@@ -18,12 +18,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SideNavComponent } from './modules/navigation/components/side-nav/side-nav.component';
 import { TopNavComponent } from './modules/navigation/components/top-nav/top-nav.component';
-import { AppLayoutComponent } from './_layouts/app-layout/app-layout.component';
+import { AppLayoutComponent } from './shared/_layouts/app-layout/app-layout.component';
 import { HomeModule } from './modules/home/home.module';
 import { JwtModule } from '@auth0/angular-jwt';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
-import { TokenInterceptor } from './services/_interceptors/token.interceptor';
-import { AppLoginComponent } from './_layouts/app-login/app-login.component';
+import { TokenInterceptor } from './shared/_interceptors/token.interceptor';
+import { AppLoginComponent } from './shared/_layouts/app-login/app-login.component';
 import {NgxPaginationModule} from 'ngx-pagination';
 import { ForgotPasswordComponent } from './modules/user-account/components/forgot-password/forgot-password.component';
 import { ConfirmSignupComponent } from './modules/user-account/components/confirm-signup/confirm-signup.component';
@@ -31,7 +31,7 @@ import { ResetPasswordComponent } from './modules/user-account/components/reset-
 import { NgSelectModule } from '@ng-select/ng-select';
 
 import {TreeviewModule } from 'ngx-treeview';
-import { EmployeeListsResolver } from './_resolver/employeeList';
+import { EmployeeListsResolver } from './shared/_resolver/employeeList';
 
 
 

@@ -1,10 +1,11 @@
 ﻿import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { HttpGenericCrudService } from '../../../services/http-generic-crud.service';
+import { HttpGenericCrudService } from '../../../shared/http-generic-crud.service';
 import { Observable } from 'rxjs';
 import { OrganizationNavModel } from 'src/app/models/OrganizationNavModel';
 import { EmployeeModel } from 'src/app/models/employee.model';
+import { MenuModel } from 'src/app/models/menu.model';
 
 @Injectable({
   providedIn: 'root',
@@ -31,4 +32,8 @@ export class NavigationService extends HttpGenericCrudService<OrganizationNavMod
   getEmployeesByOrganizationId( id):any {
     return this.httpClient.get<EmployeeModel[]>('Organization/EmployeesByOrganizationHierarchy/'+id)
   }
+
+  // getAssignedMenus():MenuModel[]{
+  //   return this.httpClient.get<MenuModel[]>()
+  // }
 }
