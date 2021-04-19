@@ -1,0 +1,242 @@
+<div class="">
+  <div class="btn-container">
+    <button type="button" class="btn btn-green" (click)="open(content)">
+      New Permission
+    </button>
+  </div>
+
+  <div class="content">
+    <div class="title-container">
+      <h1 class="page-title">Employee Permissions</h1>
+   
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-harbor">
+        <thead>
+          <tr>
+            <th scope="col">S.N</th>
+            <th scope="col">Employee </th>
+            <th scope="col">Organization(Level 1)</th>
+            <th scope="col">Region( Level 2)</th>
+            <th scope="col">Market (Level 3)</th>
+            <th scope="col">Reference</th>
+            <th scope="col">Reference Email</th>
+
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let permission of employeePermissions; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td data-th="Employee  ">{{ permission.employeeName }}</td>
+            <td data-th="Level1 ">{{ permission.organizationName }}</td>
+            <td data-th="Level2 ">{{ permission.regionName }}</td>
+            <td data-th="Level3 ">{{ permission.marketName }}</td>
+            <td data-th="Ref Id ">{{ permission.referenceName }}</td>
+            <td data-th="Reference Email">{{ permission.referenceEmail }}</td>
+            <td data-th="Actions">
+              <a
+                (click)="EditData(content, permission.permissionId)"
+                class="icon-holder"
+                href="javascript:void(0)"
+                title="edit"
+                ><i class="icon icon-pencil-create"></i
+              ></a>
+
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+
+    </div>
+    <ng-template #content let-modal>
+      <div class="container">
+        <h3 class="modal-title" *ngIf="!isEdit">Create New Permission</h3>
+        <h3 class="modal-title" *ngIf="isEdit">Update Permission</h3>
+        <form
+          class="form-cfo"
+          [formGroup]="employeePermissionForm"
+          (ngSubmit)="onSubmit()"
+        >
+          <div class="row">
+         
+
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Employee Name</label>
+                <ng-select
+                  [items]="employees"
+                  bindLabel="employeeName"
+                  bindValue="employeeId"
+                  placeholder="Select Employee"
+                  formControlName="employeeId"
+                  class="cfo-select"
+                  [ngClass]="{
+                    'invalid-input':
+                      employeePermissionForm.controls.employeeId.errors?.required
+                  }"
+                >
+                </ng-select>
+
+                <div
+                  *ngIf="employeePermissionForm.controls.employeeId.errors?.required"
+                  class="error-msg"
+                >
+                  Employee is required!
+                </div>
+              </div>
+            </div>
+
+
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Organization</label>
+                <ng-select
+                  [items]="organizations"
+                  bindLabel="organizationName"
+                  bindValue="organizationId"
+                  placeholder="Select Level One"
+                  formControlName="levelOne"
+                  (change)="getLevelOrganizations(levelOne)"
+                  class="cfo-select"
+                  [ngClass]="{
+                    'invalid-input':
+                      employeePermissionForm.controls.levelOne.errors?.required
+                  }"
+                >
+                </ng-select>
+
+                <div
+                  *ngIf="employeePermissionForm.controls.levelOne.errors?.required"
+                  class="error-msg"
+                >
+                  Organization is required!
+                </div>
+              </div>
+            </div>
+            
+          </div>
+
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Region</label>
+                <ng-select
+                  [items]="levelOrganizations"
+                  bindLabel="organizationName"
+                  bindValue="organizationId"
+                  placeholder="Select Level Two"
+                  formControlName="levelTwo"
+                  (change)="getLevelTwoOrganizations(levelTwo)"
+                  class="cfo-select"
+                  [ngClass]="{
+                    'invalid-input':
+                      employeePermissionForm.controls.levelTwo.errors?.required
+                  }"
+                >
+                </ng-select>
+
+                <div
+                  *ngIf="employeePermissionForm.controls.levelTwo.errors?.required"
+                  class="error-msg"
+                >
+                  Region is required!
+                </div>
+              </div>
+            </div>
+
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Market</label>
+                <ng-select
+                  [items]="levelTwoOrganizations"
+                  bindLabel="organizationName"
+                  bindValue="organizationId"
+                  placeholder="Select Level3"
+                  formControlName="levelThree"
+                  class="cfo-select"
+                  [ngClass]="{
+                    'invalid-input':
+                      employeePermissionForm.controls.levelThree.errors?.required
+                  }"
+                >
+                </ng-select>
+
+                <div
+                  *ngIf="employeePermissionForm.controls.levelThree.errors?.required"
+                  class="error-msg"
+                >
+                 Market is required!
+                </div>
+              </div>
+            </div>
+
+        
+
+            
+            
+
+          </div>
+
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Reference</label>
+                <ng-select
+                  [items]="employees"
+                  bindLabel="employeeName"
+                  bindValue="employeeId"
+                  placeholder="Reference Name"
+                  formControlName="referenceId"
+                  class="cfo-select"
+                  [ngClass]="{
+                    'invalid-input':
+                      employeePermissionForm.controls.referenceId.errors?.required
+                  }"
+                >
+                </ng-select>
+
+                <div
+                  *ngIf="employeePermissionForm.controls.referenceId.errors?.required"
+                  class="error-msg"
+                >
+                Reference is required!
+                </div>
+              </div>
+            </div>
+
+        
+
+        
+
+            
+            
+
+          </div>
+
+
+          <div class="float-right">
+            <button
+              type="submit"
+              class="btn btn-green mr-3"
+              [disabled]="employeePermissionForm.invalid"
+            >
+              {{ EventValue }}
+            </button>
+
+            <button
+              type="button"
+              class="btn btn-gray"
+              (click)="modal.close('Close Button Clicked')"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </ng-template>
+
+  </div>
+</div>

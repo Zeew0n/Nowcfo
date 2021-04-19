@@ -11,6 +11,7 @@ import { PaginatedResult } from 'src/app/models/Pagination/Pagination';
 import { map } from 'rxjs/operators';
 import { EmployeeTypeModel } from 'src/app/models/employeetype.model';
 import { EmployeeStatusTypeModel } from 'src/app/models/employeestatus.model';
+import { EmployeePermission } from 'src/app/models/employeepermission.model';
 
 
 @Injectable({
@@ -85,6 +86,7 @@ export class EmployeeService extends HttpGenericCrudService<EmployeeModel>{
         return this.httpClient.get<EmployeeModel[]>('employee/listallsupervisors/');
     }
 
+
     getAllEmployeeTypes(): Observable<EmployeeTypeModel[]> {
       return this.httpClient.get<EmployeeTypeModel[]>('employee/GetEmployeeTypes/');
   }
@@ -121,4 +123,28 @@ export class EmployeeService extends HttpGenericCrudService<EmployeeModel>{
     assignEmployee(data) {
       return this.httpClient.put('employee/AssignEmployee', data);
     }
+
+
+    
+    getAllEmployeePermissions(){
+      return this.httpClient.get<EmployeePermission[]>('EmployeePermission');
+    }
+    
+    getEmployeePermissionById(id: string): Observable<EmployeePermission> {
+      return this.httpClient.get<EmployeePermission>(`EmployeePermission/${id}`);
+  }
+
+    createEmployeePermission(data){
+      return this.httpClient.post('EmployeePermission', data);
+   }
+
+   updateEmployeePermission(id, data) {
+    return this.httpClient.put('EmployeePermission/' + id, data);
+}
+
+
+getLevelOrganizations(id: number){
+  return this.httpClient.get<OrganizationModel[]>(`EmployeePermission/GetLevelOrganizations/${id}`);
+}
+
 }
