@@ -16,6 +16,7 @@ import { EmployeeListsResolver } from 'src/app/shared/_resolver/employeeList';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { TreeViewModule } from '@syncfusion/ej2-angular-navigations';
 import { MiniChildComponent } from './components/minichild/minichild.component';
+import { EmployeePermissionComponent } from './components/employee-permission/employee-permission.component';
 
 
 
@@ -33,7 +34,7 @@ import { MiniChildComponent } from './components/minichild/minichild.component';
         NgxPaginationModule
         
     ],
-    declarations: [EmployeeComponent,ChildComponent,MiniChildComponent,EmployeeRoleComponent],
+    declarations: [EmployeeComponent,ChildComponent,MiniChildComponent,EmployeeRoleComponent, EmployeePermissionComponent],
     providers: [EmployeeListsResolver]
 })
 export class EmployeeModule { }

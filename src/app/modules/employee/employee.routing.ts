@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from 'src/app/shared/_guards/auth-guard';
 import { EmployeeListsResolver } from 'src/app/shared/_resolver/employeeList';
 import { EmployeeComponent } from './components/employee-info/employee.component';
+import { EmployeePermissionComponent } from './components/employee-permission/employee-permission.component';
 import { EmployeeRoleComponent } from './components/employee-role/employeerole.component';
 const routes: Routes = [
   {
@@ -19,6 +20,12 @@ const routes: Routes = [
       {
         path: 'employee-role',
         component: EmployeeRoleComponent,
+        canActivate: [AuthGuard]
+      },
+
+      {
+        path: 'employee-permission',
+        component: EmployeePermissionComponent,
         canActivate: [AuthGuard]
       },
     ]

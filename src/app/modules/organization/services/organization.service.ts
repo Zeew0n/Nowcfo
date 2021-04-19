@@ -25,6 +25,12 @@ export class OrganizationService extends HttpGenericCrudService<OrganizationMode
     return this.httpClient.get<OrganizationModel[]>('organization');
   }
 
+
+  getAllHeadOrganizations(): Observable<OrganizationModel[]> {
+    return this.httpClient.get<OrganizationModel[]>('organization/GetHeadOrganizations');
+  }
+
+
   getOrganizationById(id): Observable<OrganizationModel> {
     return this.httpClient.get<OrganizationModel>('organization/' + id);
   }
