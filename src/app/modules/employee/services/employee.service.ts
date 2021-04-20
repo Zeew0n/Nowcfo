@@ -43,6 +43,8 @@ export class EmployeeService extends HttpGenericCrudService<EmployeeModel>{
     getPaginatedEmployees(
         page?,
         itemsPerPage?,
+        searchOrg?,
+        searchStatus?,
         searchTypeId?,
         searchValue?
 
@@ -54,8 +56,11 @@ export class EmployeeService extends HttpGenericCrudService<EmployeeModel>{
         if (page != null && itemsPerPage != null) {
           params = params.append('pageNumber', page);
           params = params.append('pageSize', itemsPerPage);
+          params = params.append('searchOrg', searchOrg);
+          params = params.append('searchStatus', searchStatus);
           params = params.append('searchType', searchTypeId);
           params = params.append('searchValue', searchValue);
+
 
         }
         return this.httpClient
