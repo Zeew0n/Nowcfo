@@ -29,11 +29,11 @@ export class NavigationService extends HttpGenericCrudService<OrganizationNavMod
     );
   }
 
-  getEmployeesByOrganizationId( id):any {
-    return this.httpClient.get<EmployeeModel[]>('Organization/EmployeesByOrganizationHierarchy/'+id)
+  getEmployeesByOrganizationId( id): any {
+    return this.httpClient.get<EmployeeModel[]>('Organization/EmployeesByOrganizationHierarchy/' + id);
   }
 
-  // getAssignedMenus():MenuModel[]{
-  //   return this.httpClient.get<MenuModel[]>()
-  // }
+  getAssignedMenus(): Observable<MenuModel[]> {
+    return this.httpClient.get<MenuModel[]>('Menu/AssignedMenus');
+  }
 }

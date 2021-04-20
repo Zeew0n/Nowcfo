@@ -19,9 +19,7 @@ export class SideNavComponent implements OnInit {
 
   expandOrgNav = false;
 
-  menus = JSON.parse(localStorage.getItem('side_menu'));
-
-  admins = ['Admin'];
+  menus: MenuModel[] = [];
 
   // employees:EmployeeModel[];
   employees: any[] = [];
@@ -37,7 +35,19 @@ export class SideNavComponent implements OnInit {
   });
 
   ngOnInit() {
-    
+    this.getSideMenus();
+  }
+
+  getSideMenus(){
+    this.navigationService.getAssignedMenus()
+    .subscribe(
+      (res) => {
+        this.menus = res;
+      },
+      (err) => {
+        console.error(err);
+      }
+    );
   }
 
   toggleOrganizationNav(menu: MenuModel) {
