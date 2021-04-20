@@ -1,0 +1,68 @@
+@import url("https://fonts.googleapis.com/css?family=Montserrat|Source+Sans+Pro&display=swap");
+
+$primaryFont: "Montserrat";
+$secondaryFont: "Source Sans Pro";
+$primaryText: #4d4f5c;
+$redText: #ff6565;
+$black: #000;
+$white: #fff;
+$grey: #b0b0b0;
+$green: #00c299;
+$lightGrey: #f1f1f3;
+$btnGreen: #22b996;
+$btnBlue: #1e8dd1;
+$btnPurple: #ac32d9;
+$btnBlue_light: #288ece;
+$hearthColor: #ff6565;
+$btnOrange: #ff9200;
+$btnAqua: #4bacb6;
+$starColor: #ffc70b;
+$btnAquaGrey: #50acb5;
+$lightGray: #efefef;
+$errorColor: #ff6461;
+$successColor: #00c299;
+$colorGreen: #22b996;
+$colorPurple: #ac32d9;
+$btnDarkGrey: #707070;
+$lightGreen: #6ed09f;
+$greyStar: #d3d3d3;
+$paginationLink: #5a4181;
+$paginationBorder: #ddd;
+$progressBarGrey: #c4c4c4;
+$lightGreen: #56c080;
+$grey_dark: #4e4b4b;
+$scroll-grey: #888;
+$siteBorder: #f5f6fa;
+
+@mixin border-radius($pixel...) {
+  border-radius: $pixel;
+  -o-border-radius: $pixel;
+  -moz-border-radius: $pixel;
+  -webkit-border-radius: $pixel;
+}
+
+@mixin box-shadow($pixel...) {
+  box-shadow: $pixel;
+  -o-box-shadow: $pixel;
+  -moz-box-shadow: $pixel;
+  -webkit-box-shadow: $pixel;
+}
+
+@mixin transition($pixel...) {
+  -webkit-transition: $pixel;
+  -moz-transition: $pixel;
+  transition: $pixel;
+}
+
+@mixin transform($pixel...) {
+  -webkit-transform: $pixel;
+  -moz-transform: $pixel;
+  transform: $pixel;
+}
+
+@mixin border($pixel...) {
+  border: $pixel;
+  -o-border: $pixel;
+  -moz-border: $pixel;
+  -webkit-border: $pixel;
+}

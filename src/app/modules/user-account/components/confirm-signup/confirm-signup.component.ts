@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { ConfirmUserService } from '../../services/confirm-user.service';
 
 @Component({
@@ -30,14 +31,20 @@ export class ConfirmSignupComponent implements OnInit {
         private ConfirmUserService: ConfirmUserService,
         private router: Router,
         private toastr: ToastrService,
-        private route: ActivatedRoute,) {
+        private route: ActivatedRoute,
+        private ngxLoaderService: NgxUiLoaderService
+        ) {
     }
 
     ngOnInit() {
+        this.ngxLoaderService.start();
         this.getValue();
+        this.ngxLoaderService.stop();
+
     }
 
     getValue() {
+
         this.route.params.subscribe((params) => {
             this.userId = params.uid;
             this.token=params.token;

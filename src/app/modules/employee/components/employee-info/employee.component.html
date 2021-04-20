@@ -8,6 +8,7 @@
   <div class="content">
     <div class="title-container">
       <h1 class="page-title">Employee</h1>
+     
       <div class="content-right">
         <form
           class="form-cfo"
@@ -15,6 +16,33 @@
           (ngSubmit)="onSearch()"
           class="search-form"
         >
+
+        <ng-select
+        [items]="organizations"
+        bindLabel="organizationName"
+        bindValue="organizationId"
+        placeholder="Select Organization"
+        formControlName="searchOrg"
+        (change)="getEmployeesChanged()"
+        class="cfo-select"
+       
+      >
+      </ng-select>
+
+      <ng-select
+      [items]="employeeStatusTypes"
+      bindLabel="statusName"
+      bindValue="statusId"
+      [readonly]="disableSelect"
+      placeholder="Status Type"
+      formControlName="searchStatus"
+      (change)="getEmployeesChanged()"
+      class="cfo-select"
+     
+    >
+    </ng-select>
+
+
           <ng-select
             [items]="searchTypes"
             bindValue="id"
@@ -24,6 +52,12 @@
             class="cfo-select"
           >
           </ng-select>
+
+    
+
+
+
+
           <div>
             <input
               type="search"

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { UserSignUpModel } from '../../../../models/user/user-signup.model';
 import { match_value } from '../../../../shared/_validators/confirmation.validator';
 import { ForgetPasswordService } from '../../services/forget-password.service';
@@ -33,7 +34,7 @@ export class ResetPasswordComponent implements OnInit {
     loginCheck: boolean;
     userId: string = '';
     token: string = '';
-    isDisabled=true;
+    isDisabled = true;
 
     isTokenValid: boolean = false; //Form submission variable
 
@@ -41,31 +42,40 @@ export class ResetPasswordComponent implements OnInit {
         private forgetPasswordService: ForgetPasswordService,
         private router: Router,
         private toastr: ToastrService,
-        private route: ActivatedRoute,) {
+        private route: ActivatedRoute,
+        private ngxLoaderService: NgxUiLoaderService,
+    ) {
 
     }
 
     ngOnInit() {
+        this.ngxLoaderService.start();
         this.initializeSignUpForm();
         this.getValue();
+        // this.ngxLoaderService.stop();
+
     }
 
     getValue() {
+
         this.route.params.subscribe((params) => {
             this.userId = params.uid;
-            this.token=params.token;
+            this.token = params.token;
+            debugger
             this.UpdatePasswordForm.patchValue({
                 userName: params.uname,
             });
             this.forgetPasswordService.verifyToken(params.uid, params.token)
                 .subscribe(() => {
                     this.isTokenValid = true;
+                    this.ngxLoaderService.stop();
                 }, error => {
                     this.isTokenValid = false;
+                    this.ngxLoaderService.stop();
                 });
         });
 
-        
+
     }
 
     /*
@@ -76,11 +86,11 @@ export class ResetPasswordComponent implements OnInit {
             userName: this.userName,
             password: this.password,
             confirmPassword: this.confirmPassword,
-            
-            
+
+
         });
     }
-    
+
 
 
     onSubmit() {
@@ -91,8 +101,8 @@ export class ResetPasswordComponent implements OnInit {
             model.userName = userSignUpForm.userName;
             model.password = userSignUpForm.password;
             model.confirmPassword = userSignUpForm.confirmPassword;
-            model.token= this.token;
-                
+            model.token = this.token;
+
             this.forgetPasswordService.updatePassword(model).subscribe(
                 () => {
                     this.toastr.success('Password Reset Successfully.', 'Success!');

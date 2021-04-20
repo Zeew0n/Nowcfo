@@ -29,10 +29,6 @@ export class EmployeePermissionComponent implements OnInit {
   selectedEmployeeId: string;
   permissionId='';
 
-
-
-
-  
   constructor(
     private modalService: NgbModal,
     private toastr: ToastrService,
@@ -44,8 +40,6 @@ export class EmployeePermissionComponent implements OnInit {
 
   employeePermissionForm: FormGroup;
   EventValue: any = 'Save';
-
-
   employeeId = new FormControl(null, [Validators.required]);
   levelOne = new FormControl(null, [Validators.required]);
   levelTwo= new FormControl(null, [Validators.required]);
@@ -83,15 +77,6 @@ export class EmployeePermissionComponent implements OnInit {
     );
   }
 
-
-  getAllOrganizations() {
-    this.organizationService.getAllOrganizations().subscribe(
-      (result) => {
-        this.organizationslist = result;
-      },
-      () => console.error
-    );
-  }
 
 
   getOrganizations() {
@@ -185,7 +170,7 @@ export class EmployeePermissionComponent implements OnInit {
         this.toastr.error(
           error.error.errorMessage !== undefined
             ? error.error.errorMessage
-            : 'Employee Create failed',
+            : 'Permission not accessible!',
           'Error!'
         );
       }
@@ -249,7 +234,7 @@ export class EmployeePermissionComponent implements OnInit {
             this.toastr.error(
               error.error.errorMessage !== undefined
                 ? error.error.errorMessage
-                : 'Employee Update failed',
+                : 'Employee Permission Update failed',
               'Error!'
             );
           }

@@ -7,11 +7,14 @@ import { SignupComponent } from './modules/user-account/components/signup/signup
 import { ResetPasswordComponent } from './modules/user-account/components/reset-password/reset-password.component';
 import { ConfirmSignupComponent } from './modules/user-account/components/confirm-signup/confirm-signup.component';
 import { AuthGuard } from './shared/_guards/auth-guard';
+import { PageNotFoundComponent } from './modules/shared/page-not-found/page-not-found.component';
 export const routes: Routes = [
   { path: '', component: LoginPageComponent },
   { path: 'login', component: LoginPageComponent },
   { path: 'signup', component: SignupComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
+  { path: '404Error', component: PageNotFoundComponent },
+
   {
     path: 'updatepassword/:uid/:email/:uname/:token',
     component: ResetPasswordComponent,
@@ -60,6 +63,9 @@ export const routes: Routes = [
       }
     ],
   },
+
+  { path: '**', redirectTo: '/404Error' }
+
 ];
 
 @NgModule({

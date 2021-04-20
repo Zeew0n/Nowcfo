@@ -61,7 +61,14 @@ export class EmployeeComponent implements OnInit {
   EventValue: any = 'Save';
   //isActive: boolean;
 
+  //For Disabling Employee Status
+  disableSelect = true;
+
   searchTypeId = new FormControl(null, [Validators.required]);
+  //For Adding Search
+  searchOrg = new FormControl(null, [Validators.required]);
+  searchStatus = new FormControl(null, [Validators.required]);
+
   searchValue = new FormControl('', [Validators.required]);
 
   employeeName = new FormControl('', [Validators.required]);
@@ -101,15 +108,21 @@ export class EmployeeComponent implements OnInit {
     this.getSuperVisors();
   }
 
- 
+ getEmployeesChanged(){
+  this.disableSelect = false;
+  this.getEmployees();
+
+ }
 
   getEmployees() {
     this.employeeService
       .getPaginatedEmployees(
         this.pagination.currentPage,
         this.pagination.itemsPerPage,
+        this.searchOrg.value,
+        this.searchStatus.value,
         this.searchTypeId.value,
-        this.searchValue.value
+        this.searchValue.value,
       )
       .subscribe(
         (res: PaginatedResult<EmployeeModel[]>) => {
@@ -207,8 +220,11 @@ export class EmployeeComponent implements OnInit {
 
   initializeSearchForm() {
     this.searchForm = new FormGroup({
+      searchOrg: this.searchOrg,
+      searchStatus:this.searchStatus,
       searchTypeId: this.searchTypeId,
-      searchValue: this.searchValue,
+      searchValue: this.searchValue
+
     });
   }
 
@@ -412,6 +428,7 @@ export class EmployeeComponent implements OnInit {
 
   resetSearch() {
     this.searchForm.reset();
+    this.disableSelect = true;
     this.ngOnInit();
   }
 
