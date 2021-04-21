@@ -95,6 +95,18 @@ export class OrganizationComponent implements OnInit {
     );
   }
 
+  // getOrganizationOnChange() {
+  //   this.organizationService.getEmp()
+  //   .subscribe(
+  //     (res) => {
+  //       this.organizations = result;
+  //     },
+  //     (err) => {
+  //       this.organizations = result;
+  //     }
+  //   )
+  // }
+
   openDeleteModal(content, id) {
     this.EventValue = 'Delete';
     this.selectedOrgId = id;
