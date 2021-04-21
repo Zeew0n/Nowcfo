@@ -62,7 +62,7 @@ export class EmployeeComponent implements OnInit {
   //isActive: boolean;
 
   //For Disabling Employee Status
-  disableSelect = true;
+  //disableSelect = true;
 
   searchTypeId = new FormControl(null, [Validators.required]);
   //For Adding Search
@@ -109,7 +109,7 @@ export class EmployeeComponent implements OnInit {
   }
 
  getEmployeesChanged(){
-  this.disableSelect = false;
+ // this.disableSelect = false;
   this.getEmployees();
 
  }
@@ -428,7 +428,7 @@ export class EmployeeComponent implements OnInit {
 
   resetSearch() {
     this.searchForm.reset();
-    this.disableSelect = true;
+    //this.disableSelect = true;
     this.ngOnInit();
   }
 

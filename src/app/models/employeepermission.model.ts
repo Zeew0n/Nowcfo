@@ -3,6 +3,7 @@ export class EmployeePermission {
     permissionId:number;
     employeeId: string;
     employeeName:string;
+    email:string;
     levelOne:number;
     OrganizationName:string;
     levelTwo: number;
