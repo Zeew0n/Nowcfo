@@ -151,7 +151,6 @@ export class EmployeePermissionComponent implements OnInit {
         this.isEdit = true;
         this.EventValue = 'Update';
         this.displayFormData(res, id);
-        this.getLevelOrganizations(res.levelOne);
         this.employeeService.getLevelOrganizations(res.levelOne).subscribe(
           (result) => {
             this.levelOrganizations = result;
@@ -215,6 +214,7 @@ export class EmployeePermissionComponent implements OnInit {
     } else {
       if (this.employeePermissionForm.valid) {
         const model = {
+          permissionId:this.selectedEmployeeId,
           employeeId: createForm.employeeId,
           levelOne: createForm.levelOne,
           levelTwo: createForm.levelTwo,
@@ -223,7 +223,6 @@ export class EmployeePermissionComponent implements OnInit {
  
         };
 
-        this.permissionId = this.selectedEmployeeId;
         this.employeeService.updateEmployeePermission(this.permissionId, model).subscribe(
           () => {
             this.toastr.success('Employee Permission Updated Successfully.', 'Success!');
@@ -241,6 +240,31 @@ export class EmployeePermissionComponent implements OnInit {
         );
       }
     }
+  }
+
+
+  openDeleteModal(content, id) {
+    this.EventValue = 'Delete';
+    this.selectedEmployeeId = id;
+    this.openModal(content);
+  }
+
+  Delete() {
+    this.employeeService.deleteEmployeePermission(this.selectedEmployeeId).subscribe(
+      (result) => {
+        if (result == null) {
+          this.modalService.dismissAll();
+          this.toastr.success('Employee Permission delete successfully.', 'success!');
+          this.getEmployeePermissions();
+        } else {
+          this.toastr.success('something went wrong.', 'error!');
+        }
+      },
+      (error) => {
+        console.log(error.errorMessage);
+        this.toastr.error('Cannot delete employee permission', 'error!');
+      }
+    );
   }
 
   resetFrom() {

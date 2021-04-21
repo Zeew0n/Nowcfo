@@ -147,6 +147,9 @@ export class EmployeeService extends HttpGenericCrudService<EmployeeModel>{
     return this.httpClient.put('EmployeePermission/' + id, data);
 }
 
+deleteEmployeePermission(id) {
+  return this.httpClient.delete('EmployeePermission/' + id);
+}
 
 getLevelOrganizations(id: number){
   return this.httpClient.get<OrganizationModel[]>(`EmployeePermission/GetLevelOrganizations/${id}`);

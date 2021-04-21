@@ -23,7 +23,6 @@
         bindValue="organizationId"
         placeholder="Select Organization"
         formControlName="searchOrg"
-        (change)="getEmployeesChanged()"
         class="cfo-select"
        
       >
@@ -33,10 +32,8 @@
       [items]="employeeStatusTypes"
       bindLabel="statusName"
       bindValue="statusId"
-      [readonly]="disableSelect"
       placeholder="Status Type"
       formControlName="searchStatus"
-      (change)="getEmployeesChanged()"
       class="cfo-select"
      
     >
@@ -52,12 +49,6 @@
             class="cfo-select"
           >
           </ng-select>
-
-    
-
-
-
-
           <div>
             <input
               type="search"
@@ -83,7 +74,6 @@
           </div>
           <button
             type="submit"
-            [disabled]="searchForm.invalid"
             class="btn btn-primary"
           >
             <i class="fa fa-search"></i>
