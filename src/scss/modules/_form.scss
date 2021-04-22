@@ -174,3 +174,32 @@
         object-fit: cover;
     }
 }
+
+
+.search-form {
+    display: flex;
+    flex-direction: row;
+
+    .cfo-select {
+        width: 200px;
+        margin-right: 10px;
+    }
+
+    .form-control {
+        width: 200px;
+        margin-right: 10px;
+        height: 36px;
+    }
+
+
+
+    .btn {
+        height: 36px;
+    }
+
+    .clear-out {
+        cursor: pointer;
+        padding: 0 20px;
+        margin-left: 10px;
+    }
+}

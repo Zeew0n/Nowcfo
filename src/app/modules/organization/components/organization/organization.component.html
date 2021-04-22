@@ -1,10 +1,6 @@
 <div class="">
   <div class="btn-container">
-    <button
-      type="button"
-      class="btn btn-green"
-      (click)="openCreateModal(content)"
-    >
+    <button type="button" class="btn btn-green" (click)="openCreateModal(content)">
       New Organization
     </button>
   </div>
@@ -12,293 +8,200 @@
     <div class="title-container">
       <h1 class="page-title" *ngIf="orgList">Organizations</h1>
       <div class="content-right">
-        <form
-          class="form-cfo"
-          [formGroup]=""
-          
-          class="search-form"
-        >
-          <ng-select
-            [items]="organizations"
-            bindLabel="organizationName"
-            bindValue="organizationId"
-            placeholder="Select Organization"
-            formControlName="searchOrganization"
-            
-            class="cfo-select"
-          >
+        <form class="form-cfo" [formGroup]="" class="search-form">
+          <ng-select [items]="organizations" bindLabel="organizationName" bindValue="organizationId"
+            placeholder="Select Organization" formControlName="searchOrganization" class="cfo-select">
           </ng-select>
         </form>
       </div>
+    </div>
 
-      <div class="table-responsive" *ngIf="orgList">
+    <div class="table-responsive" *ngIf="orgList">
+      <table class="table table-harbor">
+        <thead>
+          <tr>
+            <th scope="col">S.N</th>
+            <th scope="col">Organization</th>
+            <th scope="col">HasParent</th>
+            <th scope="col">ParentOrganization</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let organization of organizations; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td data-th="UserName ">{{ organization.organizationName }}</td>
+            <td data-th="First Name ">{{ organization.hasParent }}</td>
+            <td data-th="Last Name">{{ organization.parentOrganization }}</td>
+
+            <td data-th="Actions">
+              <a (click)="openEditModal(content, organization)" class="icon-holder" href="javascript:void(0)"
+                title="edit"><i class="icon icon-pencil-create"></i></a>
+              <span></span>
+              <a class="icon-holder" (click)="
+                    openDeleteModal(deletecontent, organization.organizationId)
+                  " href="javascript:void(0)" title="delete"><i class="icon icon-circle-block"></i></a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div *ngIf="empList">
+      <div *ngIf="orgEmployees.organization || orgEmployees.childOrganization">
+        <div class="title-container">
+          <h4 class="table-title">{{ orgEmployees.organization }}</h4>
+          <div class="btn-container">
+            <button type="button" (click)="
+                  openAssignEmployeeModal(assignEmployeecontent, organization)
+                " class="btn btn-green ml-2">
+              Assign Employee
+            </button>
+            <button type="button" (click)="openEditModal(content, organization)" class="btn btn-green ml-2">
+              Edit Org Unit
+            </button>
+            <button type="button" (click)="
+                  openDeleteModal(deletecontent, organization.organizationId)
+                " class="btn btn-red ml-2">
+              Delete Org Unit
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="table-responsive">
         <table class="table table-harbor">
           <thead>
             <tr>
               <th scope="col">S.N</th>
-              <th scope="col">Organization</th>
-              <th scope="col">HasParent</th>
-              <th scope="col">ParentOrganization</th>
-              <th scope="col">Actions</th>
+              <th scope="col">Name</th>
+              <th scope="col">Email</th>
+              <th scope="col">Phone</th>
+              <th scope="col">Address</th>
+              <th scope="col">City</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let organization of organizations; let i = index">
+            <tr *ngIf="orgEmployees.employees.length <= 0">
+              No Employees
+            </tr>
+            <tr *ngFor="let orgEmp of orgEmployees.employees; let i = index">
               <td>{{ i + 1 }}</td>
-              <td data-th="UserName ">{{ organization.organizationName }}</td>
-              <td data-th="First Name ">{{ organization.hasParent }}</td>
-              <td data-th="Last Name">{{ organization.parentOrganization }}</td>
-
-              <td data-th="Actions">
-                <a
-                  (click)="openEditModal(content, organization)"
-                  class="icon-holder"
-                  href="javascript:void(0)"
-                  title="edit"
-                  ><i class="icon icon-pencil-create"></i
-                ></a>
-                <span></span>
-                <a
-                  class="icon-holder"
-                  (click)="
-                    openDeleteModal(deletecontent, organization.organizationId)
-                  "
-                  href="javascript:void(0)"
-                  title="delete"
-                  ><i class="icon icon-circle-block"></i
-                ></a>
-              </td>
+              <td data-th="employeeName ">{{ orgEmp.employeeName }}</td>
+              <td data-th="First Name ">{{ orgEmp.email }}</td>
+              <td data-th="Last Name">{{ orgEmp.phoneNumber }}</td>
+              <td data-th="Last Name">{{ orgEmp.address }}</td>
+              <td data-th="Last Name">{{ orgEmp.city }}</td>
             </tr>
           </tbody>
         </table>
       </div>
-      <div *ngIf="empList">
-        <div
-          *ngIf="orgEmployees.organization || orgEmployees.childOrganization"
-        >
-          <div class="title-container">
-            <h4 class="table-title">{{ orgEmployees.organization }}</h4>
-            <div class="btn-container">
-              <button
-                type="button"
-                (click)="
-                  openAssignEmployeeModal(assignEmployeecontent, organization)
-                "
-                class="btn btn-green ml-2"
-              >
-                Assign Employee
-              </button>
-              <button
-                type="button"
-                (click)="openEditModal(content, organization)"
-                class="btn btn-green ml-2"
-              >
-                Edit Org Unit
-              </button>
-              <button
-                type="button"
-                (click)="
-                  openDeleteModal(deletecontent, organization.organizationId)
-                "
-                class="btn btn-red ml-2"
-              >
-                Delete Org Unit
-              </button>
-            </div>
-          </div>
-        </div>
-        <div class="table-responsive">
-          <table class="table table-harbor">
-            <thead>
-              <tr>
-                <th scope="col">S.N</th>
-                <th scope="col">Name</th>
-                <th scope="col">Email</th>
-                <th scope="col">Phone</th>
-                <th scope="col">Address</th>
-                <th scope="col">City</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngIf="orgEmployees.employees.length <= 0">
-                No Employees
-              </tr>
-              <tr *ngFor="let orgEmp of orgEmployees.employees; let i = index">
-                <td>{{ i + 1 }}</td>
-                <td data-th="employeeName ">{{ orgEmp.employeeName }}</td>
-                <td data-th="First Name ">{{ orgEmp.email }}</td>
-                <td data-th="Last Name">{{ orgEmp.phoneNumber }}</td>
-                <td data-th="Last Name">{{ orgEmp.address }}</td>
-                <td data-th="Last Name">{{ orgEmp.city }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <app-org-employees
-          *ngIf="orgEmployees.childOrganization.length > 0"
-          [orgList]="orgEmployees.childOrganization"
-        >
-        </app-org-employees>
-      </div>
+      <app-org-employees *ngIf="orgEmployees.childOrganization.length > 0" [orgList]="orgEmployees.childOrganization">
+      </app-org-employees>
+    </div>
 
-      <ng-template #content let-modal>
-        <div class="container">
-          <h3 class="modal-title" *ngIf="!isEdit">Create New Organization</h3>
-          <h3 class="modal-title" *ngIf="isEdit">Update Organization</h3>
+    <ng-template #content let-modal>
+      <div class="container">
+        <h3 class="modal-title" *ngIf="!isEdit">Create New Organization</h3>
+        <h3 class="modal-title" *ngIf="isEdit">Update Organization</h3>
 
-          <form class="form-cfo" [formGroup]="OrganizationForm">
-            <div class="form-group">
-              <label>Organization Name</label>
-              <input
-                type="text"
-                formControlName="organizationName"
-                class="form-control"
-                placeholder="Organization Name"
-                [ngClass]="{
+        <form class="form-cfo" [formGroup]="OrganizationForm">
+          <div class="form-group">
+            <label>Organization Name</label>
+            <input type="text" formControlName="organizationName" class="form-control" placeholder="Organization Name"
+              [ngClass]="{
                   'invalid-input':
                     OrganizationForm.controls.organizationName.touched &&
                     OrganizationForm.controls.organizationName.errors
-                }"
-              />
-              <div
-                *ngIf="
+                }" />
+            <div *ngIf="
                   OrganizationForm.controls.organizationName.touched &&
                   OrganizationForm.controls.organizationName.errors?.required
-                "
-                class="error-msg"
-              >
-                Organization is required
-              </div>
+                " class="error-msg">
+              Organization is required
             </div>
+          </div>
 
-            <div class="row">
-              <div class="col-sm-6">
-                <div class="custom-checkbox">
-                  <input
-                    type="checkbox"
-                    id="checkboxId"
-                    value="1"
-                    formControlName="hasParent"
-                    (change)="checkValue($event)"
-                  />
-                  <span class="">Has Parent ?</span>
-                </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="custom-checkbox">
+                <input type="checkbox" id="checkboxId" value="1" formControlName="hasParent"
+                  (change)="checkValue($event)" />
+                <span class="">Has Parent ?</span>
               </div>
             </div>
-            <div class="form-group" *ngIf="OrganizationForm.value.hasParent">
-              <ng-select
-                [items]="organizations"
-                bindLabel="organizationName"
-                bindValue="organizationId"
-                formControlName="parentOrganizationId"
-                placeholder="Select Parent Organization"
-                class="cfo-select"
-                [ngClass]="{
+          </div>
+          <div class="form-group" *ngIf="OrganizationForm.value.hasParent">
+            <ng-select [items]="organizations" bindLabel="organizationName" bindValue="organizationId"
+              formControlName="parentOrganizationId" placeholder="Select Parent Organization" class="cfo-select"
+              [ngClass]="{
                   'invalid-input':
                     OrganizationForm.value.hasParent &&
                     OrganizationForm.controls.hasParent.errors?.required
-                }"
-              >
-              </ng-select>
+                }">
+            </ng-select>
 
-              <div
-                *ngIf="
+            <div *ngIf="
                   OrganizationForm.controls.parentOrganizationId.errors
                     ?.required
-                "
-                class="error-msg"
-              >
-                Parent Organization is required
-              </div>
+                " class="error-msg">
+              Parent Organization is required
             </div>
-            <div class="float-right">
-              <button
-                type="submit"
-                class="btn btn-green mr-3"
-                [disabled]="OrganizationForm.invalid"
-                (click)="onSubmit()"
-              >
-                {{ EventValue }}
-              </button>
-              <button
-                type="button"
-                class="btn btn-gray"
-                (click)="modal.close('Close Button Clicked')"
-              >
-                Cancel
-              </button>
-            </div>
-          </form>
-        </div>
-      </ng-template>
-
-      <ng-template #deletecontent let-modal>
-        <div class="container">
-          <h3 class="modal-title">
-            This action is permanent. Are you sure you want to delete this
-            organizational unit?
-          </h3>
+          </div>
           <div class="float-right">
-            <button type="submit" (click)="Delete()" class="btn btn-green mr-3">
+            <button type="submit" class="btn btn-green mr-3" [disabled]="OrganizationForm.invalid" (click)="onSubmit()">
               {{ EventValue }}
             </button>
-            <button
-              type="button"
-              class="btn btn-gray"
-              (click)="modal.close('Close Button Clicked')"
-            >
+            <button type="button" class="btn btn-gray" (click)="modal.close('Close Button Clicked')">
               Cancel
             </button>
           </div>
-        </div>
-      </ng-template>
+        </form>
+      </div>
+    </ng-template>
 
-      <ng-template #assignEmployeecontent let-modal>
-        <div class="container">
-          <h3 class="modal-title">Assign Employee</h3>
-          <!-- {{employeeAssignForm.value|json}} -->
-          <form [formGroup]="employeeAssignForm">
-            <div class="form-group">
-              <ng-select
-                [items]="employeeList"
-                bindLabel="employeeName"
-                bindValue="employeeId"
-                formControlName="employeeId"
-                placeholder="Select Employee"
-                appendTo="body"
-                [dropdownPosition]="'bottom'"
-                [loading]="loadingIcon"
-                (keyup)="searchEmployee($event)"
-                (change)="getSelectedEmployee($event)"
-                class="cfo-select"
-                [ngClass]="{
+    <ng-template #deletecontent let-modal>
+      <div class="container">
+        <h3 class="modal-title">
+          This action is permanent. Are you sure you want to delete this
+          organizational unit?
+        </h3>
+        <div class="float-right">
+          <button type="submit" (click)="Delete()" class="btn btn-green mr-3">
+            {{ EventValue }}
+          </button>
+          <button type="button" class="btn btn-gray" (click)="modal.close('Close Button Clicked')">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </ng-template>
+
+    <ng-template #assignEmployeecontent let-modal>
+      <div class="container">
+        <h3 class="modal-title">Assign Employee</h3>
+        <!-- {{employeeAssignForm.value|json}} -->
+        <form [formGroup]="employeeAssignForm">
+          <div class="form-group">
+            <ng-select [items]="employeeList" bindLabel="employeeName" bindValue="employeeId"
+              formControlName="employeeId" placeholder="Select Employee" appendTo="body" [dropdownPosition]="'bottom'"
+              [loading]="loadingIcon" (keyup)="searchEmployee($event)" (change)="getSelectedEmployee($event)"
+              class="cfo-select" [ngClass]="{
                   'invalid-input':
                     OrganizationForm.value.hasParent &&
                     OrganizationForm.controls.hasParent.errors?.required
-                }"
-              >
-              </ng-select>
-            </div>
-            <div class="float-right">
-              <button
-                type="submit"
-                (click)="employeeAssignSubmit()"
-                [disabled]="employeeAssignForm.invalid"
-                class="btn btn-green mr-3"
-              >
-                {{ EventValue }}
-              </button>
-              <button
-                type="button"
-                class="btn btn-gray"
-                (click)="modal.close('Close Button Clicked')"
-              >
-                Cancel
-              </button>
-            </div>
-          </form>
-        </div>
-      </ng-template>
-    </div>
+                }">
+            </ng-select>
+          </div>
+          <div class="float-right">
+            <button type="submit" (click)="employeeAssignSubmit()" [disabled]="employeeAssignForm.invalid"
+              class="btn btn-green mr-3">
+              {{ EventValue }}
+            </button>
+            <button type="button" class="btn btn-gray" (click)="modal.close('Close Button Clicked')">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </ng-template>
   </div>
 </div>
