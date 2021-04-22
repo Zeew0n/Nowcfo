@@ -1,8 +1,12 @@
 .title-container {
   display: flex;
-  flex-direction: row;
   margin-bottom: 10px;
+  flex-direction: column;
   align-self: center;
+
+  @media (min-width: 1660px) {
+    flex-direction: row;
+  }
 
   .content-right {
     margin-left: auto;
@@ -19,7 +23,7 @@
   font-size: 18px;
   font-weight: bold;
   align-items: center;
-    display: flex;
+  display: flex;
 }
 
 .content-title {
