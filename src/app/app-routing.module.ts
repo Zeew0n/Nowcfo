@@ -19,11 +19,10 @@ export const routes: Routes = [
     path: 'updatepassword/:uid/:email/:uname/:token',
     component: ResetPasswordComponent,
   },
-
   {
     path: 'confirm/:uid/:uname/:token',
     component: ConfirmSignupComponent,
-  }, 
+  },
   {
     path: '',
     component: AppLayoutComponent,
@@ -42,7 +41,6 @@ export const routes: Routes = [
           ),
         canActivate: [AuthGuard],
       },
-
       {
         path: 'user',
         loadChildren: () =>
@@ -51,13 +49,19 @@ export const routes: Routes = [
           ),
           canActivate: [AuthGuard],
       },
-
-
       {
         path: 'organization-information',
         loadChildren: () =>
           import('./modules/organization/organization.module').then(
             (m) => m.OrganizationModule
+          ),
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'market',
+        loadChildren: () =>
+          import('./modules/market/market.module').then(
+            (m) => m.MarketModule
           ),
         canActivate: [AuthGuard],
       }
