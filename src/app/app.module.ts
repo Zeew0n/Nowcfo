@@ -34,7 +34,6 @@ import {TreeviewModule } from 'ngx-treeview';
 import { EmployeeListsResolver } from './shared/_resolver/employeeList';
 
 
-
 const ngxUiLoaderConfig: NgxUiLoaderConfig = {
   bgsColor: 'red',
   bgsPosition: POSITION.bottomCenter,

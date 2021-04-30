@@ -24,7 +24,8 @@ export class EmployeeModel extends BaseEntity {
     statusId: number;
     statusName: string;
     overTimeRate: string;
-    joiningDate:string;
+    startDate:string;
+    terminationDate:string;
     employeepermissions: EmployeePermission[];
 
 }

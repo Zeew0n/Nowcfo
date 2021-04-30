@@ -48,6 +48,8 @@ export class EmployeeComponent implements OnInit {
   selectemployee;
   selectedEmployeeId: string;
 
+    //For Disabling Employee Status
+  disableSelect = true;
 
   date: '';
 
@@ -92,7 +94,9 @@ export class EmployeeComponent implements OnInit {
   employeeTypeId = new FormControl(null, [Validators.required]);
   statusId= new FormControl(null, [Validators.required]);
   overTimeRate = new FormControl('', [Validators.required]);
- joiningDate= new FormControl(null);
+  startDate= new FormControl(null);
+  terminationDate= new FormControl(null);
+
 
 
 
@@ -119,7 +123,7 @@ export class EmployeeComponent implements OnInit {
   }
 
  getEmployeesChanged(){
- // this.disableSelect = false;
+  this.disableSelect = false;
   this.getEmployees();
 
  }
@@ -268,7 +272,8 @@ export class EmployeeComponent implements OnInit {
       employeeTypeId: this.employeeTypeId,
       statusId: this.statusId,
       overTimeRate: this.overTimeRate,
-      joiningDate: this.joiningDate
+      startDate: this.startDate,
+      terminationDate:this.terminationDate
     });
   }
 
@@ -309,7 +314,8 @@ export class EmployeeComponent implements OnInit {
       overTimeRate: data.overTimeRate,
       employeeTypeId: data.employeeTypeId,
       statusId:data.statusId,
-      joiningDate: this.setNgbDate(data.joiningDate)
+      startDate: this.setNgbDate(data.startDate),
+      terminationDate: this.setNgbDate(data.terminationDate)
     });
   }
 
@@ -394,7 +400,8 @@ export class EmployeeComponent implements OnInit {
           employeeTypeId: createForm.employeeTypeId,
           statusId: createForm.statusId,
           payType: '',
-          joiningDate: this.setDate(createForm.joiningDate.value)
+          startDate: this.setDate(createForm.startDate),
+          terminationDate: this.setDate(createForm.terminationDate)
         };
 
         if (model.payTypeCheck) {
@@ -437,7 +444,9 @@ export class EmployeeComponent implements OnInit {
           payType: '',
           employeeTypeId: createForm.employeeTypeId,
           statusId: createForm.statusId,
-          joiningDate: this.setDate(createForm.joiningDate.value)
+          startDate: this.setDate(createForm.startDate),
+          terminationDate: this.setDate(createForm.terminationDate)
+
 
         };
 
@@ -486,7 +495,7 @@ export class EmployeeComponent implements OnInit {
 
   resetSearch() {
     this.searchForm.reset();
-    //this.disableSelect = true;
+    this.disableSelect = true;
     this.ngOnInit();
   }
 

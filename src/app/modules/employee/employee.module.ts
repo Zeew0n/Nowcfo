@@ -30,6 +30,7 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
         NgSelectModule,
         ReactiveFormsModule,
         ToastrModule,
+        NgbModule,
         NgMultiSelectDropDownModule,
         PaginationModule.forRoot(),
         NgxPaginationModule,

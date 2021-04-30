@@ -32,6 +32,7 @@
       [items]="employeeStatusTypes"
       bindLabel="statusName"
       bindValue="statusId"
+      [readonly]="disableSelect"
       placeholder="Status Type"
       formControlName="searchStatus"
       class="cfo-select"
@@ -571,13 +572,43 @@
           </div>
 
           <div class="row">
-            <div class="col-xs-12 col-12 col-md-4 form-group">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Joining Date</label>
               <input
             
               (click)="d1.toggle()" id="date" class="form-control" placeholder="mm/dd/yyyy"
-              name="startDate" formControlName="joiningDate" ngbDatepicker #d1="ngbDatepicker"
+              name="startDate" formControlName="startDate" ngbDatepicker #d1="ngbDatepicker"
               >
                     </div>
+                    </div>
+                    
+
+                    <div class="col-sm-6">
+                      <div class="form-group">
+                        <label>Termination Date</label>
+                      <input
+                    
+                      (click)="d2.toggle()" id="date" class="form-control" placeholder="mm/dd/yyyy"
+                      name="terminationDate" formControlName="terminationDate" ngbDatepicker #d2="ngbDatepicker"
+                      >
+                            </div>
+                            </div>
+
+
+          </div>
+
+          <div class="form-group">
+            <label>SuperVisor</label>
+            <ng-select
+              [items]="supervisors"
+              placeholder="Select SuperVisor"
+              bindLabel="employeeName"
+              bindValue="employeeId"
+              formControlName="superVisorId"
+              class="cfo-select"
+            >
+            </ng-select>
           </div>
 
 
