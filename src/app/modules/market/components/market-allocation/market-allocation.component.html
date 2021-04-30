@@ -1,0 +1,190 @@
+<div class="btn-container">
+    <div class="form-group float-left">
+        <ng-select
+        [items]="roles"
+        formControlName="roleId"
+        placeholder="Select Role"
+        bindLabel="roleName"
+        bindValue="roleId"
+        class="cfo-select"
+      >
+      </ng-select>
+    </div>
+    <button type="button" class="btn btn-green" (click)="open(content)">
+      New Allocation
+    </button>
+  </div>
+
+  <div class="content">
+    <div class="title-container">
+      <h1 class="page-title">Allocations</h1>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-harbor">
+        <thead>
+          <tr>
+            <th scope="col">S.N</th>
+            <th scope="col">Pay Period</th>
+            <th scope="col">Type</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let role of roles; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td data-th="PayPeriod">{{"2021-04-30"}}</td>
+            <td data-th="Type">{{"Global"}}</td>
+
+            <td data-th="Actions">
+              <a
+              (click)="editPermission(permission_content, role)"
+              class="icon-holder"
+              href="javascript:void(0)"
+              title="edit_permision"
+              >
+              <i class="icon fa fa-address-book-o"></i>
+            </a>
+            <span></span>
+              <a
+                (click)="editData(content, role)"
+                class="icon-holder"
+                href="javascript:void(0)"
+                title="edit_role"
+                ><i class="icon icon-pencil-create"></i
+              ></a>
+              <span></span>
+              <a
+                class="icon-holder"
+                (click)="openDeleteModal(deletecontent, role.roleId)"
+                href="javascript:void(0)"
+                title="delete_role"
+                ><i class="icon icon-circle-block"></i
+              ></a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ng-template #content let-modal>
+      <div class="container">
+        <h3 class="modal-title" *ngIf="!isEdit">Create New Role</h3>
+        <h3 class="modal-title" *ngIf="isEdit">Update Role</h3>
+
+        <form class="form-cfo" [formGroup]="roleForm" (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <label>Role Name</label>
+            <input
+              type="text"
+              formControlName="roleName"
+              class="form-control"
+              placeholder="Role Name"
+              [ngClass]="{
+                'invalid-input':
+                  roleForm.controls.roleName.touched &&
+                  roleForm.controls.roleName.errors
+              }"
+            />
+            <div
+              *ngIf="
+                roleForm.controls.roleName.touched &&
+                roleForm.controls.roleName.errors?.required
+              "
+              class="error-msg"
+            >
+              Role Name is Required!
+            </div>
+          </div>
+
+          <div class="float-right">
+            <button
+              type="submit"
+              class="btn btn-green mr-3"
+              [disabled]="roleForm.invalid"
+            >
+              {{ EventValue }}
+            </button>
+            <button
+              type="button"
+              class="btn btn-gray"
+              (click)="modal.close('Close Button Clicked')"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </ng-template>
+
+    <ng-template #deletecontent let-modal>
+      <div class="container">
+        <h3 class="modal-title">
+          This action is permanent. Are you sure you want to delete this role?
+        </h3>
+        <div class="float-right">
+          <button type="submit" (click)="delete()" class="btn btn-green mr-3">
+            {{ EventValue }}
+          </button>
+          <button
+            type="button"
+            class="btn btn-gray"
+            (click)="modal.close('Close Button Clicked')"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </ng-template>
+
+    <ng-template #permission_content let-modal>
+      <div class="container">
+        <h3 class="modal-title" *ngIf="!isEdit">Add Role Permisson</h3>
+        <h3 class="modal-title" *ngIf="isEdit">Edit Role Permisson</h3>
+        <form class="form-cfo" [formGroup]="rolePermissionForm" (ngSubmit)="onRoleAssginedSubmit()">
+          
+          <div class="form-group">
+            <label class="control-label">Role</label>
+            <ng-select
+              [items]="roles"
+              formControlName="roleId"
+              placeholder="Select Role"
+              bindLabel="roleName"
+              bindValue="roleId"
+              class="cfo-select"
+              readonly=true,
+              [disabled]="disableRoleDdl"
+            >
+            </ng-select>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label">Permissions</label>
+            <ng-multiselect-dropdown #multiSelect
+              [(ngModel)]="checkedMenuList"
+              formControlName="menuIds"
+              class="cfo-select"
+              placeholder="Select Permissions"
+            >
+            </ng-multiselect-dropdown>
+          </div>
+
+          <div class="float-right">
+            <button
+              type="submit"
+              class="btn btn-green mr-3"
+              [disabled]="rolePermissionForm.invalid"
+            >
+              {{ EventValue }}
+            </button>
+            <button
+              type="button"
+              class="btn btn-gray"
+              (click)="modal.close('Close Button Clicked')"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </ng-template>
+  </div>
+
