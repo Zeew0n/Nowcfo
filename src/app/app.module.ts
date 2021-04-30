@@ -15,7 +15,7 @@ import { UserAccountModule } from './modules/user-account/user-account.module';
 import { AppRoutingModule } from './app-routing.module';
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule,NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { SideNavComponent } from './modules/navigation/components/side-nav/side-nav.component';
 import { TopNavComponent } from './modules/navigation/components/top-nav/top-nav.component';
 import { AppLayoutComponent } from './shared/_layouts/app-layout/app-layout.component';
@@ -94,6 +94,7 @@ export function tokenGetter() {
   ],
   providers: [EmployeeListsResolver,
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
+    NgbActiveModal
   ],
   
   bootstrap: [AppComponent],

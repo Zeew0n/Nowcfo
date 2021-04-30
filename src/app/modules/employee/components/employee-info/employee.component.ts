@@ -6,7 +6,7 @@ import {
   Validators,
 } from '@angular/forms';
 
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal,NgbDateStruct, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Data } from '@angular/router';
 import { EmployeeModel } from 'src/app/models/employee.model';
@@ -21,6 +21,7 @@ import {
 import { OrganizationService } from 'src/app/modules/organization/services/organization.service';
 import { EmployeeTypeModel } from 'src/app/models/employeetype.model';
 import { EmployeeStatusTypeModel } from 'src/app/models/employeestatus.model';
+
 
 @Component({
   selector: 'app-employee-list',
@@ -46,6 +47,10 @@ export class EmployeeComponent implements OnInit {
   stateList: Array<any>;
   selectemployee;
   selectedEmployeeId: string;
+
+
+  date: '';
+
 
   constructor(
     private modalService: NgbModal,
@@ -87,6 +92,10 @@ export class EmployeeComponent implements OnInit {
   employeeTypeId = new FormControl(null, [Validators.required]);
   statusId= new FormControl(null, [Validators.required]);
   overTimeRate = new FormControl('', [Validators.required]);
+ joiningDate= new FormControl(null);
+
+
+
 
   ngOnInit() {
     this.getDesignations();
@@ -96,6 +105,7 @@ export class EmployeeComponent implements OnInit {
       this.employees = data.employees.result;
       this.pagination = data.employees.pagination;
     });
+    this.date = '';
 
     this.searchTypes = [
       { id: 1, name: 'Name' },
@@ -152,6 +162,49 @@ export class EmployeeComponent implements OnInit {
       () => console.error
     );
   }
+
+
+
+    /**
+   * Set date
+   */
+     setDate(date) {
+      if (date) {
+        const parsedDate = date
+          ? new Date('' + date.year + '/' + date.month + '/' + date.day)
+          : null;
+        return parsedDate.toLocaleDateString();
+      }
+    }
+  
+    /**
+     * Get Parsed date
+     */
+    setNgbDate(date) {
+      if (date) {
+        const signDate: string = date.substring(0, 10);
+        if (signDate.includes('-') || signDate.includes('/')) {
+          let newDate = {} as any;
+          let ngbDate = {} as any;
+          if (signDate.includes('-')) {
+            newDate = signDate.split('-');
+            ngbDate = {
+              year: Number(newDate[0]),
+              month: Number(newDate[1]),
+              day: Number(newDate[2]),
+            };
+          } else {
+            newDate = signDate.split('/');
+            ngbDate = {
+              month: Number(newDate[0]),
+              day: Number(newDate[1]),
+              year: Number(newDate[2]),
+            };
+          }
+          return ngbDate;
+        }
+      }
+    }
 
 
   
@@ -215,6 +268,7 @@ export class EmployeeComponent implements OnInit {
       employeeTypeId: this.employeeTypeId,
       statusId: this.statusId,
       overTimeRate: this.overTimeRate,
+      joiningDate: this.joiningDate
     });
   }
 
@@ -255,6 +309,7 @@ export class EmployeeComponent implements OnInit {
       overTimeRate: data.overTimeRate,
       employeeTypeId: data.employeeTypeId,
       statusId:data.statusId,
+      joiningDate: this.setNgbDate(data.joiningDate)
     });
   }
 
@@ -339,6 +394,7 @@ export class EmployeeComponent implements OnInit {
           employeeTypeId: createForm.employeeTypeId,
           statusId: createForm.statusId,
           payType: '',
+          joiningDate: this.setDate(createForm.joiningDate.value)
         };
 
         if (model.payTypeCheck) {
@@ -381,6 +437,8 @@ export class EmployeeComponent implements OnInit {
           payType: '',
           employeeTypeId: createForm.employeeTypeId,
           statusId: createForm.statusId,
+          joiningDate: this.setDate(createForm.joiningDate.value)
+
         };
 
         if (model.payTypeCheck) {

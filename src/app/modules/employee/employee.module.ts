@@ -17,6 +17,7 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { TreeViewModule } from '@syncfusion/ej2-angular-navigations';
 import { MiniChildComponent } from './components/minichild/minichild.component';
 import { EmployeePermissionComponent } from './components/employee-permission/employee-permission.component';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 
 
@@ -31,7 +32,9 @@ import { EmployeePermissionComponent } from './components/employee-permission/em
         ToastrModule,
         NgMultiSelectDropDownModule,
         PaginationModule.forRoot(),
-        NgxPaginationModule
+        NgxPaginationModule,
+        BsDatepickerModule.forRoot()
+
         
     ],
     declarations: [EmployeeComponent,ChildComponent,MiniChildComponent,EmployeeRoleComponent, EmployeePermissionComponent],
