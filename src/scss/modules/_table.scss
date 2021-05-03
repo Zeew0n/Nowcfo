@@ -4,25 +4,36 @@
     overflow: hidden;
     border-bottom: none;
     margin-bottom: 20px;
-    thead{
+
+    thead {
         background: #3173A7;
     }
+
+    .form-group {
+        max-width: 100px;
+        margin-top: 0;
+    }
+
     td,
     th {
         border-bottom: 1px solid rgba(51, 51, 51, 0.2);
         width: 100%;
         display: block;
         color: #fff;
+
         &:before {
             color: $color-text;
         }
+
         @include mq(lg) {
             width: auto;
             display: table-cell;
         }
+
         &:first-child {
             padding-left: 20px;
         }
+
         &:first-child {
             padding-right: 20px;
         }
@@ -34,6 +45,7 @@
         font-size: 18px;
         text-align: left;
         display: none;
+
         @include mq(lg) {
             width: auto;
             display: table-cell;
@@ -45,11 +57,13 @@
         padding: 20px 2px;
         position: relative;
         color: #6E6E6E;
+
         &:first-child {
             &:before {
                 width: 100%;
             }
         }
+
         &:before {
             content: attr(data-th) ": ";
             font-weight: bold;
@@ -61,10 +75,12 @@
             }
         }
     }
+
     .icon-holder {
         color: inherit;
         text-decoration: none;
     }
+
     .icon {
         margin-right: 10px;
         font-size: 18px;
