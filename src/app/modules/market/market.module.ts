@@ -5,10 +5,11 @@ import { MarketRoutingModule } from './market-routing.module';
 import { MarketAllocationComponent } from './components/market-allocation/market-allocation.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
+import { CreateMarketAllocationComponent } from './components/create-market-allocation/create-market-allocation.component';
 
 
 @NgModule({
-  declarations: [MarketAllocationComponent],
+  declarations: [MarketAllocationComponent, CreateMarketAllocationComponent],
   imports: [
     CommonModule,
     MarketRoutingModule,

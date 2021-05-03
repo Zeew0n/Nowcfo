@@ -3,16 +3,16 @@
         <ng-select
         [items]="roles"
         formControlName="roleId"
-        placeholder="Select Role"
+        placeholder="Select Organization"
         bindLabel="roleName"
         bindValue="roleId"
         class="cfo-select"
       >
       </ng-select>
     </div>
-    <button type="button" class="btn btn-green" (click)="open(content)">
+    <a routerLink="/market/create-market-allocation" class="btn btn-green">
       New Allocation
-    </button>
+    </a>
   </div>
 
   <div class="content">
