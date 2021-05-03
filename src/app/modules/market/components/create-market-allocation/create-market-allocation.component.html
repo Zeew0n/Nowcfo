@@ -1,0 +1,79 @@
+<form>
+  <div class="form-row">
+    <div class="form-group col-md-4">
+      <label for="inputEmail4">OrganizationName</label>
+      <input
+        type="email"
+        placeholder="Organization Name"
+        class="form-control"
+        id="inputEmail4"
+        readonly
+      />
+    </div>
+    <div class="form-group col-md-4">
+      <label for="inputPassword4">Pay Period</label>
+      <input
+        type="text"
+        placeholder="yyyy-mm-dd"
+        class="form-control"
+        id="inputPassword4"
+      />
+    </div>
+    <div class="form-group col-md-4">
+      <label for="inputState">Type</label>
+      <select id="inputState" class="form-control">
+        <option selected>Choose...</option>
+        <option>...</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="table-responsive">
+      <table class="table table-harbor">
+        <thead>
+          <tr>
+            <th scope="col">S.N</th>
+            <th scope="col">Market</th>
+            <th scope="col">Rev</th>
+            <th scope="col">COGS</th>
+            <th scope="col">COGS Type</th>
+            <th scope="col">SE</th>
+            <th scope="col">EE</th>
+            <th scope="col">G&A</th>
+            <th scope="col">Other</th>
+            <th scope="col">Other Type</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let role of roles; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>TL{{ i + 1 }}</td>
+            <td><input type="text" placeholder="text" /></td>
+            <td><input type="text" placeholder="text" /></td>
+            <td>
+              <select id="inputState" class="form-control">
+                <option selected>Choose...</option>
+                <option>...</option>
+              </select>
+            </td>
+            <td><input type="text" placeholder="text" /></td>
+            <td><input type="text" placeholder="text" /></td>
+            <td><input type="text" placeholder="text" /></td>
+            <td><input type="text" placeholder="text" /></td>
+            <td>
+              <select id="inputState" class="form-control">
+                <option selected>Choose...</option>
+                <option>...</option>
+              </select>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="pull-right">
+    <button type="submit" class="btn btn-primary">Save</button>
+    <button type="submit" class="btn btn-primary">Cancel</button>
+  </div>
+</form>
