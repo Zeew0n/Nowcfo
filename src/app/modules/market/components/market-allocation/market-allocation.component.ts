@@ -29,6 +29,8 @@ import { RolePermissionModel } from 'src/app/models/role-permission';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import {Location} from '@angular/common';
 import { RoleService } from 'src/app/modules/user-account/services/userrole.service';
+import { OrganizationModel } from 'src/app/models/organization.model';
+import { OrganizationService } from 'src/app/modules/organization/services/organization.service';
 @Component({
   selector: 'app-market-allocation',
   templateUrl: './market-allocation.component.html',
@@ -37,6 +39,7 @@ import { RoleService } from 'src/app/modules/user-account/services/userrole.serv
 
 export class MarketAllocationComponent implements OnInit {
 
+  organizations: OrganizationModel[]
   role: RoleModel = new RoleModel();
   roles: RoleModel[];
   menuList: MenuModel[];
@@ -56,12 +59,14 @@ export class MarketAllocationComponent implements OnInit {
     private fb: FormBuilder,
     private modalService: NgbModal,
     private toastr: ToastrService,
+    private organizationService: OrganizationService,
     private roleService: RoleService,
     private ngxLoaderService: NgxUiLoaderService,
     private location: Location
   ) {}
 
   /* Form Declarations */
+  marketAllocationForm: FormGroup
   roleForm: FormGroup;
   EventValue: any = 'Save';
 
@@ -71,6 +76,7 @@ export class MarketAllocationComponent implements OnInit {
   ngOnInit() {
     this.getRoles();
     this.getMenusForPermission();
+    this.initializeMarketAllocationForm();
     this.initializeUserRoleForm();
     this.initializeRolePermissionForm();
     this.dropdownPermissionSettings = {
@@ -133,6 +139,12 @@ export class MarketAllocationComponent implements OnInit {
     this.rolePermissionForm = this.fb.group({
       roleId: new FormControl(null, [Validators.required]),
       menuIds: new FormControl(null, [Validators.required]),
+    });
+  }
+  initializeMarketAllocationForm(){
+    this.roleForm = new FormGroup({
+      roleId: this.roleId,
+      roleName: this.roleName,
     });
   }
 
