@@ -1,19 +1,3 @@
-// import { Component, OnInit } from '@angular/core';
-
-// @Component({
-//   selector: 'app-market-allocation',
-//   templateUrl: './market-allocation.component.html',
-//   styleUrls: ['./market-allocation.component.scss']
-// })
-// export class MarketAllocationComponent implements OnInit {
-
-//   constructor() { }
-
-//   ngOnInit(): void {
-//   }
-
-// }
-
 import { Component, OnInit } from '@angular/core';
 import {
   FormControl,
@@ -31,6 +15,9 @@ import {Location} from '@angular/common';
 import { RoleService } from 'src/app/modules/user-account/services/userrole.service';
 import { OrganizationModel } from 'src/app/models/organization.model';
 import { OrganizationService } from 'src/app/modules/organization/services/organization.service';
+import { MarketService } from '../../services/market.service';
+import { MarketAllocation } from 'src/app/models/Market/market-allocation.model';
+import { MarketMaster } from 'src/app/models/Market/market-master.model';
 @Component({
   selector: 'app-market-allocation',
   templateUrl: './market-allocation.component.html',
@@ -39,135 +26,85 @@ import { OrganizationService } from 'src/app/modules/organization/services/organ
 
 export class MarketAllocationComponent implements OnInit {
 
-  organizations: OrganizationModel[]
-  role: RoleModel = new RoleModel();
-  roles: RoleModel[];
-  menuList: MenuModel[];
-  checkedMenuList: MenuModel[] = [];
-  dropdownPermissionSettings;
-  rolePermissionForm: FormGroup;
+  organizations: OrganizationModel[];
+  allocations: MarketMaster[];
 
   closeResult = ''; // close result for modal
-
+  allocationForm: FormGroup;
 
   isEdit = false;
-  disableRoleDdl = false;
-  selectrole;
-  selectedRole: number;
+  //selectrole;
+  selectedMarket: number;
 
   constructor(
     private fb: FormBuilder,
     private modalService: NgbModal,
     private toastr: ToastrService,
-    private organizationService: OrganizationService,
-    private roleService: RoleService,
+    private marketService:MarketService,
     private ngxLoaderService: NgxUiLoaderService,
     private location: Location
   ) {}
 
   /* Form Declarations */
-  marketAllocationForm: FormGroup
-  roleForm: FormGroup;
   EventValue: any = 'Save';
+  organizationId = new FormControl(null);
 
-  roleId = new FormControl('');
-  roleName = new FormControl('', [Validators.required]);
+  
+
 
   ngOnInit() {
-    this.getRoles();
-    this.getMenusForPermission();
-    this.initializeMarketAllocationForm();
-    this.initializeUserRoleForm();
-    this.initializeRolePermissionForm();
-    this.dropdownPermissionSettings = {
-      singleSelection: false,
-      idField: 'id',
-      textField: 'menuName',
-      selectAllText: 'Select All',
-      unSelectAllText: 'UnSelect All',
-      itemsShowLimit: 3,
-      allowSearchFilter: true,
-    };
+    this.getHeadOrganizations();
+    this.initializeAllocationForm();
   }
   backClicked() {
     this.location.back();
   }
-  getRoles() {
-    this.roleService.getAllRoles().subscribe(
+
+  
+  getHeadOrganizations() {
+    this.marketService.getAllOrganizations().subscribe(
       (result) => {
-        this.roles = result;
-        console.log("Helllo Hello ");
-        console.table(this.roles);
+        this.organizations = result;
       },
-      (error) => console.error
+      () => console.error
     );
-  }
-  getMenusForPermission() {
-    this.roleService.getParentMenusForPermission().subscribe(
-      (result) => {
-        this.menuList = result;
-        console.table(this.menuList);
-      },
-      (error) => console.error
-    );
-  }
-  getRoleById(id: string, content) {
-    this.roleService.getRoleById(id).subscribe(
-      (result: RoleModel) => {
-        this.isEdit = true;
-        this.EventValue = 'Update';
-        this.displayFormData(result, id);
-        this.openModal(content);
-      },
-      (error) => {
-        this.toastr.error(
-          error.error.errorMessage !== undefined
-            ? error.error.errorMessage
-            : ' failed',
-          'Error!'
-        );
-      }
-    );
-  }
-  displayFormData(data: RoleModel, id: any) {
-    this.rolePermissionForm.patchValue({
-      roleId: data.roleId,
-    });
   }
 
-  initializeRolePermissionForm() {
-    this.rolePermissionForm = this.fb.group({
-      roleId: new FormControl(null, [Validators.required]),
-      menuIds: new FormControl(null, [Validators.required]),
-    });
-  }
-  initializeMarketAllocationForm(){
-    this.roleForm = new FormGroup({
-      roleId: this.roleId,
-      roleName: this.roleName,
-    });
+
+  initializeAllocationForm() {
+    this.allocationForm = new FormGroup({
+      organizationId: this.organizationId
+        });
   }
 
-  initializeUserRoleForm() {
-    this.roleForm = new FormGroup({
-      roleId: this.roleId,
-      roleName: this.roleName,
-    });
+  getMarketAllocations(organizationId) {
+    
+    this.marketService.getMarketAllocationListByOrgId(organizationId).subscribe(
+      (result) => {
+        this.allocations = result;
+        console.log(this.allocations);
+      },
+      () => console.error
+    );
   }
+
+
   openDeleteModal(content, id) {
+    debugger
     this.EventValue = 'Delete';
-    this.selectedRole = id;
+    this.selectedMarket = id;
     this.openModal(content);
   }
 
   delete() {
+    debugger
     this.ngxLoaderService.start();
-    this.roleService.deleteRole(this.selectedRole).subscribe(
+    this.marketService.deleteMarketAllocation(this.selectedMarket).subscribe(
       (result) => {
         if (result == null) {
           this.modalService.dismissAll();
-          this.toastr.success('Role deleted successfully.', 'success!');
-          this.getRoles();
+          this.toastr.success('Market Allocation deleted successfully.', 'success!');
+          this.getMarketAllocations(this.selectedMarket);
           this.ngxLoaderService.stop();
         } else {
           this.toastr.success('something went wrong.', 'error!');
@@ -176,105 +113,17 @@ export class MarketAllocationComponent implements OnInit {
       },
       (error) => {
         console.log(error.errorMessage);
-        this.toastr.error('Cannot delete role', 'error!');
+        this.toastr.error('Cannot delete market allocation', 'error!');
       }
     );
   }
   open(content) {
-    this.resetFrom();
     this.isEdit = false;
-    this.role = null;
     this.openModal(content);
   }
 
-  onSubmit() {
-    this.ngxLoaderService.start();
-    const createForm = this.roleForm.value;
-    console.log(createForm);
-    if (!this.isEdit) {
-      if (this.roleForm.valid) {
-        const model = new RoleModel();
-        model.roleName = createForm.roleName;
-        this.roleService.createRole(model).subscribe(
-          (res) => {
-            this.toastr.success('Role Added Successfully.', 'Success!');
-            this.modalService.dismissAll();
-            this.getRoles();
-            this.ngxLoaderService.stop();
-          },
-          (error) => {
-            console.log(error);
-            this.modalService.dismissAll();
-            this.toastr.error(error.error.errorMessage, 'Error!');
-            this.ngxLoaderService.stop();
-          }
-        );
-      }
-    } else {
-      if (this.roleForm.valid) {
-        const model = new RoleModel();
-        model.roleName = createForm.roleName;
-        model.roleId = createForm.roleId;
+ 
 
-        this.roleService.updateRole(model).subscribe(
-          (res) => {
-            this.toastr.success('Role Updated Successfully.', 'Success!');
-            this.modalService.dismissAll();
-            this.getRoles();
-            this.ngxLoaderService.stop();
-          },
-          (error) => {
-            this.toastr.error(
-              error.error.errorMessage !== undefined
-                ? error.error.errorMessage
-                : 'Role Update failed',
-              'Error!'
-            );
-            this.ngxLoaderService.stop();
-          }
-        );
-      }
-    }
-  }
-
-  onRoleAssginedSubmit(): void {
-    this.ngxLoaderService.start();
-    const model = new RolePermissionModel();
-    const createRolePermissionForm = this.rolePermissionForm.value;
-    model.roleId = createRolePermissionForm.roleId;
-    model.menuIds = createRolePermissionForm.menuIds.map((x) => x.id);
-
-    if (!this.isEdit) {
-      this.roleService.addPermissionPermission(model).subscribe(
-        (res) => {
-          this.toastr.success('Role Permision Created Successfully.', 'Success!');
-          this.modalService.dismissAll();
-          this.ngxLoaderService.stop();
-        },
-        (error) => {
-          console.log(error);
-          this.modalService.dismissAll();
-          this.toastr.error(error?.error?.errorMessage, 'Error!');
-          this.ngxLoaderService.stop();
-        }
-      );
-    }
-    else{
-      this.roleService.editRolePermission(model).subscribe(
-        (res) => {
-          this.toastr.success('Role Permision Updated Successfully.', 'Success!');
-          this.modalService.dismissAll();
-          this.ngxLoaderService.stop();
-        },
-        (error) => {
-          console.log(error);
-          this.modalService.dismissAll();
-          this.toastr.error(error.error.errorMessage, 'Error!');
-          this.ngxLoaderService.stop();
-        }
-      );
-    }
-  }
 
   getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
@@ -286,45 +135,6 @@ export class MarketAllocationComponent implements OnInit {
     }
   }
 
-  resetFrom() {
-    this.roleForm.reset();
-    this.EventValue = 'Save';
-    this.role = null;
-  }
-
-  editData(content, role: any) {
-    this.isEdit = true;
-    this.selectrole = this.role;
-    this.EventValue = 'Update';
-    this.roleForm.patchValue({
-      roleName: role.roleName,
-      roleId: role.roleId,
-    });
-    this.openModal(content);
-  }
-
-  editPermission(content: any, role: RoleModel) {
-    this.disableRoleDdl = true;
-    this.isEdit = true;
-    this.EventValue = 'Update';
-    this.rolePermissionForm.patchValue({
-      roleName: role.roleName,
-      roleId: role.roleId,
-    });
-    this.roleService.getRolePermission(role.roleId).subscribe(
-      (result) => {
-        console.table(result.menuIds);
-        this.checkedMenuList = this.menuList.filter((item) =>
-          result.menuIds.includes(item.id)
-        );
-        console.log(this.checkedMenuList);
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
-    this.openModal(content);
-  }
 
   openModal(content: any) {
     this.modalService
@@ -343,6 +153,24 @@ export class MarketAllocationComponent implements OnInit {
         }
       );
   }
+
+
+
+
 }
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
 
 
