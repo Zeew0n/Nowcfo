@@ -1,9 +1,10 @@
 import { MarketAllocation } from "./market-allocation.model";
 
 export class MarketMaster {
-    Id:string;
-    OrganizationId:string;
-    PayPeriod:Date;
-    AllocationTypeId:string;
+    Id:number;
+    organizationId:string;
+    payPeriod:Date;
+    allocationTypeId:string;
+    allocationName:string;
     MarketAllocations:MarketAllocation[]
 }

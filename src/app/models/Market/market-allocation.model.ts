@@ -12,5 +12,5 @@ export class MarketAllocation {
         GA:number;
         Other:string;
         OtherTypeId:string ;
-        MarketMaster:MarketMaster; 
+        //MarketMaster:MarketMaster; 
 }
