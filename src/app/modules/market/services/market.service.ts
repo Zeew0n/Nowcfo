@@ -3,17 +3,10 @@ import { environment } from 'src/environments/environment';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { HttpGenericCrudService } from '../../../shared/http-generic-crud.service';
 import { Observable } from 'rxjs';
-import { DesignationModel } from 'src/app/models/designation.model';
-import { EmployeeModel } from 'src/app/models/employee.model';
 import { OrganizationModel } from 'src/app/models/organization.model';
-import { OrganizationSyncFusionModel } from 'src/app/models/organization-syncfusion.model';
 import { PaginatedResult } from 'src/app/models/Pagination/Pagination';
 import { map } from 'rxjs/operators';
-import { EmployeeTypeModel } from 'src/app/models/employeetype.model';
-import { EmployeeStatusTypeModel } from 'src/app/models/employeestatus.model';
-import { EmployeePermission } from 'src/app/models/employeepermission.model';
 import { MarketMaster } from 'src/app/models/Market/market-master.model';
-import { MarketAllocation } from 'src/app/models/Market/market-allocation.model';
 
 
 @Injectable({
@@ -36,6 +29,41 @@ export class MarketService extends HttpGenericCrudService<MarketMaster>{
         };
         return httpOptions;
     }
+
+
+
+    getPaginatedAllocation(
+        page?,
+        itemsPerPage?,
+        searchOrg?,
+
+      ): Observable<PaginatedResult<MarketMaster[]>> {
+
+        const paginatedResult: PaginatedResult<MarketMaster[]> = new PaginatedResult<
+        MarketMaster[] >();
+        let params = new HttpParams();
+        if (page != null && itemsPerPage != null) {
+          params = params.append('pageNumber', page);
+          params = params.append('pageSize', itemsPerPage);
+          params = params.append('searchOrg', searchOrg);
+
+
+        }
+        return this.httpClient
+          .get<MarketMaster[]>('MarketMaster/PaginatedAllocation', { observe: 'response', params })
+          .pipe(
+            map(response => {
+              paginatedResult.result = response.body;
+              if (response.headers.get('Pagination') != null) {
+                paginatedResult.pagination = JSON.parse(
+                  response.headers.get('Pagination')
+                );
+              }
+              return paginatedResult;
+            })
+          );
+        }
+
 
     getAllOrganizations(){
       return this.httpClient.get<OrganizationModel[]>('MarketMaster/listallorganizations');

@@ -18,6 +18,8 @@ import { OrganizationService } from 'src/app/modules/organization/services/organ
 import { MarketService } from '../../services/market.service';
 import { MarketAllocation } from 'src/app/models/Market/market-allocation.model';
 import { MarketMaster } from 'src/app/models/Market/market-master.model';
+import { ActivatedRoute, Data } from '@angular/router';
+import { PaginatedResult, Pagination } from 'src/app/models/Pagination/Pagination';
 @Component({
   selector: 'app-market-allocation',
   templateUrl: './market-allocation.component.html',
@@ -29,10 +31,14 @@ export class MarketAllocationComponent implements OnInit {
   organizations: OrganizationModel[];
   allocations: MarketMaster[];
 
+  pagination: Pagination;
+
+  
   closeResult = ''; // close result for modal
   allocationForm: FormGroup;
 
   isEdit = false;
+  isLoaded=false;
   //selectrole;
   selectedMarket: number;
 
@@ -42,7 +48,8 @@ export class MarketAllocationComponent implements OnInit {
     private toastr: ToastrService,
     private marketService:MarketService,
     private ngxLoaderService: NgxUiLoaderService,
-    private location: Location
+    private location: Location,
+    private route: ActivatedRoute
   ) {}
 
   /* Form Declarations */
@@ -55,16 +62,68 @@ export class MarketAllocationComponent implements OnInit {
   ngOnInit() {
     this.getHeadOrganizations();
     this.initializeAllocationForm();
+   
+
   }
   backClicked() {
     this.location.back();
   }
 
   
+  
+    getAllocationPagination() {
+      debugger
+      this.marketService
+        .getPaginatedAllocation(
+          1,
+          1,
+          this.organizationId.value,
+        )
+        .subscribe(
+          (res: PaginatedResult<MarketMaster[]>) => {
+            this.allocations = res.result;
+            this.pagination = res.pagination;
+            this.isLoaded= true;
+            
+          },
+          (error) => {
+            this.toastr.error(error);
+          }
+        );
+    }
+  
+    getAllocationChanged() {
+      debugger
+      this.marketService
+        .getPaginatedAllocation(
+          this.pagination.currentPage,
+          this.pagination.itemsPerPage,
+          this.organizationId.value,
+        )
+        .subscribe(
+          (res: PaginatedResult<MarketMaster[]>) => {
+            this.allocations = res.result;
+            this.pagination = res.pagination;
+            this.isLoaded= true;
+            
+          },
+          (error) => {
+            this.toastr.error(error);
+          }
+        );
+    }
+
+    pageChanged(event: any): void {
+      this.pagination.currentPage = event.page;
+      this.getAllocationChanged();
+    }
+
+
   getHeadOrganizations() {
     this.marketService.getAllOrganizations().subscribe(
       (result) => {
         this.organizations = result;
+       // this.isLoaded= true;
       },
       () => console.error
     );

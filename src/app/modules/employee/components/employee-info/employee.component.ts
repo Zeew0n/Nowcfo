@@ -47,8 +47,7 @@ export class EmployeeComponent implements OnInit {
   stateList: Array<any>;
   selectemployee;
   selectedEmployeeId: string;
-
-
+  
     minDate: NgbDateStruct = {
       year: now.getFullYear()-17,
       month: now.getMonth(),
