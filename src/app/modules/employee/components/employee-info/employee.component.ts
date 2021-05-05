@@ -49,9 +49,7 @@ export class EmployeeComponent implements OnInit {
   selectedEmployeeId: string;
 
     //For Disabling Employee Status
-  disableSelect = true;
 
-  date: '';
 
 
   constructor(
@@ -66,6 +64,7 @@ export class EmployeeComponent implements OnInit {
   employeeForm: FormGroup;
   searchForm: FormGroup;
   EventValue: any = 'Save';
+  public statusDefaultValue = 1;
   //isActive: boolean;
 
   //For Disabling Employee Status
@@ -104,13 +103,12 @@ export class EmployeeComponent implements OnInit {
   ngOnInit() {
     this.getDesignations();
     this.getOrganizations();
-    this.initializeemployeeForm();
+
     this.route.data.subscribe((data: Data) => {
       this.employees = data.employees.result;
       this.pagination = data.employees.pagination;
     });
-    this.date = '';
-
+   
     this.searchTypes = [
       { id: 1, name: 'Name' },
       { id: 2, name: 'Email' },
@@ -120,10 +118,14 @@ export class EmployeeComponent implements OnInit {
     this.getEmployeeStatusTypes();
     this.initializeSearchForm();
     this.getSuperVisors();
+    this.initializeemployeeForm();
+    this.statusDefaultValue = 1;
+
+    
   }
 
  getEmployeesChanged(){
-  this.disableSelect = false;
+  //this.disableSelect = false;
   this.getEmployees();
 
  }
@@ -364,6 +366,7 @@ export class EmployeeComponent implements OnInit {
 
   open(content) {
     this.resetFrom();
+    this.statusDefaultValue = 1;
     this.isEdit = false;
     this.openModal(content);
   }
@@ -489,13 +492,14 @@ export class EmployeeComponent implements OnInit {
 
   resetFrom() {
     this.employeeForm.reset();
+    //this.statusDefaultValue = 1;
     this.EventValue = 'Save';
     this.submitted = false;
   }
 
   resetSearch() {
     this.searchForm.reset();
-    this.disableSelect = true;
+
     this.ngOnInit();
   }
 

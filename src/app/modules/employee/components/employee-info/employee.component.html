@@ -32,7 +32,7 @@
       [items]="employeeStatusTypes"
       bindLabel="statusName"
       bindValue="statusId"
-      [readonly]="disableSelect"
+      [(ngModel)] = "statusDefaultValue"
       placeholder="Status Type"
       formControlName="searchStatus"
       class="cfo-select"
@@ -525,8 +525,8 @@
 
             </div>
 
-          <div class="row">
-            <div class="col-sm-6">
+          <div class="row"  >
+            <div class="col-sm-6" *ngIf="isEdit">
               <div class="form-group">
                 <label>Employee Status</label>
                 <ng-select
@@ -551,6 +551,35 @@
                 </div>
               </div>
             </div>
+
+
+            <div class="col-sm-6" *ngIf="!isEdit">
+              <div class="form-group">
+                <label>Employee Status</label>
+                <ng-select
+                  [items]="employeeStatusTypes"
+                  bindLabel="statusName"
+                  bindValue="statusId"
+                  [(ngModel)] = "statusDefaultValue"
+                  placeholder="Status Type"
+                  formControlName="statusId"
+                  class="cfo-select"
+                  [ngClass]="{
+                    'invalid-input':
+                      employeeForm.controls.statusId.errors?.required
+                  }"
+                >
+                </ng-select>
+
+                <div
+                  *ngIf="employeeForm.controls.statusId.errors?.required"
+                  class="error-msg"
+                >
+                  Status Type is required!
+                </div>
+              </div>
+            </div>
+
 
 
             <div class="col-sm-6">
