@@ -8,7 +8,7 @@
   <div class="content">
     <div class="title-container">
       <h1 class="page-title">Employee</h1>
-     
+
       <div class="content-right">
         <form
           class="form-cfo"
@@ -16,30 +16,26 @@
           (ngSubmit)="onSearch()"
           class="search-form"
         >
+          <ng-select
+            [items]="organizations"
+            bindLabel="organizationName"
+            bindValue="organizationId"
+            placeholder="Select Organization"
+            formControlName="searchOrg"
+            class="cfo-select"
+          >
+          </ng-select>
 
-        <ng-select
-        [items]="organizations"
-        bindLabel="organizationName"
-        bindValue="organizationId"
-        placeholder="Select Organization"
-        formControlName="searchOrg"
-        class="cfo-select"
-       
-      >
-      </ng-select>
-
-      <ng-select
-      [items]="employeeStatusTypes"
-      bindLabel="statusName"
-      bindValue="statusId"
-      [readonly]="disableSelect"
-      placeholder="Status Type"
-      formControlName="searchStatus"
-      class="cfo-select"
-     
-    >
-    </ng-select>
-
+          <ng-select
+            [items]="employeeStatusTypes"
+            bindLabel="statusName"
+            bindValue="statusId"
+            [(ngModel)]="statusDefaultValue"
+            placeholder="Status Type"
+            formControlName="searchStatus"
+            class="cfo-select"
+          >
+          </ng-select>
 
           <ng-select
             [items]="searchTypes"
@@ -73,10 +69,7 @@
               Search Value is Required!
             </div>
           </div>
-          <button
-            type="submit"
-            class="btn btn-primary"
-          >
+          <button type="submit" class="btn btn-primary">
             <i class="fa fa-search"></i>
           </button>
 
@@ -203,7 +196,6 @@
                       employeeForm.controls.email.touched &&
                       employeeForm.controls.email.errors?.required
                   }"
-               
                 />
 
                 <div
@@ -299,40 +291,37 @@
                 </div>
               </div>
             </div>
-            </div>
+          </div>
 
-
-
-
-            <div class="row">
-              <div class="col-sm-6">
-                <div class="form-group">
-                  <label>Zip Code</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    formControlName="zipCode"
-                    placeholder="zipCode"
-                    [ngClass]="{
-                      'invalid-input':
-                        employeeForm.controls.zipCode.touched &&
-                        employeeForm.controls.zipCode.errors?.required
-                    }"
-                  />
-                  <div
-                    *ngIf="
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Zip Code</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="zipCode"
+                  placeholder="zipCode"
+                  [ngClass]="{
+                    'invalid-input':
                       employeeForm.controls.zipCode.touched &&
                       employeeForm.controls.zipCode.errors?.required
-                    "
-                    class="error-msg"
-                  >
-                    ZipCode is Required!
-                  </div>
+                  }"
+                />
+                <div
+                  *ngIf="
+                    employeeForm.controls.zipCode.touched &&
+                    employeeForm.controls.zipCode.errors?.required
+                  "
+                  class="error-msg"
+                >
+                  ZipCode is Required!
                 </div>
               </div>
+            </div>
 
-              <div class="col-sm-6">
-                <div class="form-group">
+            <div class="col-sm-6">
+              <div class="form-group">
                 <label>State</label>
                 <ng-select
                   [items]="stateList"
@@ -348,11 +337,12 @@
                   (change)="onStateChange($event)"
                   class="cfo-select"
                   [ngClass]="{
-                    'invalid-input': employeeForm.controls.state.errors?.required
+                    'invalid-input':
+                      employeeForm.controls.state.errors?.required
                   }"
                 >
                 </ng-select>
-    
+
                 <div
                   *ngIf="employeeForm.controls.state.errors?.required"
                   class="error-msg"
@@ -360,13 +350,8 @@
                   State is required!
                 </div>
               </div>
-</div>
-              </div>
-            
-           
- 
-
-        
+            </div>
+          </div>
 
           <div class="row">
             <div class="col-sm-6">
@@ -421,7 +406,6 @@
               </div>
             </div>
           </div>
-
 
           <div class="row">
             <div class="col-sm-6">
@@ -522,11 +506,10 @@
                 </div>
               </div>
             </div>
-
-            </div>
+          </div>
 
           <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-6" *ngIf="isEdit">
               <div class="form-group">
                 <label>Employee Status</label>
                 <ng-select
@@ -552,50 +535,114 @@
               </div>
             </div>
 
+            <div class="col-sm-6" *ngIf="!isEdit">
+              <div class="form-group">
+                <label>Employee Status</label>
+                <ng-select
+                  [items]="employeeStatusTypes"
+                  bindLabel="statusName"
+                  bindValue="statusId"
+                  [(ngModel)]="statusDefaultValue"
+                  placeholder="Status Type"
+                  formControlName="statusId"
+                  (change)="terminationValidation()"
+                  class="cfo-select"
+                  [ngClass]="{
+                    'invalid-input':
+                      employeeForm.controls.statusId.errors?.required
+                  }"
+                >
+                </ng-select>
+
+                <div
+                  *ngIf="employeeForm.controls.statusId.errors?.required"
+                  class="error-msg"
+                >
+                  Status Type is required!
+                </div>
+              </div>
+            </div>
 
             <div class="col-sm-6">
               <div class="form-group">
                 <div class="custom-checkbox">
-           
-                <input
-                type="checkbox"
-                id="checkboxSuperVisorId"
-                value="1"
-                formControlName="isSupervisor"
-              />
-              <span>Is Supervisor</span>
-               </div>
+                  <input
+                    type="checkbox"
+                    id="checkboxSuperVisorId"
+                    value="1"
+                    formControlName="isSupervisor"
+                  />
+                  <span>Is Supervisor</span>
+                </div>
               </div>
             </div>
-            
-
           </div>
 
           <div class="row">
             <div class="col-sm-6">
               <div class="form-group">
                 <label>Joining Date</label>
-              <input
-            
-              (click)="d1.toggle()" id="date" class="form-control" placeholder="mm/dd/yyyy"
-              name="startDate" formControlName="startDate" ngbDatepicker #d1="ngbDatepicker"
-              >
-                    </div>
-                    </div>
-                    
+                <input
+                  (click)="d1.toggle()"
+                  [minDate]="minDate"
+                  id="date"
+                  class="form-control"
+                  placeholder="yyyy-mm-dd"
+                  name="startDate"
+                  formControlName="startDate"
+                  ngbDatepicker
+                  #d1="ngbDatepicker"
+                  (dateSelect)="startDateChanged()"
+                  [ngClass]="{
+                    'invalid-input':
+                      employeeForm.controls.startDate.touched &&
+                      employeeForm.controls.startDate.errors?.required
+                  }"
+                />
 
-                    <div class="col-sm-6">
-                      <div class="form-group">
-                        <label>Termination Date</label>
-                      <input
-                    
-                      (click)="d2.toggle()" id="date" class="form-control" placeholder="mm/dd/yyyy"
-                      name="terminationDate" formControlName="terminationDate" ngbDatepicker #d2="ngbDatepicker"
-                      >
-                            </div>
-                            </div>
+                <div
+                  *ngIf="
+                    employeeForm.controls.startDate.touched &&
+                    employeeForm.controls.startDate.errors?.required
+                  "
+                  class="error-msg"
+                >
+                  Start Date is Required!
+                </div>
+              </div>
+            </div>
 
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Termination Date</label>
+                <input
+                  (click)="d2.toggle()"
+                  [minDate]="minEndDate"
+                  id="date"
+                  class="form-control"
+                  placeholder="yyyy-mm-dd"
+                  name="terminationDate"
+                  formControlName="terminationDate"
+                  ngbDatepicker
+                  #d2="ngbDatepicker"
+                  [ngClass]="{
+                    'invalid-input':
+                      employeeForm.controls.terminationDate.touched &&
+                      employeeForm.controls.terminationDate.errors?.required
+                  }"
+                />
 
+                <div
+                  *ngIf="
+                    employeeForm.controls.terminationDate.touched &&
+                    employeeForm.controls.terminationDate.errors?.required
+                  "
+                  class="error-msg"
+                >
+                  Termination Date is Required!
+                </div>
+              </div>
+            </div>
           </div>
 
           <div class="form-group">
@@ -610,38 +657,6 @@
             >
             </ng-select>
           </div>
-
-
-      
-
-
-
-    
-
-          <!-- <div class="form-group" *ngIf="!isEdit">
-            <app-child
-              [fields]="field"
-              [showCheckBox]="showCheckBox"
-              
-              (onChecked)="nodeChecked($event)"
-            >
-            </app-child>
-          </div>
-
-          <div class="form-group" *ngIf="isEdit">
-            <app-minichild
-              [fields]="field"
-              [showCheckBox]="showCheckBox"
-              (onChecked)="nodeChecked($event)"
-            >
-            </app-minichild>
-          </div> -->
-
-          <!-- <app-child
-[fields]="field"
-[showCheckBox]="showCheckBox"
-(onChecked)="nodeChecked($event)"
-></app-child> -->
 
           <div class="float-right">
             <button

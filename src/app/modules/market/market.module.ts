@@ -6,18 +6,25 @@ import { MarketAllocationComponent } from './components/market-allocation/market
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
 import { CreateMarketAllocationComponent } from './components/create-market-allocation/create-market-allocation.component';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { AllocationListsResolver } from 'src/app/shared/_resolver/allocationList';
 
 
 @NgModule({
-  declarations: [MarketAllocationComponent, CreateMarketAllocationComponent],
+ 
   imports: [
     CommonModule,
     MarketRoutingModule,
     NgSelectModule,
     FormsModule,
     ReactiveFormsModule,
-    ToastrModule
+    ToastrModule,
+    PaginationModule.forRoot(),
+    NgxPaginationModule,
     
-  ]
+  ],
+  declarations: [MarketAllocationComponent, CreateMarketAllocationComponent],
+  providers: [AllocationListsResolver]
 })
 export class MarketModule { }

@@ -22,7 +22,7 @@ import { OrganizationService } from 'src/app/modules/organization/services/organ
 import { EmployeeTypeModel } from 'src/app/models/employeetype.model';
 import { EmployeeStatusTypeModel } from 'src/app/models/employeestatus.model';
 
-
+const now = new Date();
 @Component({
   selector: 'app-employee-list',
   templateUrl: './employee.component.html',
@@ -47,11 +47,18 @@ export class EmployeeComponent implements OnInit {
   stateList: Array<any>;
   selectemployee;
   selectedEmployeeId: string;
+  
+    minDate: NgbDateStruct = {
+      year: now.getFullYear()-17,
+      month: now.getMonth(),
+      day: now.getDate(),
+    };
+    minEndDate: NgbDateStruct = {
+      year: this.minDate.year,
+      month: this.minDate.month,
+      day: this.minDate.day + 1,
+    };
 
-    //For Disabling Employee Status
-  disableSelect = true;
-
-  date: '';
 
 
   constructor(
@@ -66,10 +73,7 @@ export class EmployeeComponent implements OnInit {
   employeeForm: FormGroup;
   searchForm: FormGroup;
   EventValue: any = 'Save';
-  //isActive: boolean;
-
-  //For Disabling Employee Status
-  //disableSelect = true;
+  public statusDefaultValue = 1;
 
   searchTypeId = new FormControl(null, [Validators.required]);
   //For Adding Search
@@ -92,10 +96,10 @@ export class EmployeeComponent implements OnInit {
   payTypeCheck = new FormControl(false);
   pay = new FormControl(true, [Validators.required]);
   employeeTypeId = new FormControl(null, [Validators.required]);
-  statusId= new FormControl(null, [Validators.required]);
+  statusId= new FormControl(1, [Validators.required]);
   overTimeRate = new FormControl('', [Validators.required]);
-  startDate= new FormControl(null);
-  terminationDate= new FormControl(null);
+  startDate= new FormControl('',[Validators.required]);
+  terminationDate= new FormControl('',[Validators.required]);
 
 
 
@@ -104,13 +108,12 @@ export class EmployeeComponent implements OnInit {
   ngOnInit() {
     this.getDesignations();
     this.getOrganizations();
-    this.initializeemployeeForm();
+
     this.route.data.subscribe((data: Data) => {
       this.employees = data.employees.result;
       this.pagination = data.employees.pagination;
     });
-    this.date = '';
-
+   
     this.searchTypes = [
       { id: 1, name: 'Name' },
       { id: 2, name: 'Email' },
@@ -120,10 +123,12 @@ export class EmployeeComponent implements OnInit {
     this.getEmployeeStatusTypes();
     this.initializeSearchForm();
     this.getSuperVisors();
+    this.initializeemployeeForm();
+
+    
   }
 
  getEmployeesChanged(){
-  this.disableSelect = false;
   this.getEmployees();
 
  }
@@ -154,7 +159,34 @@ export class EmployeeComponent implements OnInit {
     this.getEmployees();
   }
 
+
+  startDateChanged() {
+    this.minEndDate = {
+      year: now.getFullYear(),
+      month: now.getMonth(),
+      day: now.getDate() + 1,
+    };
+    const startDate = this.employeeForm.value.startDate;
+    this.minEndDate = {
+      year: startDate.year,
+      month: startDate.month,
+      day: startDate.day + 1,
+    };  
+  }
+
   
+  terminationValidation(){
+  const statusValue = this.employeeForm.value.statusId;
+  if(statusValue==1 || statusValue == 2){
+    this.employeeForm.controls.terminationDate.setValidators(null);
+    this.employeeForm.controls.terminationDate.setErrors(null);
+  }else{
+    this.employeeForm.controls.terminationDate.setValidators(Validators.required);
+    this.employeeForm.controls.terminationDate.setErrors(this.employeeForm.value.terminationDate ? null : { required: true }
+      );
+
+  }
+  }
 
 
 
@@ -226,6 +258,7 @@ export class EmployeeComponent implements OnInit {
     this.employeeService.getAllEmployeeStatusTypes().subscribe(
       (result) => {
         this.employeeStatusTypes = result;
+        this.statusDefaultValue=1;
       },
       () => console.error
     );
@@ -296,6 +329,19 @@ export class EmployeeComponent implements OnInit {
   }
 
   private displayFormData(data: EmployeeModel, id: any) {
+
+    this.minEndDate = {
+      year: now.getFullYear(),
+      month: now.getMonth(),
+      day: now.getDate() + 1,
+    };
+    const startDate = this.setNgbDate(data.startDate);
+    this.minEndDate = {
+      year: startDate.year,
+      month: startDate.month,
+      day: startDate.day + 1,
+    }; 
+
     this.employeeForm.patchValue({
       employeeName: data.employeeName,
       email: data.email,
@@ -364,6 +410,7 @@ export class EmployeeComponent implements OnInit {
 
   open(content) {
     this.resetFrom();
+    this.statusDefaultValue = 1;
     this.isEdit = false;
     this.openModal(content);
   }
@@ -495,7 +542,6 @@ export class EmployeeComponent implements OnInit {
 
   resetSearch() {
     this.searchForm.reset();
-    this.disableSelect = true;
     this.ngOnInit();
   }
 
