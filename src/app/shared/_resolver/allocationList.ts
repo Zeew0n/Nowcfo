@@ -3,12 +3,12 @@ import { Resolve, Router, ActivatedRouteSnapshot,RouterStateSnapshot } from '@an
 import { ToastrService } from 'ngx-toastr';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { MarketMaster } from 'src/app/models/Market/market-master.model';
+import { MarketMasterModel } from 'src/app/models/Market/market-master.model';
 import { MarketService } from 'src/app/modules/market/services/market.service';
 import { EmployeeModel } from '../../models/employee.model';
 import { EmployeeService } from '../../modules/employee/services/employee.service';
 @Injectable()
-export class AllocationListsResolver implements Resolve<MarketMaster[]> {
+export class AllocationListsResolver implements Resolve<MarketMasterModel[]> {
 
   pageNumber = 1;
   pageSize = 20;
@@ -18,7 +18,7 @@ export class AllocationListsResolver implements Resolve<MarketMaster[]> {
     private toastr: ToastrService
   ) {}
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<MarketMaster[]> {
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<MarketMasterModel[]> {
     return this.marketService
       .getPaginatedAllocation(this.pageNumber, this.pageSize,null)
       .pipe(

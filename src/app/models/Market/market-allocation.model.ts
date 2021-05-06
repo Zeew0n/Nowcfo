@@ -1,6 +1,4 @@
-import { MarketMaster } from "./market-master.model";
-
-export class MarketAllocation {
+export class MarketAllocationModel {
         Id:string ;
         MarketId:string;
         MasterId:string;
@@ -12,5 +10,4 @@ export class MarketAllocation {
         GA:number;
         Other:string;
         OtherTypeId:string ;
-        //MarketMaster:MarketMaster; 
 }

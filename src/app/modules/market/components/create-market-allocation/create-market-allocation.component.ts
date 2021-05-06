@@ -4,6 +4,7 @@ import {
   FormBuilder,
   FormGroup,
   Validators,
+  FormArray,
 } from '@angular/forms';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -13,6 +14,9 @@ import { RolePermissionModel } from 'src/app/models/role-permission';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import {Location} from '@angular/common';
 import { RoleService } from 'src/app/modules/user-account/services/userrole.service';
+import { ActivatedRoute } from '@angular/router';
+import { MarketMasterModel } from 'src/app/models/Market/market-master.model';
+import { CreateMarketService } from '../../services/create-market.service';
 @Component({
   selector: 'app-create-market-allocation',
   templateUrl: './create-market-allocation.component.html',
@@ -21,6 +25,7 @@ import { RoleService } from 'src/app/modules/user-account/services/userrole.serv
 
 export class CreateMarketAllocationComponent implements OnInit {
 
+  market:MarketMasterModel;
   role: RoleModel = new RoleModel();
   roles: RoleModel[];
   menuList: MenuModel[];
@@ -42,10 +47,13 @@ export class CreateMarketAllocationComponent implements OnInit {
     private toastr: ToastrService,
     private roleService: RoleService,
     private ngxLoaderService: NgxUiLoaderService,
-    private location: Location
+    private location: Location,
+    private _route: ActivatedRoute,
+    private _createMarketSerivce: CreateMarketService
   ) {}
 
   /* Form Declarations */
+  marketMasterForm: FormGroup;
   roleForm: FormGroup;
   EventValue: any = 'Save';
 
@@ -53,6 +61,17 @@ export class CreateMarketAllocationComponent implements OnInit {
   roleName = new FormControl('', [Validators.required]);
 
   ngOnInit() {
+    this._route.queryParamMap.subscribe((queryParams) => {
+      if (queryParams.has('id')) {
+        const id = queryParams.get('id');
+      } 
+    });
+    this.initializeMarketAllocationModelForm();
+    // this.getAllocationTypes();
+    // this.getCogsTypes();
+    // this.getOtherTypes();
+    // const id = +this._route.snapshot.paramMap.get('id');
+
     this.getRoles();
     this.getMenusForPermission();
     this.initializeUserRoleForm();
@@ -67,15 +86,19 @@ export class CreateMarketAllocationComponent implements OnInit {
       allowSearchFilter: true,
     };
   }
+
   backClicked() {
     this.location.back();
   }
+
+  // getAllocationTypes(){
+  //   this._createMarketSerivce.
+  // }
   getRoles() {
     this.roleService.getAllRoles().subscribe(
       (result) => {
         this.roles = result;
-        console.log("Helllo Hello ");
-        console.table(this.roles);
+       
       },
       (error) => console.error
     );
@@ -84,7 +107,6 @@ export class CreateMarketAllocationComponent implements OnInit {
     this.roleService.getParentMenusForPermission().subscribe(
       (result) => {
         this.menuList = result;
-        console.table(this.menuList);
       },
       (error) => console.error
     );
@@ -120,6 +142,40 @@ export class CreateMarketAllocationComponent implements OnInit {
     });
   }
 
+ 
+  initializeMarketAllocationModelForm() {
+    this.marketMasterForm = this.fb.group ({
+      organizationId:[''],
+      payperiod: ['', [Validators.required]],
+      allocationTypeId:['', [Validators.required]],
+      allocations:  this.fb.array([])
+    });
+    for (let i = 0; i < 1; i++) {
+      (this.marketMasterForm.controls.allocations as FormArray).push(this.newAllocation());
+    }
+  }
+
+  quantities() : FormArray {
+    return this.marketMasterForm.get("allocations") as FormArray
+  }
+
+  newAllocation(): FormGroup {
+    return this.fb.group({
+        marketId: ['', [Validators.required]],
+        cogs: ['', [Validators.required]],
+        cogsTypeId: ['', [Validators.required]],
+        se: ['', [Validators.required]],
+        ee: ['', [Validators.required]],
+        ga: ['', [Validators.required]],
+        other: ['', [Validators.required]],
+        otherTypeId:['', [Validators.required]],
+    })
+  }
+  addAllocation() {
+    (this.marketMasterForm.controls.allocations as FormArray).push(this.newAllocation());
+    //this.quantities().push(this.newAllocation());
+  }
+
   initializeUserRoleForm() {
     this.roleForm = new FormGroup({
       roleId: this.roleId,
@@ -147,7 +203,6 @@ export class CreateMarketAllocationComponent implements OnInit {
         }
       },
       (error) => {
-        console.log(error.errorMessage);
         this.toastr.error('Cannot delete role', 'error!');
       }
     );
@@ -161,12 +216,16 @@ export class CreateMarketAllocationComponent implements OnInit {
 
   onSubmit() {
     this.ngxLoaderService.start();
-    const createForm = this.roleForm.value;
+    const createForm = this.marketMasterForm.value;
     console.log(createForm);
     if (!this.isEdit) {
-      if (this.roleForm.valid) {
-        const model = new RoleModel();
-        model.roleName = createForm.roleName;
+      if (this.marketMasterForm.valid) {
+        const model = new MarketMasterModel();
+        model.organizationId = createForm.organizationId;
+        model.payPeriod = createForm.payPeriod;
+        model.allocationTypeId = createForm.allocationTypeId;
+        // model.marketAllocations = createForm.
+
         this.roleService.createRole(model).subscribe(
           (res) => {
             this.toastr.success('Role Added Successfully.', 'Success!');

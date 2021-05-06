@@ -1,28 +1,35 @@
-<form>
+<form [formGroup]="marketMasterForm">
   <div class="form-row">
     <div class="form-group col-md-4">
-      <h2>OrganizationName</h2>
+      <input  type="hidden" value="19" formControlName="organizationId">
+      <h2>Midwest Region</h2>
     </div>
     <div class="form-group col-md-4">
-      <label for="inputPassword4">Pay Period</label>
+      <label for="payperiod">Pay Period</label>
       <input
         type="text"
         placeholder="yyyy-mm-dd"
         class="form-control"
-        id="inputPassword4"
+        formControlName="payperiod"
+        id="payperiod"
       />
     </div>
     <div class="form-group col-md-4">
-      <label for="inputState">Type</label>
-      <select id="inputState" class="form-control">
-        <option selected>Choose...</option>
-        <option>...</option>
-      </select>
+      <label>Type</label>
+      <ng-select
+      [items]="roles"
+      formControlName="allocationTypeId"
+      placeholder="Select Organization"
+      bindLabel="roleName"
+      bindValue="roleId"
+      class="cfo-select"
+    >
+    </ng-select>
     </div>
   </div>
-  <div class="form-group">
+  <div  class="form-group">
     <div class="table-responsive">
-      <table class="table table-harbor">
+      <table formArrayName="allocations" class="table table-harbor">
         <thead>
           <tr>
             <th scope="col">S.N</th>
@@ -38,26 +45,37 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let role of roles; let i = index">
+          <tr *ngFor="let role of quantities().controls; let i = index" [formGroupName]="i">
             <td>{{ i + 1 }}</td>
-            <td>TL{{ i + 1 }}</td>
-            <td><input type="text" placeholder="text" class="form-control"/></td>
-            <td><input type="text" placeholder="text" class="form-control"/></td>
             <td>
-              <select id="inputState" class="form-control">
-                <option selected>Choose...</option>
-                <option>...</option>
-              </select>
+              DAL III{{ i + 1 }}
+              <input type="hidden" value="20" formControlName="marketId"/>
             </td>
-            <td><input type="text" placeholder="text" class="form-control"/></td>
-            <td><input type="text" placeholder="text" class="form-control"/></td>
-            <td><input type="text" placeholder="text" class="form-control"/></td>
-            <td><input type="text" placeholder="text" class="form-control"/></td>
+            
+            <td><input type="text" formControlName="cogs" placeholder="text" class="form-control"/></td>
             <td>
-              <select id="inputState" class="form-control">
-                <option selected>Choose...</option>
-                <option>...</option>
-              </select>
+              <ng-select
+              [items]="roles"
+              formControlName="cogsTypeId"
+              placeholder="Select Organization"
+              bindLabel="roleName"
+              bindValue="roleId"
+              class="cfo-select"
+              ></ng-select>
+            </td>
+            <td><input type="text" formControlName="se" placeholder="text" class="form-control"/></td>
+            <td><input type="text" formControlName="ee" placeholder="text" class="form-control"/></td>
+            <td><input type="text" formControlName="ga" placeholder="text" class="form-control"/></td>
+            <td><input type="text" formControlName="other" placeholder="text" class="form-control"/></td>
+            <td>
+              <ng-select
+              [items]="roles"
+              formControlName="cogsTypeId"
+              placeholder="Select Organization"
+              bindLabel="roleName"
+              bindValue="roleId"
+              class="cfo-select"
+              > </ng-select>
             </td>
           </tr>
         </tbody>
