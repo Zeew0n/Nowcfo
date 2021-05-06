@@ -76,7 +76,7 @@ export class MarketAllocationComponent implements OnInit {
       this.marketService
         .getPaginatedAllocation(
           1,
-          1,
+          20,
           this.organizationId.value,
         )
         .subscribe(
