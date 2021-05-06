@@ -6,13 +6,13 @@ import { Observable } from 'rxjs';
 import { OrganizationModel } from 'src/app/models/organization.model';
 import { PaginatedResult } from 'src/app/models/Pagination/Pagination';
 import { map } from 'rxjs/operators';
-import { MarketMaster } from 'src/app/models/Market/market-master.model';
+import { MarketMasterModel } from 'src/app/models/Market/market-master.model';
 
 
 @Injectable({
     providedIn: 'root'
 })
-export class MarketService extends HttpGenericCrudService<MarketMaster>{
+export class MarketService extends HttpGenericCrudService<MarketMasterModel>{
     constructor(httpClient: HttpClient) {
         super(
             httpClient,
@@ -37,10 +37,10 @@ export class MarketService extends HttpGenericCrudService<MarketMaster>{
         itemsPerPage?,
         searchOrg?,
 
-      ): Observable<PaginatedResult<MarketMaster[]>> {
+      ): Observable<PaginatedResult<MarketMasterModel[]>> {
 
-        const paginatedResult: PaginatedResult<MarketMaster[]> = new PaginatedResult<
-        MarketMaster[] >();
+        const paginatedResult: PaginatedResult<MarketMasterModel[]> = new PaginatedResult<
+        MarketMasterModel[] >();
         let params = new HttpParams();
         if (page != null && itemsPerPage != null) {
           params = params.append('pageNumber', page);
@@ -50,7 +50,7 @@ export class MarketService extends HttpGenericCrudService<MarketMaster>{
 
         }
         return this.httpClient
-          .get<MarketMaster[]>('MarketMaster/PaginatedAllocation', { observe: 'response', params })
+          .get<MarketMasterModel[]>('MarketMaster/PaginatedAllocation', { observe: 'response', params })
           .pipe(
             map(response => {
               paginatedResult.result = response.body;
@@ -70,8 +70,8 @@ export class MarketService extends HttpGenericCrudService<MarketMaster>{
     }
 
 
-    getMarketAllocationListByOrgId(organizationId:number): Observable<MarketMaster[]> {
-        return this.httpClient.get<MarketMaster[]>(`MarketMaster/GetMarketAllocationListByOrgId/${organizationId}`);
+    getMarketAllocationModelListByOrgId(organizationId:number): Observable<MarketMasterModel[]> {
+        return this.httpClient.get<MarketMasterModel[]>(`MarketMaster/GetMarketAllocationModelListByOrgId/${organizationId}`);
     }
 
 
@@ -79,12 +79,12 @@ export class MarketService extends HttpGenericCrudService<MarketMaster>{
        return this.httpClient.post('MarketMaster', data);
     }
 
-    deleteMarketAllocation(id) {
+    deleteMarketAllocationModel(id) {
         return this.httpClient.delete('MarketMaster/' + id);
     }
 
 
-    updateMarketAllocation(id, data) {
+    updateMarketAllocationModel(id, data) {
         return this.httpClient.put('MarketMaster/' + id, data);
     }
 

@@ -1,4 +1,4 @@
-export class AllocationTypeModal {
+export class AllocationTypeModel {
     Id:number ;
     Name:string;
 }
