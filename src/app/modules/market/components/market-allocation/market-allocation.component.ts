@@ -75,7 +75,7 @@ export class MarketAllocationComponent implements OnInit {
   
   
     getAllocationPagination() {
-      
+      this.selectedMarket = this.organizationId.value
       if(this.organizationId.value != undefined || null)
       {
 
