@@ -17,6 +17,11 @@ import { RoleService } from 'src/app/modules/user-account/services/userrole.serv
 import { ActivatedRoute } from '@angular/router';
 import { MarketMasterModel } from 'src/app/models/Market/market-master.model';
 import { CreateMarketService } from '../../services/create-market.service';
+import { AllocationTypeModel } from 'src/app/models/Market/allocation.model';
+import { CogsTypeModel } from 'src/app/models/Market/cogs.model';
+import { OtherTypeModel } from 'src/app/models/Market/other.model';
+import { MarketService } from '../../services/market.service';
+import { MarketAllocationModel } from 'src/app/models/Market/market-allocation.model';
 @Component({
   selector: 'app-create-market-allocation',
   templateUrl: './create-market-allocation.component.html',
@@ -25,9 +30,15 @@ import { CreateMarketService } from '../../services/create-market.service';
 
 export class CreateMarketAllocationComponent implements OnInit {
 
-  market:MarketMasterModel;
   role: RoleModel = new RoleModel();
   roles: RoleModel[];
+
+  allocationTypes:AllocationTypeModel[];
+  cogsTypes:CogsTypeModel[];
+  otherTypes:OtherTypeModel[];
+
+  market:MarketMasterModel;
+  marketAllocations: MarketAllocationModel[];
   menuList: MenuModel[];
   checkedMenuList: MenuModel[] = [];
   dropdownPermissionSettings;
@@ -41,6 +52,8 @@ export class CreateMarketAllocationComponent implements OnInit {
   selectrole;
   selectedRole: number;
 
+  parentOrganizationId = '';
+
   constructor(
     private fb: FormBuilder,
     private modalService: NgbModal,
@@ -49,7 +62,8 @@ export class CreateMarketAllocationComponent implements OnInit {
     private ngxLoaderService: NgxUiLoaderService,
     private location: Location,
     private _route: ActivatedRoute,
-    private _createMarketSerivce: CreateMarketService
+    private createMarketSerivce: CreateMarketService,
+    private marketService: MarketService
   ) {}
 
   /* Form Declarations */
@@ -63,13 +77,14 @@ export class CreateMarketAllocationComponent implements OnInit {
   ngOnInit() {
     this._route.queryParamMap.subscribe((queryParams) => {
       if (queryParams.has('id')) {
-        const id = queryParams.get('id');
+        this.parentOrganizationId = queryParams.get('id');
       } 
     });
+
     this.initializeMarketAllocationModelForm();
-    // this.getAllocationTypes();
-    // this.getCogsTypes();
-    // this.getOtherTypes();
+    this.getAllocationTypes();
+    this.getCogsTypes();
+    this.getOtherTypes();
     // const id = +this._route.snapshot.paramMap.get('id');
 
     this.getRoles();
@@ -91,9 +106,39 @@ export class CreateMarketAllocationComponent implements OnInit {
     this.location.back();
   }
 
-  // getAllocationTypes(){
-  //   this._createMarketSerivce.
-  // }
+  getAllocationTypes() {
+    this.createMarketSerivce.getAllAllocationTypes().subscribe(
+      (data)=>{
+        this.allocationTypes = data;
+      },
+      (err)=>{
+        console.log(err);
+      }
+    )
+  }
+
+  getCogsTypes() {
+    this.createMarketSerivce.getAllCogsType().subscribe(
+      (data)=>{
+        this.cogsTypes = data;
+      },
+      (err)=>{
+        console.log(err);
+      }
+    )
+  }
+
+  getOtherTypes() {
+    this.createMarketSerivce.getAllOtherTypes().subscribe(
+      (data)=>{
+        this.otherTypes = data;
+      },
+      (err)=>{
+        console.log(err);
+      }
+    )
+  }
+
   getRoles() {
     this.roleService.getAllRoles().subscribe(
       (result) => {
@@ -147,12 +192,29 @@ export class CreateMarketAllocationComponent implements OnInit {
     this.marketMasterForm = this.fb.group ({
       organizationId:[''],
       payperiod: ['', [Validators.required]],
-      allocationTypeId:['', [Validators.required]],
+      allocationTypeId:[null, [Validators.required]],
       allocations:  this.fb.array([])
     });
-    for (let i = 0; i < 1; i++) {
+    this.createMarketSerivce.getAllMarketsByOrgId(parseInt(this.parentOrganizationId))
+    .subscribe(
+      (data) => {
+        const test  = Object.assign([], data);
+        this.marketAllocations  = Object.assign([], data);
+
+        console.table(test);
+        console.table(this.marketAllocations);
+        for (let i = 0; i < this.marketAllocations.length; i++) {
       (this.marketMasterForm.controls.allocations as FormArray).push(this.newAllocation());
     }
+
+      },
+      (error) => {
+        this.toastr.error('err', 'error!');
+      }
+    )
+    
+    
+    
   }
 
   quantities() : FormArray {
@@ -162,19 +224,17 @@ export class CreateMarketAllocationComponent implements OnInit {
   newAllocation(): FormGroup {
     return this.fb.group({
         marketId: ['', [Validators.required]],
+        revenue:['', [Validators.required]],
         cogs: ['', [Validators.required]],
-        cogsTypeId: ['', [Validators.required]],
+        cogsTypeId: [null, [Validators.required]],
         se: ['', [Validators.required]],
         ee: ['', [Validators.required]],
         ga: ['', [Validators.required]],
         other: ['', [Validators.required]],
-        otherTypeId:['', [Validators.required]],
+        otherTypeId:[null, [Validators.required]],
     })
   }
-  addAllocation() {
-    (this.marketMasterForm.controls.allocations as FormArray).push(this.newAllocation());
-    //this.quantities().push(this.newAllocation());
-  }
+ 
 
   initializeUserRoleForm() {
     this.roleForm = new FormGroup({
@@ -212,6 +272,59 @@ export class CreateMarketAllocationComponent implements OnInit {
     this.isEdit = false;
     this.role = null;
     this.openModal(content);
+  }
+
+  submit() {
+    this.ngxLoaderService.start();
+    const createForm = this.marketMasterForm.value;
+    console.log(createForm);
+    if (!this.isEdit) {
+      if (true) {
+        const model = new MarketMasterModel();
+        model.organizationId = createForm.organizationId;
+        model.payPeriod = createForm.payPeriod;
+        model.allocationTypeId = createForm.allocationTypeId;
+        model.marketAllocations = createForm.allocations;
+        this.marketService.createMarketMaster(model).subscribe(
+          (res) => {
+            this.toastr.success('Role Added Successfully.', 'Success!');
+            this.modalService.dismissAll();
+            this.getRoles();
+            this.ngxLoaderService.stop();
+          },
+          (error) => {
+            console.log(error);
+            this.modalService.dismissAll();
+            this.toastr.error(error.error.errorMessage, 'Error!');
+            this.ngxLoaderService.stop();
+          }
+        );
+      }
+    } else {
+      if (this.roleForm.valid) {
+        const model = new RoleModel();
+        model.roleName = createForm.roleName;
+        model.roleId = createForm.roleId;
+
+        this.roleService.updateRole(model).subscribe(
+          (res) => {
+            this.toastr.success('Role Updated Successfully.', 'Success!');
+            this.modalService.dismissAll();
+            this.getRoles();
+            this.ngxLoaderService.stop();
+          },
+          (error) => {
+            this.toastr.error(
+              error.error.errorMessage !== undefined
+                ? error.error.errorMessage
+                : 'Role Update failed',
+              'Error!'
+            );
+            this.ngxLoaderService.stop();
+          }
+        );
+      }
+    }
   }
 
   onSubmit() {
