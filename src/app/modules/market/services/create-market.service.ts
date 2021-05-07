@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AllocationTypeModel } from 'src/app/models/Market/allocation.model';
 import { CogsTypeModel } from 'src/app/models/Market/cogs.model';
+import { MarketAllocationModel } from 'src/app/models/Market/market-allocation.model';
 import { MarketMasterModel } from 'src/app/models/Market/market-master.model';
 import { OtherTypeModel } from 'src/app/models/Market/other.model';
 import { HttpGenericCrudService } from 'src/app/shared/http-generic-crud.service';
@@ -25,22 +26,24 @@ export class CreateMarketService extends HttpGenericCrudService<MarketMasterMode
     return httpOptions;
   }
 
-  getAllAllocationTypes() {
-    return this.httpClient.get<AllocationTypeModel[]>(
-      'MarketMaster/listallorganizations'
-    );
+  getAllAllocationTypes(): Observable<AllocationTypeModel[]> {
+    return this.httpClient.get<AllocationTypeModel[]>(`MarketMaster/GetAllocationTypes`);
   }
 
   getAllCogsType(): Observable<CogsTypeModel[]> {
-    return this.httpClient.get<CogsTypeModel[]>(`MarketMaster/GetMarketAllocationModelListByOrgId}`);
+    return this.httpClient.get<CogsTypeModel[]>(`MarketMaster/GetCogsTypes`);
   }
 
   getAllOtherTypes(): Observable<OtherTypeModel[]> {
-    return this.httpClient.get<OtherTypeModel[]>(`MarketMaster/GetMarketAllocationModelListByOrgId}`);
+    return this.httpClient.get<OtherTypeModel[]>(`MarketMaster/GetOtherTypes`);
+  }
+
+  getAllMarketsByOrgId(id): Observable<MarketAllocationModel[]> {
+    return this.httpClient.get<MarketAllocationModel[]>(`MarketMaster/GetMarketAllocationList/${id}`);
   }
 
   createMarketMaster(data) {
-    return this.httpClient.post('MarketMaster', data);
+    return this.httpClient.post('MarketMaster/MarketMaster', data);
   }
   
 }

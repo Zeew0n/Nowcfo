@@ -16,11 +16,11 @@ import { RoleService } from 'src/app/modules/user-account/services/userrole.serv
 import { OrganizationModel } from 'src/app/models/organization.model';
 import { OrganizationService } from 'src/app/modules/organization/services/organization.service';
 import { MarketService } from '../../services/market.service';
-import { MarketAllocation } from 'src/app/models/Market/market-allocation.model';
-import { MarketMaster } from 'src/app/models/Market/market-master.model';
+
 import { ActivatedRoute, Data, Router } from '@angular/router';
 
 import { PaginatedResult, Pagination } from 'src/app/models/Pagination/Pagination';
+import { MarketMasterModel } from 'src/app/models/Market/market-master.model';
 @Component({
   selector: 'app-market-allocation',
   templateUrl: './market-allocation.component.html',
@@ -108,7 +108,7 @@ export class MarketAllocationComponent implements OnInit {
     }
   
     getAllocationChanged() {
-      
+      this.selectedMarket = this.organizationId.value
       this.marketService
         .getPaginatedAllocation(
           this.pagination.currentPage,

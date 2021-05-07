@@ -1,7 +1,8 @@
-<form [formGroup]="marketMasterForm">
+<form [formGroup]="marketMasterForm" class="form-cfo">
+  {{marketMasterForm.value|json}}
   <div class="form-row">
     <div class="form-group col-md-4">
-      <input  type="hidden" value="19" formControlName="organizationId">
+      <input type="hidden" [ngModel]="parentOrganizationId" formControlName="organizationId" />
       <h2>Midwest Region</h2>
     </div>
     <div class="form-group col-md-4">
@@ -17,24 +18,24 @@
     <div class="form-group col-md-4">
       <label>Type</label>
       <ng-select
-      [items]="roles"
-      formControlName="allocationTypeId"
-      placeholder="Select Organization"
-      bindLabel="roleName"
-      bindValue="roleId"
-      class="cfo-select"
-    >
-    </ng-select>
+        [items]="allocationTypes"
+        formControlName="allocationTypeId"
+        placeholder="select"
+        bindLabel="name"
+        bindValue="id"
+        class="cfo-select"
+      >
+      </ng-select>
     </div>
   </div>
-  <div  class="form-group">
+  <div class="form-group">
     <div class="table-responsive">
       <table formArrayName="allocations" class="table table-harbor">
         <thead>
           <tr>
             <th scope="col">S.N</th>
             <th scope="col">Market</th>
-            <th scope="col">Rev</th>
+            <th scope="col">Revenue</th>
             <th scope="col">COGS</th>
             <th scope="col">COGS Type</th>
             <th scope="col">SE</th>
@@ -45,37 +46,77 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let role of quantities().controls; let i = index" [formGroupName]="i">
+          <tr
+            *ngFor="let allocation of marketAllocations; let i = index"
+            [formGroupName]="i"
+          >
             <td>{{ i + 1 }}</td>
             <td>
-              DAL III{{ i + 1 }}
-              <input type="hidden" value="20" formControlName="marketId"/>
+              {{allocation.marketName }}
+              <input type="hidden" [ngModel]="allocation.marketId" formControlName="marketId" />
             </td>
-            
-            <td><input type="text" formControlName="cogs" placeholder="text" class="form-control"/></td>
+            <td>
+              <input
+                type="text"
+                formControlName="revenue"
+                class="form-control"
+              />
+            </td>
+            <td>
+              <input
+                type="text"
+                formControlName="cogs"
+                class="form-control"
+              />
+            </td>
             <td>
               <ng-select
-              [items]="roles"
-              formControlName="cogsTypeId"
-              placeholder="Select Organization"
-              bindLabel="roleName"
-              bindValue="roleId"
-              class="cfo-select"
+                [items]="cogsTypes"
+                formControlName="cogsTypeId"
+                placeholder="select"
+                bindLabel="name"
+                bindValue="id"
+                class="cfo-select"
               ></ng-select>
             </td>
-            <td><input type="text" formControlName="se" placeholder="text" class="form-control"/></td>
-            <td><input type="text" formControlName="ee" placeholder="text" class="form-control"/></td>
-            <td><input type="text" formControlName="ga" placeholder="text" class="form-control"/></td>
-            <td><input type="text" formControlName="other" placeholder="text" class="form-control"/></td>
+            <td>
+              <input
+                type="text"
+                formControlName="se"
+                class="form-control"
+              />
+            </td>
+            <td>
+              <input
+                type="text"
+                formControlName="ee"
+                class="form-control"
+              />
+            </td>
+            <td>
+              <input
+                type="text"
+                formControlName="ga"
+                class="form-control"
+              />
+            </td>
+            <td>
+              <input
+                type="text"
+                formControlName="other"
+                class="form-control"
+              />
+            </td>
             <td>
               <ng-select
-              [items]="roles"
-              formControlName="cogsTypeId"
-              placeholder="Select Organization"
-              bindLabel="roleName"
-              bindValue="roleId"
-              class="cfo-select"
-              > </ng-select>
+                [items]="otherTypes"
+                formControlName="otherTypeId"
+                placeholder="select"
+                bindLabel="name"
+                bindValue="id"
+                class="cfo-select"
+              >
+              </ng-select>
             </td>
           </tr>
         </tbody>
@@ -84,7 +125,7 @@
   </div>
 
   <div class="pull-right">
-    <button type="submit" class="btn btn-primary mr-2">Save</button>
-    <button type="submit" class="btn btn-primary">Cancel</button>
+    <button type="submit" (click)="submit()"  class="btn btn-green mr-2">Save</button>
+    <button type="button"  class="btn btn-gray">Cancel</button>
   </div>
 </form>
