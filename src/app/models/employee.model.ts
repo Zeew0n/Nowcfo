@@ -1,6 +1,4 @@
 import { BaseEntity } from './base-entity';
-import { EmployeePermission } from './employeepermission.model';
-
 export class EmployeeModel extends BaseEntity {
     employeeId: string;
     employeeName: string;
@@ -26,6 +24,4 @@ export class EmployeeModel extends BaseEntity {
     overTimeRate: string;
     startDate:string;
     terminationDate:string;
-    employeepermissions: EmployeePermission[];
-
 }
