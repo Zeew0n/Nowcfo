@@ -19,6 +19,7 @@ import { MarketService } from '../../services/market.service';
 import { MarketAllocation } from 'src/app/models/Market/market-allocation.model';
 import { MarketMaster } from 'src/app/models/Market/market-master.model';
 import { ActivatedRoute, Data, Router } from '@angular/router';
+
 import { PaginatedResult, Pagination } from 'src/app/models/Pagination/Pagination';
 @Component({
   selector: 'app-market-allocation',
@@ -29,7 +30,7 @@ import { PaginatedResult, Pagination } from 'src/app/models/Pagination/Paginatio
 export class MarketAllocationComponent implements OnInit {
 
   organizations: OrganizationModel[];
-  allocations: MarketMaster[];
+  allocations: MarketMasterModel[];
 
   pagination: Pagination;
 
@@ -85,7 +86,7 @@ export class MarketAllocationComponent implements OnInit {
           this.organizationId.value,
         )
         .subscribe(
-          (res: PaginatedResult<MarketMaster[]>) => {
+          (res: PaginatedResult<MarketMasterModel[]>) => {
             this.allocations = res.result;
             this.pagination = res.pagination;
             this.isLoaded= true;
@@ -115,7 +116,7 @@ export class MarketAllocationComponent implements OnInit {
           this.organizationId.value,
         )
         .subscribe(
-          (res: PaginatedResult<MarketMaster[]>) => {
+          (res: PaginatedResult<MarketMasterModel[]>) => {
             this.allocations = res.result;
             this.pagination = res.pagination;
             this.isLoaded= true;
@@ -150,9 +151,9 @@ export class MarketAllocationComponent implements OnInit {
         });
   }
 
-  getMarketAllocations(organizationId) {
+  getMarketAllocationModels(organizationId) {
     
-    this.marketService.getMarketAllocationListByOrgId(organizationId).subscribe(
+    this.marketService.getMarketAllocationModelListByOrgId(organizationId).subscribe(
       (result) => {
         this.allocations = result;
         console.log(this.allocations);
@@ -172,12 +173,12 @@ export class MarketAllocationComponent implements OnInit {
   delete() {
     
     this.ngxLoaderService.start();
-    this.marketService.deleteMarketAllocation(this.selectedMarket).subscribe(
+    this.marketService.deleteMarketAllocationModel(this.selectedMarket).subscribe(
       (result) => {
         if (result == null) {
           this.modalService.dismissAll();
           this.toastr.success('Market Allocation deleted successfully.', 'success!');
-          this.getMarketAllocations(this.selectedMarket);
+          this.getMarketAllocationModels(this.selectedMarket);
           this.ngxLoaderService.stop();
         } else {
           this.toastr.success('something went wrong.', 'error!');

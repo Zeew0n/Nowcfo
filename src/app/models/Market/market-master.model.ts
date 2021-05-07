@@ -1,10 +1,10 @@
-import { MarketAllocation } from "./market-allocation.model";
+import { MarketAllocationModel } from "./market-allocation.model";
 
-export class MarketMaster {
+export class MarketMasterModel {
     Id:number;
     organizationId:string;
     payPeriod:Date;
     allocationTypeId:string;
     allocationName:string;
-    MarketAllocations:MarketAllocation[]
+    marketAllocations:MarketAllocationModel[]
 }
