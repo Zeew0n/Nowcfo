@@ -1,13 +1,14 @@
 export class MarketAllocationModel {
-        Id:string ;
-        MarketId:string;
-        MasterId:string;
-        Revenue:number;
-        COGS:number;
-        CogsTypeId:string;
-        SE:number;
-        EE:number;
-        GA:number;
-        Other:string;
-        OtherTypeId:string ;
+        id:string ;
+        marketId:string;
+        marketName:string;
+        masterId:string;
+        revenue:number;
+        cogs:number;
+        cogsTypeId:string;
+        se:number;
+        ee:number;
+        ga:number;
+        other:string;
+        otherTypeId:string ;
 }
