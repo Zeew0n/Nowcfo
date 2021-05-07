@@ -24,7 +24,7 @@
       <h1 class="page-title">Allocations</h1>
     </div>
     <div class="table-responsive">
-      <table class="table table-harbor">
+      <table  class="table table-harbor">
         <thead>
           <tr>
             <th scope="col">S.N</th>
@@ -34,9 +34,9 @@
           </tr>
         </thead>
         
-        <tbody>
+        <tbody *ngIf="isLoaded">
           <tr *ngFor="let allocation of allocations; let i = index">
-            <td>{{allocation.id}}</td>
+            <td>{{ i + 1 }}</td>
 
             <td data-th="PayPeriod">{{allocation.payPeriod}}</td>
             <td data-th="Type">{{allocation.allocationName}}</td>

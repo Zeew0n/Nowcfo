@@ -518,6 +518,7 @@
                   bindValue="statusId"
                   placeholder="Status Type"
                   formControlName="statusId"
+                  (change)="terminationValidation()"
                   class="cfo-select"
                   [ngClass]="{
                     'invalid-input':
@@ -581,7 +582,7 @@
           <div class="row">
             <div class="col-sm-6">
               <div class="form-group">
-                <label>Joining Date</label>
+                <label>Start Date</label>
                 <input
                   (click)="d1.toggle()"
                   [minDate]="minDate"

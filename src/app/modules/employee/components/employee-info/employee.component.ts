@@ -99,7 +99,7 @@ export class EmployeeComponent implements OnInit {
   statusId= new FormControl(1, [Validators.required]);
   overTimeRate = new FormControl('', [Validators.required]);
   startDate= new FormControl('',[Validators.required]);
-  terminationDate= new FormControl('',[Validators.required]);
+  terminationDate= new FormControl('');
 
 
 
@@ -306,7 +306,8 @@ export class EmployeeComponent implements OnInit {
       statusId: this.statusId,
       overTimeRate: this.overTimeRate,
       startDate: this.startDate,
-      terminationDate:this.terminationDate
+      terminationDate:this.terminationDate,
+
     });
   }
 
@@ -362,6 +363,8 @@ export class EmployeeComponent implements OnInit {
       statusId:data.statusId,
       startDate: this.setNgbDate(data.startDate),
       terminationDate: this.setNgbDate(data.terminationDate)
+
+    
     });
   }
 
@@ -448,7 +451,7 @@ export class EmployeeComponent implements OnInit {
           statusId: createForm.statusId,
           payType: '',
           startDate: this.setDate(createForm.startDate),
-          terminationDate: this.setDate(createForm.terminationDate)
+          terminationDate:this.setDate(createForm.terminationDate)
         };
 
         if (model.payTypeCheck) {
@@ -456,6 +459,9 @@ export class EmployeeComponent implements OnInit {
         } else {
           model.payType = 'Hourly';
         }
+  
+      
+
 
         this.employeeService.createEmployee(model).subscribe(
           () => {
@@ -492,10 +498,18 @@ export class EmployeeComponent implements OnInit {
           employeeTypeId: createForm.employeeTypeId,
           statusId: createForm.statusId,
           startDate: this.setDate(createForm.startDate),
-          terminationDate: this.setDate(createForm.terminationDate)
+          terminationDate:this.setDate(createForm.terminationDate)
 
 
         };
+
+        if (model.payTypeCheck) {
+          model.payType = 'Salary';
+        } else {
+          model.payType = 'Hourly';
+        }
+  
+       
 
         if (model.payTypeCheck) {
           model.payType = 'Salary';

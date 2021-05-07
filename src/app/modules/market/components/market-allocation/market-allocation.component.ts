@@ -16,9 +16,10 @@ import { RoleService } from 'src/app/modules/user-account/services/userrole.serv
 import { OrganizationModel } from 'src/app/models/organization.model';
 import { OrganizationService } from 'src/app/modules/organization/services/organization.service';
 import { MarketService } from '../../services/market.service';
-import { MarketAllocationModel } from 'src/app/models/Market/market-allocation.model';
-import { MarketMasterModel } from 'src/app/models/Market/market-master.model';
-import { ActivatedRoute, Data } from '@angular/router';
+import { MarketAllocation } from 'src/app/models/Market/market-allocation.model';
+import { MarketMaster } from 'src/app/models/Market/market-master.model';
+import { ActivatedRoute, Data, Router } from '@angular/router';
+
 import { PaginatedResult, Pagination } from 'src/app/models/Pagination/Pagination';
 @Component({
   selector: 'app-market-allocation',
@@ -49,7 +50,9 @@ export class MarketAllocationComponent implements OnInit {
     private marketService:MarketService,
     private ngxLoaderService: NgxUiLoaderService,
     private location: Location,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router,
+
   ) {}
 
   /* Form Declarations */
@@ -72,8 +75,11 @@ export class MarketAllocationComponent implements OnInit {
   
   
     getAllocationPagination() {
-      debugger
-      this.marketService
+      
+      if(this.organizationId.value != undefined || null)
+      {
+
+        this.marketService
         .getPaginatedAllocation(
           1,
           20,
@@ -90,10 +96,19 @@ export class MarketAllocationComponent implements OnInit {
             this.toastr.error(error);
           }
         );
+
+      }
+      else{
+        this.router.navigateByUrl('market');
+        this.isLoaded= false;
+
+      }
+
+
     }
   
     getAllocationChanged() {
-      debugger
+      
       this.marketService
         .getPaginatedAllocation(
           this.pagination.currentPage,
@@ -149,14 +164,14 @@ export class MarketAllocationComponent implements OnInit {
 
 
   openDeleteModal(content, id) {
-    debugger
+    
     this.EventValue = 'Delete';
     this.selectedMarket = id;
     this.openModal(content);
   }
 
   delete() {
-    debugger
+    
     this.ngxLoaderService.start();
     this.marketService.deleteMarketAllocationModel(this.selectedMarket).subscribe(
       (result) => {
