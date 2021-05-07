@@ -108,7 +108,7 @@ export class MarketAllocationComponent implements OnInit {
     }
   
     getAllocationChanged() {
-      
+      this.selectedMarket = this.organizationId.value
       this.marketService
         .getPaginatedAllocation(
           this.pagination.currentPage,
