@@ -88,13 +88,13 @@ export class EmployeeComponent implements OnInit {
   address = new FormControl('', [Validators.required]);
   city = new FormControl('', [Validators.required]);
   zipCode = new FormControl('', [Validators.required]);
-  state = new FormControl('', [Validators.required]);
-  organizationId = new FormControl(true, [Validators.required]);
-  designationId = new FormControl('', [Validators.required]);
-  superVisorId = new FormControl('');
+  state = new FormControl(null, [Validators.required]);
+  organizationId = new FormControl(null, [Validators.required]);
+  designationId = new FormControl(null, [Validators.required]);
+  superVisorId = new FormControl(null);
   isSupervisor = new FormControl('');
   payTypeCheck = new FormControl(false);
-  pay = new FormControl(true, [Validators.required]);
+  pay = new FormControl('', [Validators.required]);
   employeeTypeId = new FormControl(null, [Validators.required]);
   statusId= new FormControl(1, [Validators.required]);
   overTimeRate = new FormControl('', [Validators.required]);
@@ -124,6 +124,9 @@ export class EmployeeComponent implements OnInit {
     this.initializeSearchForm();
     this.getSuperVisors();
     this.initializeemployeeForm();
+    this.terminationValidation();
+    this.statusDefaultValue = 1;
+
 
     
   }
@@ -177,7 +180,7 @@ export class EmployeeComponent implements OnInit {
   
   terminationValidation(){
   const statusValue = this.employeeForm.value.statusId;
-  if(statusValue==1 || statusValue == 2){
+  if(statusValue==1 || statusValue == 2 || statusValue==null){
     this.employeeForm.controls.terminationDate.setValidators(null);
     this.employeeForm.controls.terminationDate.setErrors(null);
   }else{
@@ -459,10 +462,7 @@ export class EmployeeComponent implements OnInit {
         } else {
           model.payType = 'Hourly';
         }
-  
-      
-
-
+        
         this.employeeService.createEmployee(model).subscribe(
           () => {
             this.submitted = true;
@@ -552,6 +552,7 @@ export class EmployeeComponent implements OnInit {
     this.employeeForm.reset();
     this.EventValue = 'Save';
     this.submitted = false;
+    this.ngOnInit();
   }
 
   resetSearch() {
@@ -564,6 +565,9 @@ export class EmployeeComponent implements OnInit {
       .open(content, {
         ariaLabelledBy: 'modal-basic-title',
         windowClass: 'modal-cfo',
+        backdropClass: 'static',
+        backdrop: false,
+
       })
       .result.then(
         (result) => {

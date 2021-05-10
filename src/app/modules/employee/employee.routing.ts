@@ -28,6 +28,9 @@ const routes: Routes = [
         component: EmployeePermissionComponent,
         canActivate: [AuthGuard]
       },
+     
+
+      
     ]
   }
   ];
