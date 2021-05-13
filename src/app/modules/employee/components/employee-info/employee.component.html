@@ -85,16 +85,16 @@
         <thead>
           <tr>
             <th scope="col">S.N</th>
-            <th scope="col">Employee Name</th>
+            <th scope="col">Name</th>
             <th scope="col">Email</th>
-            <th scope="col">Phone Number</th>
+            <th scope="col">Phone</th>
             <th scope="col">Address</th>
             <th scope="col">City</th>
-            <th scope="col">Zip Code</th>
+            <th scope="col">Zip</th>
             <th scope="col">State</th>
             <th scope="col">Organization</th>
             <th scope="col">Designation</th>
-            <th scope="col">Employee Type</th>
+            <th scope="col">Type</th>
             <th scope="col">Status</th>
             <th scope="col">Action</th>
           </tr>
@@ -102,17 +102,17 @@
         <tbody>
           <tr *ngFor="let employee of employees; let i = index">
             <td>{{ i + 1 }}</td>
-            <td data-th="Employee Name ">{{ employee.employeeName }}</td>
-            <td data-th="Email ">{{ employee.email }}</td>
-            <td data-th="Phone Number ">{{ employee.phone }}</td>
-            <td data-th="Address ">{{ employee.address }}</td>
+            <td data-th="Name">{{ employee.employeeName }}</td>
+            <td data-th="Email">{{ employee.email }}</td>
+            <td data-th="Phone">{{ employee.phone }}</td>
+            <td data-th="Address">{{ employee.address }}</td>
             <td data-th="City">{{ employee.city }}</td>
-            <td data-th="Zip Code ">{{ employee.zipCode }}</td>
+            <td data-th="Zip">{{ employee.zipCode }}</td>
             <td data-th="State">{{ employee.state }}</td>
-            <td data-th="Organization Id ">{{ employee.organizationName }}</td>
-            <td data-th="Designation Id ">{{ employee.designationName }}</td>
-            <td data-th="Status ">{{ employee.employeeTypeName }}</td>
-            <td data-th="Status ">{{ employee.statusName }}</td>
+            <td data-th="Organization">{{ employee.organizationName }}</td>
+            <td data-th="Designation">{{ employee.designationName }}</td>
+            <td data-th="Type">{{ employee.employeeTypeName }}</td>
+            <td data-th="Status">{{ employee.statusName }}</td>
             <td data-th="Actions">
               <a
                 (click)="EditData(content, employee.employeeId)"
