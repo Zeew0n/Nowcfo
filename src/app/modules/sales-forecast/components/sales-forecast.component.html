@@ -48,7 +48,7 @@
         </tbody>
       </table>
 
-      <!-- <div class="pagination-nowcfo pagination">
+      <div class="pagination-nowcfo pagination">
           <pagination
             [boundaryLinks]="true"
             [totalItems]="pagination.totalItems"
@@ -61,7 +61,7 @@
             lastText="&raquo;"
           >
           </pagination>
-        </div> -->
+        </div>
     </div>
     <ng-template #content let-modal>
       <div class="container">
@@ -255,14 +255,12 @@
           <div class="row">
             <div class="col-sm-6">
               <div class="form-group">
-                <label>Qkly Estimated Revenue</label>
+                <label>Qkly Estimated Revenue ($)</label>
                 <input
                   type="text"
                   class="form-control"
                   formControlName="estimatedRevenue"
                   [readonly]="disableSelect"
-                  (input)="onQklyValueChange()"
-
                  
                 />
            
@@ -311,7 +309,7 @@
 
             <div class="col-sm-6">
               <div class="form-group">
-                <label>COGS Qkly</label>
+                <label>COGS Qkly ($)</label>
                 <input
                   type="text"
                   class="form-control"

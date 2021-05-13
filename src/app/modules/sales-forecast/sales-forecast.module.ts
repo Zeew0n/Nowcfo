@@ -9,6 +9,7 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { SalesForecastComponent } from './components/sales-forecast.component';
 import { SalesForecastRoutingModule } from './sales-forecast.routing';
+import { ForecastListsResolver } from 'src/app/shared/_resolver/forecastList';
 
 @NgModule({
     imports: [
@@ -25,5 +26,6 @@ import { SalesForecastRoutingModule } from './sales-forecast.routing';
         
     ],
     declarations: [SalesForecastComponent],
+    providers: [ForecastListsResolver]
 })
 export class SalesForecastModule { }

@@ -11,7 +11,6 @@
   import { NgbModal,NgbDateStruct, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
   import { ToastrService } from 'ngx-toastr';
   import { ActivatedRoute, Data } from '@angular/router';
-  import { EmployeeModel } from 'src/app/models/employee.model';
   import {
     PaginatedResult,
     Pagination,
@@ -37,6 +36,8 @@ import { SalesForecastService } from '../services/sales-forecast.service';
     isEdit = false;
     selectforecast;
     selectedForecastId: string;
+    pagination: Pagination;
+
     
       minDate: NgbDateStruct = {
         year: now.getFullYear()-17,
@@ -84,8 +85,13 @@ import { SalesForecastService } from '../services/sales-forecast.service';
 
   
     ngOnInit() {
-      this.getAllForecasts();
+
+      this.route.data.subscribe((data: Data) => {
+        this.forecasts = data.forecasts.result;
+        this.pagination = data.forecasts.pagination;
+      });
       this.initializeforecastForm();
+
     }
   
 
@@ -94,28 +100,47 @@ import { SalesForecastService } from '../services/sales-forecast.service';
    const value2 = this.forecastForm.value.billHours;
   if(value1 && value2){
     this.estimatedRevenue.patchValue(value1*value2*1.03);
+    const value3 = this.forecastForm.value.estimatedRevenue;
+    this.cogsQkly.patchValue(value3*0.5);
   }
   };
 
 
-  onQklyValueChange(){
-    debugger
-    const value1 = this.forecastForm.value.estimatedRevenue;
-   if(value1){
-     this.cogsQkly.patchValue(value1*0.5);
-   }
-   };
+
+  getForecasts() {
+    this.forecastService
+      .getPaginatedForecast(
+        this.pagination.currentPage,
+        this.pagination.itemsPerPage,
+
+      )
+      .subscribe(
+        (res: PaginatedResult<SalesForecastModel[]>) => {
+          this.forecasts = res.result;
+          this.pagination = res.pagination;
+        },
+        (error) => {
+          this.toastr.error(error);
+        }
+      );
+  }
+
+  pageChanged(event: any): void {
+    this.pagination.currentPage = event.page;
+    this.getForecasts();
+  }
+
 
 
   
-    getAllForecasts() {
-      this.forecastService.getAllForecasts().subscribe(
-        (result) => {
-          this.forecasts = result;
-        },
-        () => console.error
-      );
-    }
+    // getAllForecasts() {
+    //   this.forecastService.getAllForecasts().subscribe(
+    //     (result) => {
+    //       this.forecasts = result;
+    //     },
+    //     () => console.error
+    //   );
+    // }
   
   
   
@@ -234,7 +259,7 @@ import { SalesForecastService } from '../services/sales-forecast.service';
           if (result == null) {
             this.modalService.dismissAll();
             this.toastr.success('Forecast deleted successfully.', 'success!');
-            this.getAllForecasts();
+            this.getForecasts();
           } else {
             this.toastr.success('something went wrong.', 'error!');
           }
@@ -277,7 +302,7 @@ import { SalesForecastService } from '../services/sales-forecast.service';
               this.submitted = true;
               this.toastr.success('Forecast Added Successfully.', 'Success!');
               this.modalService.dismissAll();
-              this.getAllForecasts();
+              this.getForecasts();
             },
             (error) => {
               console.log(error);
@@ -309,7 +334,7 @@ import { SalesForecastService } from '../services/sales-forecast.service';
             () => {
               this.toastr.success('Forecast Updated Successfully.', 'Success!');
               this.modalService.dismissAll();
-              this.getAllForecasts();
+              this.getForecasts();
             },
             (error) => {
               this.toastr.error(
