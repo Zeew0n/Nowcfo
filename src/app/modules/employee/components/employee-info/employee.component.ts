@@ -94,10 +94,12 @@ export class EmployeeComponent implements OnInit {
   superVisorId = new FormControl(null);
   isSupervisor = new FormControl('');
   payTypeCheck = new FormControl(false);
-  pay = new FormControl('', [Validators.required]);
-  employeeTypeId = new FormControl(null, [Validators.required]);
+  pay = new FormControl('', [Validators.required,Validators.pattern(/^\s*-?(\d+(\.\d{1,2})?|\.\d{1,2})\s*$/
+    )]);
+  employeeTypeId = new FormControl(null);
   statusId= new FormControl(1, [Validators.required]);
-  overTimeRate = new FormControl('', [Validators.required]);
+  overTimeRate = new FormControl('', [Validators.required,Validators.pattern(/^\s*-?(\d+(\.\d{1,2})?|\.\d{1,2})\s*$/
+    )]);
   startDate= new FormControl('',[Validators.required]);
   terminationDate= new FormControl('');
 

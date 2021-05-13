@@ -12,16 +12,10 @@
   import { ToastrService } from 'ngx-toastr';
   import { ActivatedRoute, Data } from '@angular/router';
   import { EmployeeModel } from 'src/app/models/employee.model';
-  import { DesignationModel } from 'src/app/models/designation.model';
-  import { OrganizationModel } from 'src/app/models/organization.model';
-  import csc from 'country-state-city';
   import {
     PaginatedResult,
     Pagination,
   } from 'src/app/models/Pagination/Pagination';
-  import { OrganizationService } from 'src/app/modules/organization/services/organization.service';
-  import { EmployeeTypeModel } from 'src/app/models/employeetype.model';
-  import { EmployeeStatusTypeModel } from 'src/app/models/employeestatus.model';
 import { SalesForecastModel } from 'src/app/models/SalesForecast/sales-forecast.model.';
 import { SalesForecastService } from '../services/sales-forecast.service';
   
@@ -36,6 +30,7 @@ import { SalesForecastService } from '../services/sales-forecast.service';
     forecasts: SalesForecastModel[];
 
     disabled = false;
+    disableSelect = true;
     id = '';
     closeResult = ''; // close result for modal
     submitted = false;
@@ -68,17 +63,24 @@ import { SalesForecastService } from '../services/sales-forecast.service';
     EventValue: any = 'Save';
   
 
-    
+
     payPeriod = new FormControl('', [Validators.required]);
-    billRate = new FormControl('', [Validators.required,Validators.pattern(/^\d+\.\d{2}$/)]);
-    billHours = new FormControl('', [Validators.required,Validators.pattern(/^\d+\.\d{2}$/)]);
-    placements = new FormControl('', [Validators.required,Validators.pattern(/^\d+\.\d{2}$/)]);
-    buyOuts = new FormControl('', [Validators.required,Validators.pattern(/^\d+\.\d{2}$/)]);
+    billRate = new FormControl('', [Validators.required,Validators.pattern(/^\s*-?(\d+(\.\d{1,2})?|\.\d{1,2})\s*$/
+      )]);
+    billHours = new FormControl('', [Validators.required,Validators.pattern(/^\s*-?(\d+(\.\d{1,2})?|\.\d{1,2})\s*$/
+      )]);
+    placements = new FormControl('', [Validators.required,Validators.pattern(/^\s*-?(\d+(\.\d{1,2})?|\.\d{1,2})\s*$/
+      )]);
+    buyOuts = new FormControl('', [Validators.required,Validators.pattern(/^\s*-?(\d+(\.\d{1,2})?|\.\d{1,2})\s*$/
+      )]);
     estimatedRevenue = new FormControl('', [Validators.required]);
-    cogs = new FormControl('', [Validators.required,Validators.pattern(/^\d+\.\d{2}$/)]);
+    cogs = new FormControl('', [Validators.required,Validators.pattern(/^\s*-?(\d+(\.\d{1,2})?|\.\d{1,2})\s*$/
+      )]);
     cogsQkly = new FormControl('', [Validators.required]);
-    closedPayPeriods = new FormControl('', [Validators.required,Validators.pattern(/^\d+\.\d{2}$/)]);
-    otherPercent = new FormControl('', [Validators.required,Validators.pattern(/^\d+\.\d{2}$/)]);  
+    closedPayPeriods = new FormControl('', [Validators.required,Validators.pattern(/^\s*-?(\d+(\.\d{1,2})?|\.\d{1,2})\s*$/
+      )]);
+    otherPercent = new FormControl('', [Validators.required,Validators.pattern(/^\s*-?(\d+(\.\d{1,2})?|\.\d{1,2})\s*$/
+      )]);  
 
   
     ngOnInit() {
@@ -86,16 +88,25 @@ import { SalesForecastService } from '../services/sales-forecast.service';
       this.initializeforecastForm();
     }
   
-  
-  
 
-  
-    
-  
-  
-    
-  
-  
+  onValueChange(){
+   const value1 = this.forecastForm.value.billRate;
+   const value2 = this.forecastForm.value.billHours;
+  if(value1 && value2){
+    this.estimatedRevenue.patchValue(value1*value2*1.03);
+  }
+  };
+
+
+  onQklyValueChange(){
+    debugger
+    const value1 = this.forecastForm.value.estimatedRevenue;
+   if(value1){
+     this.cogsQkly.patchValue(value1*0.5);
+   }
+   };
+
+
   
     getAllForecasts() {
       this.forecastService.getAllForecasts().subscribe(

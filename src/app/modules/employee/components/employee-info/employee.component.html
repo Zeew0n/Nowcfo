@@ -235,6 +235,18 @@
                 >
                   Phone Number is Required!
                 </div>
+
+                <div
+                *ngIf="
+                employeeForm.controls.phone.touched &&
+                employeeForm.controls.phone?.hasError('pattern')
+                "
+                class="error-msg"
+              >
+                Phone Number is invalid!
+              </div>
+
+
               </div>
             </div>
           </div>
@@ -317,6 +329,17 @@
                 >
                   ZipCode is Required!
                 </div>
+
+                <div
+                *ngIf="
+                employeeForm.controls.zipCode.touched &&
+                employeeForm.controls.zipCode?.hasError('pattern')
+                "
+                class="error-msg"
+              >
+                Zip Code is invalid!
+              </div>
+
               </div>
             </div>
 
@@ -478,6 +501,18 @@
                 >
                   Pay Scale is Required!
                 </div>
+
+                <div
+                *ngIf="
+                employeeForm.controls.pay.touched &&
+                employeeForm.controls.pay?.hasError('pattern')
+                "
+                class="error-msg"
+              >
+                Pay Scale is invalid!
+              </div>
+
+
               </div>
             </div>
 
@@ -504,6 +539,17 @@
                 >
                   OverTime Rate is Required!
                 </div>
+
+                <div
+                *ngIf="
+                employeeForm.controls.overTimeRate.touched &&
+                employeeForm.controls.overTimeRate?.hasError('pattern')
+                "
+                class="error-msg"
+              >
+              OverTime Rate is invalid!
+              </div>
+
               </div>
             </div>
           </div>

@@ -2,7 +2,8 @@ export class SalesForecastModel {
 
         id:string ;
         payPeriod:Date;
-        billRate:number;
+        billRateCurrency:string;
+        billRate:string;
         billHours:number;
         placements:number;
         buyOuts:number;

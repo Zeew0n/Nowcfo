@@ -25,7 +25,7 @@
           <tr *ngFor="let forecast of forecasts; let i = index">
             <td>{{ i + 1 }}</td>
             <td data-th="Pay Period">{{ forecast.payPeriod }}</td>
-            <td data-th="Bill Rate">{{ forecast.billRate }}</td>
+            <td data-th="Bill Rate">{{ forecast.billRateCurrency }}</td>
             <td data-th="Hours">{{ forecast.billHours }}</td>
             <td data-th="Actions">
               <a
@@ -110,24 +110,33 @@
                   class="form-control"
                   formControlName="billRate"
                   placeholder="Prior Period Avg.Bill Rate"
+                  (change)="onValueChange()"
                   [ngClass]="{
                     'invalid-input':
                       forecastForm.controls.billRate.touched &&
-                      forecastForm.controls.billRate.errors?.required ||
-                      forecastForm.controls.billRate?.hasError('pattern')
+                      forecastForm.controls.billRate.errors?.required
                   }"
                 />
 
                 <div
                   *ngIf="
                   forecastForm.controls.billRate.touched &&
-                  forecastForm.controls.billRate.errors?.required ||
-                    forecastForm.controls.billRate?.hasError('pattern')
+                  forecastForm.controls.billRate.errors?.required
                   "
                   class="error-msg"
                 >
                   Prior Period Avg. Bill Rate is required!
                 </div>
+
+                <div
+                *ngIf="
+                forecastForm.controls.billRate.touched &&
+                  forecastForm.controls.billRate?.hasError('pattern')
+                "
+                class="error-msg"
+              >
+                Prior Period Avg. Bill Rate is invalid!
+              </div>
               </div>
             </div>
 
@@ -138,6 +147,7 @@
                   type="text"
                   class="form-control"
                   formControlName="billHours"
+                  (change)="onValueChange()"
                   placeholder="Average Billed Hours (2 Periods)"
                   [ngClass]="{
                     'invalid-input':
@@ -154,6 +164,17 @@
                 >
                   Average Billed Hours (2 Periods) is Required!
                 </div>
+
+                <div
+                *ngIf="
+                forecastForm.controls.billHours.touched &&
+                  forecastForm.controls.billHours?.hasError('pattern')
+                "
+                class="error-msg"
+              >
+              Average Billed Hours (2 Periods) is invalid!
+              </div>
+
               </div>
             </div>
           </div>
@@ -182,6 +203,15 @@
                 >
                   Projected Placements is Required!
                 </div>
+                <div
+                *ngIf="
+                forecastForm.controls.placements.touched &&
+                  forecastForm.controls.placements?.hasError('pattern')
+                "
+                class="error-msg"
+              >
+              Projected Placements is invalid!
+              </div>
               </div>
             </div>
 
@@ -208,6 +238,16 @@
                 >
                   Projected Buyouts is Required!
                 </div>
+
+                <div
+                *ngIf="
+                forecastForm.controls.buyOuts.touched &&
+                  forecastForm.controls.buyOuts?.hasError('pattern')
+                "
+                class="error-msg"
+              >
+              Projected Buyouts is invalid!
+              </div>
               </div>
             </div>
           </div>
@@ -220,22 +260,12 @@
                   type="text"
                   class="form-control"
                   formControlName="estimatedRevenue"
-                  placeholder="Qkly Estimated Revenue"
-                  [ngClass]="{
-                    'invalid-input':
-                      forecastForm.controls.estimatedRevenue.touched &&
-                      forecastForm.controls.estimatedRevenue.errors?.required
-                  }"
+                  [readonly]="disableSelect"
+                  (input)="onQklyValueChange()"
+
+                 
                 />
-                <div
-                  *ngIf="
-                    forecastForm.controls.estimatedRevenue.touched &&
-                    forecastForm.controls.estimatedRevenue.errors?.required
-                  "
-                  class="error-msg"
-                >
-                  Qkly Estimated Revenue is Required!
-                </div>
+           
               </div>
             </div>
           </div>
@@ -265,6 +295,17 @@
                 >
                   COGS is required!
                 </div>
+
+                <div
+                *ngIf="
+                forecastForm.controls.cogs.touched &&
+                  forecastForm.controls.cogs?.hasError('pattern')
+                "
+                class="error-msg"
+              >
+              COGS is invalid!
+              </div>
+
               </div>
             </div>
 
@@ -275,23 +316,11 @@
                   type="text"
                   class="form-control"
                   formControlName="cogsQkly"
-                  placeholder="COGS Qkly"
-                  [ngClass]="{
-                    'invalid-input':
-                      forecastForm.controls.cogsQkly.touched &&
-                      forecastForm.controls.cogsQkly.errors?.required
-                  }"
+                  [readonly]="disableSelect"
+
                 />
 
-                <div
-                  *ngIf="
-                    forecastForm.controls.cogsQkly.touched &&
-                    forecastForm.controls.cogsQkly.errors?.required
-                  "
-                  class="error-msg"
-                >
-                  COGS Qkly is required!
-                </div>
+               
               </div>
             </div>
           </div>
@@ -320,6 +349,17 @@
                 >
                   Closed Pay Periods is Required!
                 </div>
+                
+                <div
+                *ngIf="
+                forecastForm.controls.closedPayPeriods.touched &&
+                  forecastForm.controls.closedPayPeriods?.hasError('pattern')
+                "
+                class="error-msg"
+              >
+              Closed Pay Periods is invalid!
+              </div>
+
               </div>
             </div>
 
@@ -346,6 +386,16 @@
                 >
                   Other Percent is Required!
                 </div>
+                <div
+                *ngIf="
+                forecastForm.controls.otherPercent.touched &&
+                  forecastForm.controls.otherPercent?.hasError('pattern')
+                "
+                class="error-msg"
+              >
+              Other Percent is invalid!
+              </div>
+
               </div>
             </div>
           </div>
