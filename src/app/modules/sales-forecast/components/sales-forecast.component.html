@@ -1,0 +1,395 @@
+<div class="">
+  <div class="btn-container">
+    <button type="button" class="btn btn-green" (click)="open(content)">
+      New Forecast
+    </button>
+  </div>
+
+  <div class="content">
+    <div class="title-container">
+      <h1 class="page-title">Sales Forecast</h1>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-harbor">
+        <thead>
+          <tr>
+            <th scope="col">S.N</th>
+            <th scope="col">Pay Period</th>
+            <th scope="col">Bill Rate</th>
+            <th scope="col">Hours</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let forecast of forecasts; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td data-th="Pay Period">{{ forecast.payPeriod }}</td>
+            <td data-th="Bill Rate">{{ forecast.billRate }}</td>
+            <td data-th="Hours">{{ forecast.billHours }}</td>
+            <td data-th="Actions">
+              <a
+                (click)="EditData(content, forecast.id)"
+                class="icon-holder"
+                href="javascript:void(0)"
+                title="edit"
+                ><i class="icon icon-pencil-create"></i
+              ></a>
+              <span></span>
+              <a
+                class="icon-holder"
+                (click)="openDeleteModal(deletecontent, forecast.id)"
+                href="javascript:void(0)"
+                title="delete"
+                ><i class="icon icon-circle-block"></i
+              ></a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- <div class="pagination-nowcfo pagination">
+          <pagination
+            [boundaryLinks]="true"
+            [totalItems]="pagination.totalItems"
+            [itemsPerPage]="pagination.itemsPerPage"
+            [(ngModel)]="pagination.currentPage"
+            (pageChanged)="pageChanged($event)"
+            previousText="&lsaquo;"
+            nextText="&rsaquo;"
+            firstText="&laquo;"
+            lastText="&raquo;"
+          >
+          </pagination>
+        </div> -->
+    </div>
+    <ng-template #content let-modal>
+      <div class="container">
+        <h3 class="modal-title" *ngIf="!isEdit">Create Forecast</h3>
+        <h3 class="modal-title" *ngIf="isEdit">Update Forecast</h3>
+        <form
+          class="form-cfo"
+          [formGroup]="forecastForm"
+          (ngSubmit)="onSubmit()"
+        >
+          <div class="form-group">
+            <label>Pay Period</label>
+            <input
+              (click)="d1.toggle()"
+              [minDate]="minDate"
+              id="date"
+              class="form-control"
+              placeholder="yyyy-mm-dd"
+              name="payPeriod"
+              formControlName="payPeriod"
+              ngbDatepicker
+              #d1="ngbDatepicker"
+              [ngClass]="{
+                'invalid-input':
+                  forecastForm.controls.payPeriod.touched &&
+                  forecastForm.controls.payPeriod.errors?.required
+              }"
+            />
+            <div
+              *ngIf="
+                forecastForm.controls.payPeriod.touched &&
+                forecastForm.controls.payPeriod.errors?.required
+              "
+              class="error-msg"
+            >
+              Pay Period is required
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Prior Period Avg. Bill Rate</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="billRate"
+                  placeholder="Prior Period Avg.Bill Rate"
+                  [ngClass]="{
+                    'invalid-input':
+                      forecastForm.controls.billRate.touched &&
+                      forecastForm.controls.billRate.errors?.required ||
+                      forecastForm.controls.billRate?.hasError('pattern')
+                  }"
+                />
+
+                <div
+                  *ngIf="
+                  forecastForm.controls.billRate.touched &&
+                  forecastForm.controls.billRate.errors?.required ||
+                    forecastForm.controls.billRate?.hasError('pattern')
+                  "
+                  class="error-msg"
+                >
+                  Prior Period Avg. Bill Rate is required!
+                </div>
+              </div>
+            </div>
+
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Average Billed Hours (2 Periods)</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="billHours"
+                  placeholder="Average Billed Hours (2 Periods)"
+                  [ngClass]="{
+                    'invalid-input':
+                      forecastForm.controls.billHours.touched &&
+                      forecastForm.controls.billHours.errors?.required
+                  }"
+                />
+                <div
+                  *ngIf="
+                    forecastForm.controls.billHours.touched &&
+                    forecastForm.controls.billHours.errors?.required
+                  "
+                  class="error-msg"
+                >
+                  Average Billed Hours (2 Periods) is Required!
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Projected Placements</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="placements"
+                  placeholder="Projected Placements"
+                  [ngClass]="{
+                    'invalid-input':
+                      forecastForm.controls.placements.touched &&
+                      forecastForm.controls.placements.errors?.required
+                  }"
+                />
+                <div
+                  *ngIf="
+                    forecastForm.controls.placements.touched &&
+                    forecastForm.controls.placements.errors?.required
+                  "
+                  class="error-msg"
+                >
+                  Projected Placements is Required!
+                </div>
+              </div>
+            </div>
+
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Projected Buyouts</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="buyOuts"
+                  placeholder="Projected Buyouts"
+                  [ngClass]="{
+                    'invalid-input':
+                      forecastForm.controls.buyOuts.touched &&
+                      forecastForm.controls.buyOuts.errors?.required
+                  }"
+                />
+                <div
+                  *ngIf="
+                    forecastForm.controls.buyOuts.touched &&
+                    forecastForm.controls.buyOuts.errors?.required
+                  "
+                  class="error-msg"
+                >
+                  Projected Buyouts is Required!
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Qkly Estimated Revenue</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="estimatedRevenue"
+                  placeholder="Qkly Estimated Revenue"
+                  [ngClass]="{
+                    'invalid-input':
+                      forecastForm.controls.estimatedRevenue.touched &&
+                      forecastForm.controls.estimatedRevenue.errors?.required
+                  }"
+                />
+                <div
+                  *ngIf="
+                    forecastForm.controls.estimatedRevenue.touched &&
+                    forecastForm.controls.estimatedRevenue.errors?.required
+                  "
+                  class="error-msg"
+                >
+                  Qkly Estimated Revenue is Required!
+                </div>
+              </div>
+            </div>
+          </div>
+          .......................................................................
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>COGS (% of Billed)</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="cogs"
+                  placeholder="COGS (% of Billed)"
+                  [ngClass]="{
+                    'invalid-input':
+                      forecastForm.controls.cogs.touched &&
+                      forecastForm.controls.cogs.errors?.required
+                  }"
+                />
+
+                <div
+                  *ngIf="
+                    forecastForm.controls.cogs.touched &&
+                    forecastForm.controls.cogs.errors?.required
+                  "
+                  class="error-msg"
+                >
+                  COGS is required!
+                </div>
+              </div>
+            </div>
+
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>COGS Qkly</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="cogsQkly"
+                  placeholder="COGS Qkly"
+                  [ngClass]="{
+                    'invalid-input':
+                      forecastForm.controls.cogsQkly.touched &&
+                      forecastForm.controls.cogsQkly.errors?.required
+                  }"
+                />
+
+                <div
+                  *ngIf="
+                    forecastForm.controls.cogsQkly.touched &&
+                    forecastForm.controls.cogsQkly.errors?.required
+                  "
+                  class="error-msg"
+                >
+                  COGS Qkly is required!
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Closed Pay Periods</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="closedPayPeriods"
+                  placeholder="Closed Pay Periods"
+                  [ngClass]="{
+                    'invalid-input':
+                      forecastForm.controls.closedPayPeriods.touched &&
+                      forecastForm.controls.closedPayPeriods.errors?.required
+                  }"
+                />
+                <div
+                  *ngIf="
+                    forecastForm.controls.closedPayPeriods.touched &&
+                    forecastForm.controls.closedPayPeriods.errors?.required
+                  "
+                  class="error-msg"
+                >
+                  Closed Pay Periods is Required!
+                </div>
+              </div>
+            </div>
+
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Other Percent</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="otherPercent"
+                  placeholder="Other Percent"
+                  [ngClass]="{
+                    'invalid-input':
+                      forecastForm.controls.otherPercent.touched &&
+                      forecastForm.controls.otherPercent.errors?.required
+                  }"
+                />
+                <div
+                  *ngIf="
+                    forecastForm.controls.otherPercent.touched &&
+                    forecastForm.controls.otherPercent.errors?.required
+                  "
+                  class="error-msg"
+                >
+                  Other Percent is Required!
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="float-right">
+            <button
+              type="submit"
+              class="btn btn-green mr-3"
+              [disabled]="forecastForm.invalid"
+            >
+              {{ EventValue }}
+            </button>
+
+            <button
+              type="button"
+              class="btn btn-gray"
+              (click)="modal.close('Close Button Clicked')"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </ng-template>
+
+    <ng-template #deletecontent let-modal>
+      <div class="container">
+        <h3 class="modal-title">
+          This action is permanent. Are you sure you want to delete this
+          Forecast?
+        </h3>
+        <div class="float-right">
+          <button type="submit" (click)="Delete()" class="btn btn-green mr-3">
+            {{ EventValue }}
+          </button>
+          <button
+            type="button"
+            class="btn btn-gray"
+            (click)="modal.close('Close Button Clicked')"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div>

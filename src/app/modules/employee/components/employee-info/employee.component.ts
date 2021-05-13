@@ -84,10 +84,10 @@ export class EmployeeComponent implements OnInit {
 
   employeeName = new FormControl('', [Validators.required]);
   email = new FormControl('', [Validators.required, Validators.email]);
-  phone = new FormControl('', [Validators.required]);
+  phone = new FormControl('', [Validators.required,Validators.pattern(/^[0-9]{10}$/)]);
   address = new FormControl('', [Validators.required]);
   city = new FormControl('', [Validators.required]);
-  zipCode = new FormControl('', [Validators.required]);
+  zipCode = new FormControl('', [Validators.required, Validators.pattern('^[0-9]{5}(?:-[0-9]{4})?$')]);
   state = new FormControl(null, [Validators.required]);
   organizationId = new FormControl(null, [Validators.required]);
   designationId = new FormControl(null, [Validators.required]);

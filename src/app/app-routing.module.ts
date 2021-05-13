@@ -64,6 +64,14 @@ export const routes: Routes = [
             (m) => m.MarketModule
           ),
         canActivate: [AuthGuard],
+      },
+      {
+        path: 'sales',
+        loadChildren: () =>
+          import('./modules/sales-forecast/sales-forecast.module').then(
+            (m) => m.SalesForecastModule
+          ),
+        canActivate: [AuthGuard],
       }
     ],
   },
