@@ -195,7 +195,6 @@ export class EmployeeComponent implements OnInit {
   }
 
 
-
   getDesignations() {
     this.employeeService.getAllDesignations().subscribe(
       (result) => {

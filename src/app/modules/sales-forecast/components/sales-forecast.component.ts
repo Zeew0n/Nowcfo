@@ -17,7 +17,7 @@
   } from 'src/app/models/Pagination/Pagination';
 import { SalesForecastModel } from 'src/app/models/SalesForecast/sales-forecast.model.';
 import { SalesForecastService } from '../services/sales-forecast.service';
-  
+import { DatePipe } from '@angular/common'
   const now = new Date();
   @Component({
     selector: 'app-sales-forecast',
@@ -29,7 +29,9 @@ import { SalesForecastService } from '../services/sales-forecast.service';
     forecasts: SalesForecastModel[];
 
     disabled = false;
+    isView=false;
     disableSelect = true;
+    isPayPeriodExists=false;
     id = '';
     closeResult = ''; // close result for modal
     submitted = false;
@@ -56,7 +58,8 @@ import { SalesForecastService } from '../services/sales-forecast.service';
       private modalService: NgbModal,
       private toastr: ToastrService,
       private forecastService: SalesForecastService,
-      private route: ActivatedRoute
+      private route: ActivatedRoute,
+      private datepipe: DatePipe
     ) {}
   
   
@@ -133,7 +136,25 @@ import { SalesForecastService } from '../services/sales-forecast.service';
 
 
 
-  
+     checkPayrollExists() {
+      this.isPayPeriodExists = false;
+       var payPeriod= this.forecastForm.value.payPeriod;
+       payPeriod = this.setPayDate(payPeriod);
+       let latestdate=this.datepipe.transform(payPeriod, 'yyyy-MM-dd')
+      this.forecastService.checkPayPeriodExists(latestdate).subscribe(
+        () => {
+          this.isPayPeriodExists = true;
+          this.forecastForm.controls.payPeriod.setErrors({
+
+
+            
+          })
+        },
+        () => console.error
+      );
+    }
+
+
     // getAllForecasts() {
     //   this.forecastService.getAllForecasts().subscribe(
     //     (result) => {
@@ -157,6 +178,17 @@ import { SalesForecastService } from '../services/sales-forecast.service';
         }
       }
     
+
+      setPayDate(date) {
+        if (date) {
+          const parsedDate = date
+            ? new Date('' + date.year + '-' + date.month + '-' + date.day)
+            : null;
+          return parsedDate.toLocaleDateString();
+        }
+      }
+
+
       /**
        * Get Parsed date
        */
@@ -205,10 +237,24 @@ import { SalesForecastService } from '../services/sales-forecast.service';
 
     EditData(content, id: string) {
       this.isEdit = true;
+      this.isView=false;
       this.selectedForecastId = id;
       this.resetFrom();
+      this.EventValue = 'Update';
       this.id = id;
       this.getForecastById(id, content);
+      this.forecastForm.enable();
+
+    }
+
+    ViewData(content, id: string) {
+      this.isEdit=false;
+      this.isView = true;
+      this.selectedForecastId = id;
+      this.id = id;
+      this.getForecastById(id, content);
+      this.forecastForm.disable();
+
     }
   
     private displayFormData(data: SalesForecastModel, id: any) {
@@ -232,8 +278,6 @@ import { SalesForecastService } from '../services/sales-forecast.service';
     getForecastById(id: string, content) {
       this.forecastService.getForecastById(id).subscribe(
         (res: SalesForecastModel) => {
-          this.isEdit = true;
-          this.EventValue = 'Update';
           this.displayFormData(res, id);
           this.openModal(content);
         },
@@ -274,13 +318,13 @@ import { SalesForecastService } from '../services/sales-forecast.service';
     open(content) {
       this.resetFrom();
       this.isEdit = false;
+      this.isView=false;
       this.openModal(content);
     }
   
 
   
     onSubmit() {
-      debugger
       const createForm = this.forecastForm.value;
       if (!this.isEdit) {
         if (this.forecastForm.valid) {
@@ -305,7 +349,6 @@ import { SalesForecastService } from '../services/sales-forecast.service';
               this.getForecasts();
             },
             (error) => {
-              console.log(error);
               this.modalService.dismissAll();
               this.toastr.error(error.error.errorMessage, 'Error!');
             }
@@ -363,6 +406,9 @@ import { SalesForecastService } from '../services/sales-forecast.service';
       this.forecastForm.reset();
       this.EventValue = 'Save';
       this.submitted = false;
+      this.isView=false;
+      this.isPayPeriodExists = false;
+
     }
   
   
