@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -26,6 +26,6 @@ import { ForecastListsResolver } from 'src/app/shared/_resolver/forecastList';
         
     ],
     declarations: [SalesForecastComponent],
-    providers: [ForecastListsResolver]
+    providers: [DatePipe,ForecastListsResolver]
 })
 export class SalesForecastModule { }

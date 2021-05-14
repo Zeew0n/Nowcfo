@@ -73,6 +73,12 @@ export class SalesForecastService extends HttpGenericCrudService<SalesForecastMo
         return this.httpClient.delete('SalesForecasts/' + id);
     }
 
+
+    checkPayPeriodExists(payPeriod:string) {
+        return this.httpClient.get('SalesForecasts/CheckIfExists/'+payPeriod);
+    }
+
+
     updateForecast(id, data) {
         return this.httpClient.put('SalesForecasts/' + id, data);
     }
