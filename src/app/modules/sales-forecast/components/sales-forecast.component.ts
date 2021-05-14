@@ -99,9 +99,10 @@ import { SalesForecastService } from '../services/sales-forecast.service';
    const value1 = this.forecastForm.value.billRate;
    const value2 = this.forecastForm.value.billHours;
   if(value1 && value2){
-    this.estimatedRevenue.patchValue(value1*value2*1.03);
-    const value3 = this.forecastForm.value.estimatedRevenue;
-    this.cogsQkly.patchValue(value3*0.5);
+    const revenue = (value1*value2*1.03).toFixed(2);
+    this.estimatedRevenue.patchValue(revenue);
+    const value3 = (this.forecastForm.value.estimatedRevenue*0.5).toFixed(2);
+    this.cogsQkly.patchValue(value3);
   }
   };
 
@@ -270,7 +271,6 @@ import { SalesForecastService } from '../services/sales-forecast.service';
         }
       );
     }
-  
     open(content) {
       this.resetFrom();
       this.isEdit = false;

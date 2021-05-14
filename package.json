@@ -31,6 +31,7 @@
     "@nguniversal/module-map-ngfactory-loader": "^8.2.6",
     "@syncfusion/ej2-angular-buttons": "^19.1.54",
     "@syncfusion/ej2-angular-navigations": "^19.1.54",
+    "angular2-focus": "^1.1.4",
     "bootstrap": "^4.6.0",
     "country-state-city": "^2.0.0",
     "font-awesome": "^4.7.0",

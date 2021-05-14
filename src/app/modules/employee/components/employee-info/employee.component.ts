@@ -186,6 +186,7 @@ export class EmployeeComponent implements OnInit {
     this.employeeForm.controls.terminationDate.setValidators(null);
     this.employeeForm.controls.terminationDate.setErrors(null);
   }else{
+
     this.employeeForm.controls.terminationDate.setValidators(Validators.required);
     this.employeeForm.controls.terminationDate.setErrors(this.employeeForm.value.terminationDate ? null : { required: true }
       );
@@ -247,8 +248,6 @@ export class EmployeeComponent implements OnInit {
       }
     }
 
-
-  
   getEmployeeTypes() {
     this.employeeService.getAllEmployeeTypes().subscribe(
       (result) => {
@@ -563,6 +562,7 @@ export class EmployeeComponent implements OnInit {
   }
 
   openModal(content: any) {
+    this.terminationValidation();
     this.modalService
       .open(content, {
         ariaLabelledBy: 'modal-basic-title',
