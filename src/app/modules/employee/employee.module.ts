@@ -18,12 +18,14 @@ import { TreeViewModule } from '@syncfusion/ej2-angular-navigations';
 import { MiniChildComponent } from './components/minichild/minichild.component';
 import { EmployeePermissionComponent } from './components/employee-permission/employee-permission.component';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import {FocusModule} from 'angular2-focus';
 
 
 
 @NgModule({
     imports: [
         CommonModule,
+        FocusModule.forRoot(),
         TreeViewModule,
         EmployeeRoutingModule,
         FormsModule,

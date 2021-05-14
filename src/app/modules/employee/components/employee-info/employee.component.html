@@ -163,6 +163,7 @@
             <input
               type="text"
               formControlName="employeeName"
+              focus="true"
               class="form-control"
               placeholder="Employee Name"
               [ngClass]="{
@@ -579,6 +580,9 @@
                 >
                   Status Type is required!
                 </div>
+
+
+
               </div>
             </div>
 
@@ -637,6 +641,7 @@
                   placeholder="yyyy-mm-dd"
                   name="startDate"
                   formControlName="startDate"
+                  focus="true"
                   ngbDatepicker
                   #d1="ngbDatepicker"
                   (dateSelect)="startDateChanged()"
@@ -669,6 +674,7 @@
                   class="form-control"
                   placeholder="yyyy-mm-dd"
                   name="terminationDate"
+                  focus="true"
                   formControlName="terminationDate"
                   ngbDatepicker
                   #d2="ngbDatepicker"
