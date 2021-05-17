@@ -18,6 +18,7 @@
 import { SalesForecastModel } from 'src/app/models/SalesForecast/sales-forecast.model.';
 import { SalesForecastService } from '../services/sales-forecast.service';
 import { DatePipe } from '@angular/common'
+import { NgxUiLoaderService } from 'ngx-ui-loader';
   const now = new Date();
   @Component({
     selector: 'app-sales-forecast',
@@ -59,6 +60,7 @@ import { DatePipe } from '@angular/common'
       private toastr: ToastrService,
       private forecastService: SalesForecastService,
       private route: ActivatedRoute,
+      private loader: NgxUiLoaderService,
       private datepipe: DatePipe
     ) {}
   
@@ -144,10 +146,7 @@ import { DatePipe } from '@angular/common'
       this.forecastService.checkPayPeriodExists(latestdate).subscribe(
         () => {
           this.isPayPeriodExists = true;
-          this.forecastForm.controls.payPeriod.setErrors({
-
-
-            
+          this.forecastForm.controls.payPeriod.setErrors({ 
           })
         },
         () => console.error
@@ -325,6 +324,7 @@ import { DatePipe } from '@angular/common'
 
   
     onSubmit() {
+      this.loader.start();
       const createForm = this.forecastForm.value;
       if (!this.isEdit) {
         if (this.forecastForm.valid) {
@@ -344,11 +344,14 @@ import { DatePipe } from '@angular/common'
           this.forecastService.createForecast(model).subscribe(
             () => {
               this.submitted = true;
+              this.loader.stop();
               this.toastr.success('Forecast Added Successfully.', 'Success!');
               this.modalService.dismissAll();
               this.getForecasts();
             },
             (error) => {
+              this.submitted = false;
+              this.loader.stop();
               this.modalService.dismissAll();
               this.toastr.error(error.error.errorMessage, 'Error!');
             }
@@ -377,6 +380,7 @@ import { DatePipe } from '@angular/common'
             () => {
               this.toastr.success('Forecast Updated Successfully.', 'Success!');
               this.modalService.dismissAll();
+              this.loader.stop();
               this.getForecasts();
             },
             (error) => {
@@ -386,6 +390,8 @@ import { DatePipe } from '@angular/common'
                   : 'Forecast Update failed',
                 'Error!'
               );
+              this.loader.stop();
+
             }
           );
         }

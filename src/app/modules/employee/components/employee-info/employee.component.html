@@ -1,8 +1,14 @@
 <div class="">
   <div class="btn-container">
-    <button type="button" class="btn btn-green" (click)="open(content)">
+    <!-- <button type="button" class="btn btn-green" (click)="open(content)">
       New Employee
-    </button>
+    </button> -->
+
+    <a routerLink="/employee/employee-create/" class="btn btn-green">
+      New Employee
+    </a>
+
+
   </div>
 
   <div class="content">
@@ -114,13 +120,20 @@
             <td data-th="Type">{{ employee.employeeTypeName }}</td>
             <td data-th="Status">{{ employee.statusName }}</td>
             <td data-th="Actions">
-              <a
+
+              <a routerLink="/employee/employee-create" [queryParams]="{id:employee.employeeId}"  title="edit" class="icon-holder" >
+                <i class="icon icon-pencil-create"></i
+                  ></a>
+            
+
+
+              <!-- <a
                 (click)="EditData(content, employee.employeeId)"
                 class="icon-holder"
                 href="javascript:void(0)"
                 title="edit"
                 ><i class="icon icon-pencil-create"></i
-              ></a>
+              ></a> -->
               <!-- <span></span> -->
               <!-- <a
                 class="icon-holder"

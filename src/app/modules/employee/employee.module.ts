@@ -19,6 +19,7 @@ import { MiniChildComponent } from './components/minichild/minichild.component';
 import { EmployeePermissionComponent } from './components/employee-permission/employee-permission.component';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import {FocusModule} from 'angular2-focus';
+import { EmployeeCreateComponent } from './components/employee/employeecreate.component';
 
 
 
@@ -40,7 +41,7 @@ import {FocusModule} from 'angular2-focus';
 
         
     ],
-    declarations: [EmployeeComponent,ChildComponent,MiniChildComponent,EmployeeRoleComponent, EmployeePermissionComponent],
+    declarations: [EmployeeComponent,EmployeeCreateComponent,ChildComponent,MiniChildComponent,EmployeeRoleComponent, EmployeePermissionComponent],
     providers: [EmployeeListsResolver]
 })
 export class EmployeeModule { }

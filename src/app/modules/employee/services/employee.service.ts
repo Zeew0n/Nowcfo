@@ -125,6 +125,11 @@ export class EmployeeService extends HttpGenericCrudService<EmployeeModel>{
       return this.httpClient.get<EmployeeModel[]>('employee/EmployeesAutocomplete/' + searchText);
     }
 
+    checkEmailExists(email:string) {
+      return this.httpClient.get('employee/CheckIfExists/'+email);
+  }
+
+
     assignEmployee(data) {
       return this.httpClient.put('employee/AssignEmployee', data);
     }

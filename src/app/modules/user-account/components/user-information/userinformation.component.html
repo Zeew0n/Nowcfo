@@ -72,6 +72,7 @@
           <input
             type="text"
             formControlName="userName"
+            (ngModelChange)="checkUsernameExists()"
             [readonly]="disableSelect"
             class="form-control"
             placeholder="username"
@@ -90,6 +91,11 @@
           >
             Username is required
           </div>
+
+          <div *ngIf="isUsernameExists" class="error-msg">
+            Username Already Exists!
+          </div>
+
         </div>
 
         <div class="row">
@@ -154,24 +160,28 @@
               <input
                 type="email"
                 formControlName="email"
+                (ngModelChange)="checkEmailExists()"
                 class="form-control"
                 placeholder="Email"
                 [ngClass]="{
                   'invalid-input':
-                    userForm.controls.email.touched &&
-                    userForm.controls.email.errors
+                  userForm.controls.email.touched &&
+                  userForm.controls.email.errors?.required
                 }"
               />
               <div
-                *ngIf="
-                  (userForm.controls.email.touched &&
-                    userForm.controls.email.errors?.required) ||
-                  (userForm.controls.email.touched &&
-                    userForm.controls.email.errors?.email)
-                "
-                class="error-msg"
-              >
-                Email is Invalid!
+              *ngIf="
+                (userForm.controls.email.touched &&
+                userForm.controls.email.errors?.email) ||
+                (userForm.controls.email.touched &&
+                userForm.controls.email.errors?.required)
+              "
+              class="error-msg"
+            >
+              Email is invalid!
+            </div>
+              <div *ngIf="isEmailExists" class="error-msg">
+                Email Already Exists!
               </div>
             </div>
           </div>
@@ -200,6 +210,15 @@
               >
                 Phone number is required
               </div>
+              <div
+              *ngIf="
+              userForm.controls.phoneNumber.touched &&
+              userForm.controls.phoneNumber?.hasError('pattern')
+              "
+              class="error-msg"
+            >
+              Phone Number is invalid!
+            </div>
             </div>
           </div>
         </div>
@@ -277,6 +296,16 @@
               >
                 ZipCode is Required!
               </div>
+              <div
+                  *ngIf="
+                  userForm.controls.zipCode.touched &&
+                  userForm.controls.zipCode?.hasError('pattern')
+                  "
+                  class="error-msg"
+                >
+                  Zip Code is invalid!
+                </div>
+
             </div>
           </div>
         </div>

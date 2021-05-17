@@ -5,6 +5,7 @@ import { EmployeeListsResolver } from 'src/app/shared/_resolver/employeeList';
 import { EmployeeComponent } from './components/employee-info/employee.component';
 import { EmployeePermissionComponent } from './components/employee-permission/employee-permission.component';
 import { EmployeeRoleComponent } from './components/employee-role/employeerole.component';
+import { EmployeeCreateComponent } from './components/employee/employeecreate.component';
 const routes: Routes = [
   {
     path: '',
@@ -20,6 +21,18 @@ const routes: Routes = [
       {
         path: 'employee-role',
         component: EmployeeRoleComponent,
+        canActivate: [AuthGuard]
+      },
+
+      {
+        path: 'employee-create',
+        component: EmployeeCreateComponent,
+        canActivate: [AuthGuard]
+      },
+
+      {
+        path: 'employee-create/:id',
+        component: EmployeeCreateComponent,
         canActivate: [AuthGuard]
       },
 

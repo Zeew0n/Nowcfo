@@ -8,7 +8,7 @@ import {
 
 import { NgbModal,NgbDateStruct, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { ActivatedRoute, Data } from '@angular/router';
+import { ActivatedRoute, Data, Router } from '@angular/router';
 import { EmployeeModel } from 'src/app/models/employee.model';
 import { DesignationModel } from 'src/app/models/designation.model';
 import { OrganizationModel } from 'src/app/models/organization.model';
@@ -21,15 +21,16 @@ import {
 import { OrganizationService } from 'src/app/modules/organization/services/organization.service';
 import { EmployeeTypeModel } from 'src/app/models/employeetype.model';
 import { EmployeeStatusTypeModel } from 'src/app/models/employeestatus.model';
-import { NgxUiLoaderService } from 'ngx-ui-loader';
+import { ThrowStmt } from '@angular/compiler';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 const now = new Date();
 @Component({
-  selector: 'app-employee-list',
-  templateUrl: './employee.component.html',
-  styleUrls: ['./employee.component.scss'],
+  selector: 'app-employee-page',
+  templateUrl: './employeecreate.component.html',
+  styleUrls: ['./employeecreate.component.scss'],
 })
-export class EmployeeComponent implements OnInit {
+export class EmployeeCreateComponent implements OnInit {
   employee: EmployeeModel = new EmployeeModel();
   employees: EmployeeModel[];
   designations: DesignationModel[];
@@ -42,11 +43,12 @@ export class EmployeeComponent implements OnInit {
   employeeId = '';
   pagination: Pagination;
   searchTypes: any = [];
-  closeResult = ''; // close result for modal
   submitted = false;
   isEdit = false;
+  isEmailExists=false;
   stateList: Array<any>;
   selectemployee;
+  employeeForm: FormGroup;
   selectedEmployeeId: string;
   
     minDate: NgbDateStruct = {
@@ -63,26 +65,35 @@ export class EmployeeComponent implements OnInit {
 
 
   constructor(
-    private modalService: NgbModal,
     private toastr: ToastrService,
     private employeeService: EmployeeService,
     private organizationService: OrganizationService,
-    private loader: NgxUiLoaderService,
+    private router: Router,
     private route: ActivatedRoute
-  ) {}
+  ) {
+
+  this.route.queryParams.subscribe((params) => {
+    this.selectedEmployeeId = params['id'];
+
+    });
+  if(this.selectedEmployeeId!=null || undefined){
+    this.initializeemployeeForm();
+    this.EditData(this.selectedEmployeeId);
+  }
+  else{
+    this.initializeemployeeForm();
+    this.terminationValidation();
 
 
-  employeeForm: FormGroup;
-  searchForm: FormGroup;
+  }
+
+  }
+
+
+
   EventValue: any = 'Save';
   public statusDefaultValue = 1;
 
-  searchTypeId = new FormControl(null, [Validators.required]);
-  //For Adding Search
-  searchOrg = new FormControl(null, [Validators.required]);
-  searchStatus = new FormControl(null, [Validators.required]);
-
-  searchValue = new FormControl('', [Validators.required]);
 
   employeeName = new FormControl('', [Validators.required]);
   email = new FormControl('', [Validators.required, Validators.email]);
@@ -112,59 +123,19 @@ export class EmployeeComponent implements OnInit {
   ngOnInit() {
     this.getDesignations();
     this.getOrganizations();
-
-    this.route.data.subscribe((data: Data) => {
-      this.employees = data.employees.result;
-      this.pagination = data.employees.pagination;
-    });
-   
-    this.searchTypes = [
-      { id: 1, name: 'Name' },
-      { id: 2, name: 'Email' },
-    ];
-
     this.getEmployeeTypes();
     this.getEmployeeStatusTypes();
-    this.initializeSearchForm();
     this.getSuperVisors();
     this.initializeemployeeForm();
     this.terminationValidation();
     this.statusDefaultValue = 1;
-
-
     
   }
 
- getEmployeesChanged(){
-  this.getEmployees();
 
- }
 
-  getEmployees() {
-    this.employeeService
-      .getPaginatedEmployees(
-        this.pagination.currentPage,
-        this.pagination.itemsPerPage,
-        this.searchOrg.value,
-        this.searchStatus.value,
-        this.searchTypeId.value,
-        this.searchValue.value,
-      )
-      .subscribe(
-        (res: PaginatedResult<EmployeeModel[]>) => {
-          this.employees = res.result;
-          this.pagination = res.pagination;
-        },
-        (error) => {
-          this.toastr.error(error);
-        }
-      );
-  }
 
-  pageChanged(event: any): void {
-    this.pagination.currentPage = event.page;
-    this.getEmployees();
-  }
+
 
 
   startDateChanged() {
@@ -269,6 +240,18 @@ export class EmployeeComponent implements OnInit {
     );
   }
 
+  checkEmailExists() {
+    this.isEmailExists = false;
+     var emailValue= this.employeeForm.value.email;
+    this.employeeService.checkEmailExists(emailValue).subscribe(
+      () => {
+        this.isEmailExists = true;
+        this.employeeForm.controls.email.setErrors({ 
+        })
+      },
+      () => console.error
+    );
+  }
 
 
 
@@ -316,22 +299,14 @@ export class EmployeeComponent implements OnInit {
     });
   }
 
-  initializeSearchForm() {
-    this.searchForm = new FormGroup({
-      searchOrg: this.searchOrg,
-      searchStatus:this.searchStatus,
-      searchTypeId: this.searchTypeId,
-      searchValue: this.searchValue
 
-    });
-  }
 
-  EditData(content, id: string) {
+  EditData(id: string) {
     this.isEdit = true;
     this.selectedEmployeeId = id;
-    this.resetFrom();
+    //this.resetFrom();
     this.employeeId = id;
-    this.getEmployeeById(id, content);
+    this.getEmployeeById(id);
   }
 
   private displayFormData(data: EmployeeModel, id: any) {
@@ -373,55 +348,27 @@ export class EmployeeComponent implements OnInit {
     });
   }
 
-  getEmployeeById(id: string, content) {
+  getEmployeeById(id: string) {
     this.employeeService.getEmployeeById(id).subscribe(
       (res: EmployeeModel) => {
         this.isEdit = true;
         this.EventValue = 'Update';
         this.displayFormData(res, id);
-        this.openModal(content);
       },
       (error) => {
         this.toastr.error(
           error.error.errorMessage !== undefined
             ? error.error.errorMessage
-            : 'Employee Create failed',
+            : 'Cannot Load Employee Details!!!',
           'Error!'
         );
       }
     );
   }
 
-  openDeleteModal(content, id) {
-    this.EventValue = 'Delete';
-    this.selectedEmployeeId = id;
-    this.openModal(content);
-  }
 
-  Delete() {
-    this.employeeService.deleteEmployee(this.selectedEmployeeId).subscribe(
-      (result) => {
-        if (result == null) {
-          this.modalService.dismissAll();
-          this.toastr.success('Employee delete successfully.', 'success!');
-          this.getEmployees();
-        } else {
-          this.toastr.success('something went wrong.', 'error!');
-        }
-      },
-      (error) => {
-        console.log(error.errorMessage);
-        this.toastr.error('Cannot delete employee', 'error!');
-      }
-    );
-  }
 
-  open(content) {
-    this.resetFrom();
-    this.statusDefaultValue = 1;
-    this.isEdit = false;
-    this.openModal(content);
-  }
+
 
   onStateChange(event) {
     if (event !== undefined) {
@@ -429,12 +376,8 @@ export class EmployeeComponent implements OnInit {
     }
   }
 
-  onSearch() {
-    this.getEmployees();
-  }
 
   onSubmit() {
-    this.loader.start();
     const createForm = this.employeeForm.value;
     if (!this.isEdit) {
       if (this.employeeForm.valid) {
@@ -469,15 +412,14 @@ export class EmployeeComponent implements OnInit {
         this.employeeService.createEmployee(model).subscribe(
           () => {
             this.submitted = true;
-            this.loader.stop();
             this.toastr.success('Employee Added Successfully.', 'Success!');
-            this.modalService.dismissAll();
-            this.getEmployees();
+            this.router.navigate(['employee/employee-information']);
+            //Redirect to EmployeeList page
+            //Redirecting msg
+
           },
           (error) => {
             console.log(error);
-            this.loader.stop();
-            this.modalService.dismissAll();
             this.toastr.error(error.error.errorMessage, 'Error!');
           }
         );
@@ -527,9 +469,10 @@ export class EmployeeComponent implements OnInit {
         this.employeeService.updateEmployee(this.employeeId, model).subscribe(
           () => {
             this.toastr.success('Employee Updated Successfully.', 'Success!');
-            this.loader.stop();
-            this.modalService.dismissAll();
-            this.getEmployees();
+            //Redirect to EmployeeList page
+            //Redirecting msg  
+            this.router.navigate(['employee/employee-information']);
+        
           },
           (error) => {
             this.toastr.error(
@@ -538,53 +481,21 @@ export class EmployeeComponent implements OnInit {
                 : 'Employee Update failed',
               'Error!'
             );
-            this.loader.stop();
-
           }
         );
       }
     }
   }
 
-  getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
-  }
+
 
   resetFrom() {
     this.employeeForm.reset();
     this.EventValue = 'Save';
     this.submitted = false;
-    this.ngOnInit();
+    this.router.navigate(['employee/employee-information']);
+
   }
 
-  resetSearch() {
-    this.searchForm.reset();
-    this.ngOnInit();
-  }
 
-  openModal(content: any) {
-    this.terminationValidation();
-    this.modalService
-      .open(content, {
-        ariaLabelledBy: 'modal-basic-title',
-        windowClass: 'modal-cfo',
-        backdropClass: 'static',
-        backdrop: false,
-
-      })
-      .result.then(
-        (result) => {
-          this.closeResult = `Closed with: ${result}`;
-        },
-        (reason) => {
-          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-        }
-      );
-  }
 }
