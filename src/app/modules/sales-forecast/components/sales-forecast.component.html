@@ -118,7 +118,7 @@
                 >
                   Pay Period is required
                 </div>
-                <div *ngIf="isPayPeriodExists" class="error-msg">
+                <div *ngIf="isPayPeriodExists && !isView" class="error-msg">
                   Pay Period Already Exists!
                 </div>
               </div>

@@ -407,6 +407,7 @@ import { DatePipe } from '@angular/common'
       this.EventValue = 'Save';
       this.submitted = false;
       this.isView=false;
+      this.forecastForm.enable();
       this.isPayPeriodExists = false;
 
     }
