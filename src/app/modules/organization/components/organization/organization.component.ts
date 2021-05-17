@@ -33,6 +33,7 @@ export class OrganizationComponent implements OnInit {
     private ngxLoaderService: NgxUiLoaderService,
   ) {
     this.route.params.subscribe((params) => {
+      debugger
       if (params.id !== undefined) {
         this.selectedOrgId = params.id;
         this.getSingleOrganization(params.id);

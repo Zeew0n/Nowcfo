@@ -43,6 +43,8 @@ export class  UserInformationComponent implements OnInit{
   isUpdate = false;
   selectuserinformation;
   disableSelect = false;
+  isEmailExists=false;
+  isUsernameExists=false;
 
   constructor(
     private fb: FormBuilder,
@@ -64,14 +66,12 @@ export class  UserInformationComponent implements OnInit{
 
   userName = new FormControl('', [Validators.required]);
   email = new FormControl('', [Validators.email, Validators.required]);
-  phoneNumber = new FormControl('', [Validators.required, Validators.pattern('^((\\+91-?)|0)?[0-9]{10}$')]);
+  phoneNumber = new FormControl('', [Validators.required,Validators.pattern(/^[0-9]{10}$/)]);
   firstName = new FormControl('', [Validators.required]);
   lastName = new FormControl('', [Validators.required]);
-  // password = new FormControl('', [Validators.required]);
-  // password = new FormControl();
   address = new FormControl('', [Validators.required]);
   city = new FormControl('', [Validators.required]);
-  zipCode = new FormControl('', [Validators.required]);
+  zipCode = new FormControl('', [Validators.required, Validators.pattern('^[0-9]{5}(?:-[0-9]{4})?$')]);
   roleId = new FormControl(true, [Validators.required]);
 
   ngOnInit() {
@@ -107,6 +107,37 @@ export class  UserInformationComponent implements OnInit{
       (error) => console.error
     );
   }
+
+
+  checkEmailExists() {
+    
+    this.isEmailExists = false;
+     var emailValue= this.userForm.value.email;
+    this.userInformationService.checkEmailExists(emailValue).subscribe(
+      () => {
+        this.isEmailExists = true;
+        this.userForm.controls.email.setErrors({ 
+        })
+      },
+      () => console.error
+    );
+  }
+
+  checkUsernameExists() {
+    
+    this.isUsernameExists = false;
+     var userValue= this.userForm.value.userName;
+    this.userInformationService.checkUsernameExists(userValue).subscribe(
+      () => {
+        this.isUsernameExists = true;
+        this.userForm.controls.userName.setErrors({ 
+        })
+      },
+      () => console.error
+    );
+  }
+
+
 
   initializeuserinformationForm() {
     this.userForm = new FormGroup({
@@ -246,6 +277,8 @@ export class  UserInformationComponent implements OnInit{
     this.userForm.reset();
     this.EventValue = 'Save';
     this.submitted = false;
+    this.isEmailExists = false;
+    this.isUsernameExists = false;
     this.userinformation = null;
   }
 

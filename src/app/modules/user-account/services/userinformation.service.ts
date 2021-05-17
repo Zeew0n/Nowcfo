@@ -41,4 +41,13 @@ export class UserInformationService extends HttpGenericCrudService<UserInformati
         return this.httpClient.put('user/changepassword', data);
     }
 
+    checkEmailExists(email:string) {
+        debugger
+        return this.httpClient.get('user/CheckIfEmailExists/'+email);
+    }
+
+    checkUsernameExists(userName:string) {
+        return this.httpClient.get('user/CheckIfUsernameExists/'+userName);
+    }
+    
 }

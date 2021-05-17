@@ -116,7 +116,7 @@
                   "
                   class="error-msg"
                 >
-                  Pay Period is required
+                This field is required
                 </div>
                 <div *ngIf="isPayPeriodExists && !isView" class="error-msg">
                   Pay Period Already Exists!
@@ -137,7 +137,7 @@
                   type="text"
                   class="form-control"
                   formControlName="billRate"
-                  placeholder="Prior Period Avg.Bill Rate"
+                  placeholder="Avg.Bill Rate"
                   (change)="onValueChange()"
                   [ngClass]="{
                     'invalid-input':
@@ -153,7 +153,7 @@
                   "
                   class="error-msg"
                 >
-                  Prior Period Avg. Bill Rate is required!
+                This field is required
                 </div>
 
                 <div
@@ -163,7 +163,7 @@
                   "
                   class="error-msg"
                 >
-                  Prior Period Avg. Bill Rate is invalid!
+                Invalid Input!
                 </div>
               </div>
             </div>
@@ -181,7 +181,7 @@
                   class="form-control"
                   formControlName="billHours"
                   (change)="onValueChange()"
-                  placeholder="Average Billed Hours (2 Periods)"
+                  placeholder="Billed Hours"
                   [ngClass]="{
                     'invalid-input':
                       forecastForm.controls.billHours.touched &&
@@ -195,7 +195,7 @@
                   "
                   class="error-msg"
                 >
-                  Average Billed Hours (2 Periods) is Required!
+                This field is required
                 </div>
 
                 <div
@@ -205,7 +205,7 @@
                   "
                   class="error-msg"
                 >
-                  Average Billed Hours (2 Periods) is invalid!
+                Invalid Input!
                 </div>
               </div>
             </div>
@@ -223,7 +223,7 @@
                   type="text"
                   class="form-control"
                   formControlName="placements"
-                  placeholder="Projected Placements"
+                  placeholder="Proj Placements"
                   [ngClass]="{
                     'invalid-input':
                       forecastForm.controls.placements.touched &&
@@ -237,7 +237,7 @@
                   "
                   class="error-msg"
                 >
-                  Projected Placements is Required!
+                This field is required
                 </div>
                 <div
                   *ngIf="
@@ -246,7 +246,7 @@
                   "
                   class="error-msg"
                 >
-                  Projected Placements is invalid!
+                   Invalid Input!
                 </div>
               </div>
             </div>
@@ -277,7 +277,7 @@
                   "
                   class="error-msg"
                 >
-                  Projected Buyouts is Required!
+                This field is required
                 </div>
 
                 <div
@@ -287,7 +287,7 @@
                   "
                   class="error-msg"
                 >
-                  Projected Buyouts is invalid!
+                Invalid Input!
                 </div>
               </div>
             </div>
@@ -332,7 +332,7 @@
                   type="text"
                   class="form-control"
                   formControlName="cogs"
-                  placeholder="COGS (% of Billed)"
+                  placeholder="COGS"
                   [ngClass]="{
                     'invalid-input':
                       forecastForm.controls.cogs.touched &&
@@ -347,7 +347,7 @@
                   "
                   class="error-msg"
                 >
-                  COGS is required!
+                This field is required
                 </div>
 
                 <div
@@ -357,7 +357,7 @@
                   "
                   class="error-msg"
                 >
-                  COGS is invalid!
+                Invalid Input!
                 </div>
               </div>
             </div>
@@ -399,7 +399,7 @@
                   "
                   class="error-msg"
                 >
-                  Closed Pay Periods is Required!
+                This field is required
                 </div>
 
                 <div
@@ -409,7 +409,7 @@
                   "
                   class="error-msg"
                 >
-                  Closed Pay Periods is invalid!
+                Invalid Input!
                 </div>
               </div>
             </div>
@@ -440,7 +440,7 @@
                   "
                   class="error-msg"
                 >
-                  Other Percent is Required!
+                This field is required
                 </div>
                 <div
                   *ngIf="
@@ -449,7 +449,7 @@
                   "
                   class="error-msg"
                 >
-                  Other Percent is invalid!
+                Invalid Input!
                 </div>
               </div>
             </div>
