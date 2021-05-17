@@ -75,21 +75,25 @@ export class MarketAllocationComponent implements OnInit {
   
   
     getAllocationPagination() {
-      this.selectedMarket = this.organizationId.value
-      if(this.organizationId.value != undefined || null)
+      this.ngxLoaderService.start();
+      const allocationFormValue = this.allocationForm.value
+      this.selectedMarket = allocationFormValue.organizationId
+      console.log(this.selectedMarket);
+      if(this.selectedMarket != undefined || null)
       {
 
         this.marketService
         .getPaginatedAllocation(
           1,
           20,
-          this.organizationId.value,
+          this.selectedMarket,
         )
         .subscribe(
           (res: PaginatedResult<MarketMasterModel[]>) => {
             this.allocations = res.result;
             this.pagination = res.pagination;
             this.isLoaded= true;
+            this.ngxLoaderService.stop();
             
           },
           (error) => {
@@ -101,6 +105,7 @@ export class MarketAllocationComponent implements OnInit {
       else{
         this.router.navigateByUrl('market');
         this.isLoaded= false;
+        this.ngxLoaderService.stop();
 
       }
 
@@ -108,12 +113,13 @@ export class MarketAllocationComponent implements OnInit {
     }
   
     getAllocationChanged() {
-      this.selectedMarket = this.organizationId.value
+      const allocationFormValue = this.allocationForm.value
+      this.selectedMarket = allocationFormValue.organizationId
       this.marketService
         .getPaginatedAllocation(
           this.pagination.currentPage,
           this.pagination.itemsPerPage,
-          this.organizationId.value,
+          this.selectedMarket,
         )
         .subscribe(
           (res: PaginatedResult<MarketMasterModel[]>) => {
@@ -146,9 +152,12 @@ export class MarketAllocationComponent implements OnInit {
 
 
   initializeAllocationForm() {
-    this.allocationForm = new FormGroup({
-      organizationId: this.organizationId
-        });
+    // this.allocationForm = new FormGroup({
+    //   organizationId: this.organizationId
+    // });
+    this.allocationForm = this.fb.group ({
+      organizationId:[null, [Validators.required]],
+    });
   }
 
   getMarketAllocationModels(organizationId) {
@@ -162,6 +171,11 @@ export class MarketAllocationComponent implements OnInit {
     );
   }
 
+  openAllocation() {
+    this.ngxLoaderService.start();
+    this.router.navigateByUrl(`market/create-market-allocation?id=${this.selectedMarket}`);
+    this.ngxLoaderService.stop();
+  }
 
   openDeleteModal(content, id) {
     
@@ -228,23 +242,4 @@ export class MarketAllocationComponent implements OnInit {
       );
   }
 
-
-
-
 }
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-

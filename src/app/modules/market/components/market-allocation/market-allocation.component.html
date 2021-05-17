@@ -13,10 +13,9 @@
       </ng-select>
     </div>
   </form>
-    
-  <a routerLink="/market/create-market-allocation/" [queryParams]="{id:selectedMarket}"  class="btn btn-green">
+  <button (click)="openAllocation()" class="btn btn-green"  [disabled]="allocationForm.invalid">
     New Allocation
-  </a>
+  </button>
   </div>
 
   <div class="content">

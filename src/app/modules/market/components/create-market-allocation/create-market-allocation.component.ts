@@ -6,7 +6,7 @@ import {
   Validators,
   FormArray,
 } from '@angular/forms';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { RoleModel } from 'src/app/models/role.model';
 import { MenuModel } from 'src/app/models/menu.model';
@@ -22,6 +22,7 @@ import { CogsTypeModel } from 'src/app/models/Market/cogs.model';
 import { OtherTypeModel } from 'src/app/models/Market/other.model';
 import { MarketService } from '../../services/market.service';
 import { MarketAllocationModel } from 'src/app/models/Market/market-allocation.model';
+import { MarketModel } from 'src/app/models/Market/market.model';
 @Component({
   selector: 'app-create-market-allocation',
   templateUrl: './create-market-allocation.component.html',
@@ -30,9 +31,11 @@ import { MarketAllocationModel } from 'src/app/models/Market/market-allocation.m
 
 export class CreateMarketAllocationComponent implements OnInit {
 
+  model: NgbDateStruct;
   role: RoleModel = new RoleModel();
   roles: RoleModel[];
 
+  markets: MarketModel[];
   allocationTypes:AllocationTypeModel[];
   cogsTypes:CogsTypeModel[];
   otherTypes:OtherTypeModel[];
@@ -68,6 +71,14 @@ export class CreateMarketAllocationComponent implements OnInit {
 
   /* Form Declarations */
   marketMasterForm: FormGroup;
+  allocationtList: FormArray;
+  get allocationFormGroup() {
+    return this.marketMasterForm.get('allocations') as FormArray;
+  }
+   // quantities() : FormArray {
+  //   return this.marketMasterForm.get("allocations") as FormArray
+  // }
+
   roleForm: FormGroup;
   EventValue: any = 'Save';
 
@@ -82,6 +93,9 @@ export class CreateMarketAllocationComponent implements OnInit {
     });
 
     this.initializeMarketAllocationModelForm();
+    // set contactlist to the form control containing contacts
+    this.allocationtList = this.marketMasterForm.get('allocations') as FormArray;
+
     this.getAllocationTypes();
     this.getCogsTypes();
     this.getOtherTypes();
@@ -193,37 +207,43 @@ export class CreateMarketAllocationComponent implements OnInit {
       organizationId:[''],
       payperiod: ['', [Validators.required]],
       allocationTypeId:[null, [Validators.required]],
-      allocations:  this.fb.array([])
+      allocations:  this.fb.array([this.createAllocation()])
     });
-    this.createMarketSerivce.getAllMarketsByOrgId(parseInt(this.parentOrganizationId))
+    this.createMarketSerivce.getAllMarketsByOrgId(1)
     .subscribe(
       (data) => {
-        const test  = Object.assign([], data);
-        this.marketAllocations  = Object.assign([], data);
+        
+        this.markets  = Object.assign([], data);
 
-        console.table(test);
-        console.table(this.marketAllocations);
-        for (let i = 0; i < this.marketAllocations.length; i++) {
-      (this.marketMasterForm.controls.allocations as FormArray).push(this.newAllocation());
-    }
+        console.log(this.markets);
+        console.table(this.markets);
 
       },
       (error) => {
         this.toastr.error('err', 'error!');
       }
     )
-    
-    
-    
   }
-
-  quantities() : FormArray {
-    return this.marketMasterForm.get("allocations") as FormArray
+  hidePlusIcon=false;
+  hideMinusIcon=true;
+  addAllocation() {
+    this.hidePlusIcon = true;
+    this.hideMinusIcon = false;
+    this.allocationtList.push(this.createAllocation());
   }
+  
+  removeAllocation(index) {
+    this.allocationtList.removeAt(index);
+  }
+  
 
-  newAllocation(): FormGroup {
+  // quantities() : FormArray {
+  //   return this.marketMasterForm.get("allocations") as FormArray
+  // }
+
+  createAllocation(): FormGroup {
     return this.fb.group({
-        marketId: ['', [Validators.required]],
+        marketId: [null, [Validators.required]],
         revenue:['', [Validators.required]],
         cogs: ['', [Validators.required]],
         cogsTypeId: [null, [Validators.required]],
@@ -233,6 +253,34 @@ export class CreateMarketAllocationComponent implements OnInit {
         other: ['', [Validators.required]],
         otherTypeId:[null, [Validators.required]],
     })
+  }
+
+
+  // get the formgroup under contacts form array
+  getAllocationsFormGroup(index): FormGroup {
+    // this.contactList = this.form.get('contacts') as FormArray;
+    const formGroup = this.allocationtList.controls[index] as FormGroup;
+    return formGroup;
+  }
+
+  // triggered to change validation of value field type
+  changedFieldType(index) {
+    let validators = null;
+
+    if (this.getAllocationsFormGroup(index).controls['type'].value === 'email') {
+      validators = Validators.compose([Validators.required, Validators.email]);
+    } else {
+      validators = Validators.compose([
+        Validators.required,
+        Validators.pattern(new RegExp('^\\+[0-9]?()[0-9](\\d[0-9]{9})$')) // pattern for validating international phone number
+      ]);
+    }
+
+    this.getAllocationsFormGroup(index).controls['value'].setValidators(
+      validators
+    );
+
+    this.getAllocationsFormGroup(index).controls['value'].updateValueAndValidity();
   }
  
 
