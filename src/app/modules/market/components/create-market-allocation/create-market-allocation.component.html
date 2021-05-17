@@ -1,21 +1,26 @@
 <form [formGroup]="marketMasterForm" class="form-cfo">
   <!-- {{marketMasterForm.value|json}} -->
   <div class="form-row">
-    <div class="form-group col-md-4">
-      <input type="hidden" [ngModel]="parentOrganizationId" formControlName="organizationId" />
+    <div class="form-group col-md-3">
+      <input
+        type="hidden"
+        [ngModel]="parentOrganizationId"
+        formControlName="organizationId"
+      />
       <h2>Midwest Region</h2>
     </div>
-    <div class="form-group col-md-4">
+    <div class="form-group col-md-3">
       <label for="payperiod">Pay Period</label>
       <input
-        type="text"
-        placeholder="yyyy-mm-dd"
-        class="form-control"
-        formControlName="payperiod"
-        id="payperiod"
-      />
+      (click)="d1.toggle()"
+      class="form-control"
+      placeholder="yyyy-mm-dd"
+      formControlName="payperiod"
+      ngbDatepicker
+      #d1="ngbDatepicker"
+    />
     </div>
-    <div class="form-group col-md-4">
+    <div class="form-group col-md-3">
       <label>Type</label>
       <ng-select
         [items]="allocationTypes"
@@ -27,13 +32,16 @@
       >
       </ng-select>
     </div>
+    <div class="form-group col-md-3">
+      <button type="button" (click)="addAllocation()"> Add Rows </button>
+    </div>
   </div>
   <div class="form-group">
     <div class="table-responsive">
-      <table formArrayName="allocations" class="table table-harbor">
+      <table formArrayName="allocations" class="table table-striped">
         <thead>
           <tr>
-            <th scope="col">S.N</th>
+            <th scope="col">#</th>
             <th scope="col">Market</th>
             <th scope="col">Revenue</th>
             <th scope="col">COGS</th>
@@ -43,17 +51,22 @@
             <th scope="col">G&A</th>
             <th scope="col">Other</th>
             <th scope="col">Other Type</th>
+           
           </tr>
         </thead>
         <tbody>
-          <tr
-            *ngFor="let allocation of marketAllocations; let i = index"
-            [formGroupName]="i"
-          >
+          <tr *ngFor="let allocation of allocationFormGroup.controls; let i = index;" 
+               [formGroupName]="i">
             <td>{{ i + 1 }}</td>
             <td>
-              {{allocation.marketName }}
-              <input type="hidden" [ngModel]="allocation.marketId" formControlName="marketId" />
+              <ng-select
+              [items]="markets"
+              formControlName="marketId"
+              placeholder="select"
+              bindLabel="marketName"
+              bindValue="marketId"
+              class="cfo-select"
+            ></ng-select>
             </td>
             <td>
               <input
@@ -63,11 +76,7 @@
               />
             </td>
             <td>
-              <input
-                type="text"
-                formControlName="cogs"
-                class="form-control"
-              />
+              <input type="text" formControlName="cogs" class="form-control" />
             </td>
             <td>
               <ng-select
@@ -80,32 +89,16 @@
               ></ng-select>
             </td>
             <td>
-              <input
-                type="text"
-                formControlName="se"
-                class="form-control"
-              />
+              <input type="text" formControlName="se" class="form-control" />
             </td>
             <td>
-              <input
-                type="text"
-                formControlName="ee"
-                class="form-control"
-              />
+              <input type="text" formControlName="ee" class="form-control" />
             </td>
             <td>
-              <input
-                type="text"
-                formControlName="ga"
-                class="form-control"
-              />
+              <input type="text" formControlName="ga" class="form-control" />
             </td>
             <td>
-              <input
-                type="text"
-                formControlName="other"
-                class="form-control"
-              />
+              <input type="text" formControlName="other" class="form-control" />
             </td>
             <td>
               <ng-select
@@ -118,6 +111,7 @@
               >
               </ng-select>
             </td>
+            <a [hidden]="hideMinusIcon" style="cursor:pointer;" (click)="removeAllocation(i)"> <i style="color:red" class="fa fa-minus-circle" aria-hidden="true"></i> </a>
           </tr>
         </tbody>
       </table>
@@ -125,7 +119,9 @@
   </div>
 
   <div class="pull-right">
-    <button type="submit" (click)="submit()"  class="btn btn-green mr-2">Save</button>
-    <button type="button"  class="btn btn-gray">Cancel</button>
+    <button type="submit" (click)="submit()" class="btn btn-green mr-2">
+      Save
+    </button>
+    <a routerLink="/market/market-allocation" class="btn btn-gray">Cancel</a>
   </div>
 </form>
