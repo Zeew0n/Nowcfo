@@ -512,14 +512,12 @@
                     (dateSelect)="startDateChanged()"
                     [ngClass]="{
                       'invalid-input':
-                        employeeForm.controls.startDate.touched &&
                         employeeForm.controls.startDate.errors?.required
                     }"
                   />
   
                   <div
                     *ngIf="
-                      employeeForm.controls.startDate.touched &&
                       employeeForm.controls.startDate.errors?.required
                     "
                     class="error-msg"
@@ -544,14 +542,12 @@
                     #d2="ngbDatepicker"
                     [ngClass]="{
                       'invalid-input':
-                        employeeForm.controls.terminationDate.touched &&
                         employeeForm.controls.terminationDate.errors?.required
                     }"
                   />
   
                   <div
                     *ngIf="
-                      employeeForm.controls.terminationDate.touched &&
                       employeeForm.controls.terminationDate.errors?.required
                     "
                     class="error-msg"
