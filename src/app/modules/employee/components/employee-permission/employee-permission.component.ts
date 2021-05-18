@@ -27,6 +27,7 @@ export class EmployeePermissionComponent implements OnInit {
   isEdit: boolean=false;
   closeResult = '';
   selectedEmployeeId: string;
+  levelTwoSelected:any;
   permissionId='';
 
   constructor(
@@ -69,8 +70,11 @@ export class EmployeePermissionComponent implements OnInit {
 
 
   getLevelTwoOrganizations(id) {
+    debugger
+    this.levelTwoSelected=null;
     this.employeeService.getLevelOrganizations(id.value).subscribe(
       (result) => {
+       // this.levelTwoOrganizations.length=0;
         this.levelTwoOrganizations = result;
       },
       (error) => console.error
@@ -146,6 +150,7 @@ export class EmployeePermissionComponent implements OnInit {
   }
 
   getEmployeePermissonById(id: string, content) {
+    debugger
     this.employeeService.getEmployeePermissionById(id).subscribe(
       (res: EmployeePermission) => {
         this.isEdit = true;
