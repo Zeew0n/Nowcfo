@@ -1,4 +1,4 @@
-<form [formGroup]="marketMasterForm" class="form-cfo">
+<form [formGroup]="marketMasterForm" >
   <!-- {{marketMasterForm.value|json}} -->
   <div class="form-row">
     <div class="form-group col-md-3">
@@ -9,7 +9,7 @@
       />
       <h2>Midwest Region</h2>
     </div>
-    <div class="form-group col-md-3">
+    <div class="form-group col-md-3 search-form">
       <label for="payperiod">Pay Period</label>
       <input
       (click)="d1.toggle()"
@@ -20,7 +20,7 @@
       #d1="ngbDatepicker"
     />
     </div>
-    <div class="form-group col-md-3">
+    <div class="form-group col-md-3 search-form">
       <label>Type</label>
       <ng-select
         [items]="allocationTypes"
@@ -33,11 +33,11 @@
       </ng-select>
     </div>
     <div class="form-group col-md-3">
-      <button type="button" (click)="addAllocation()"> Add Rows </button>
+      <button type="button" (click)="addAllocation()" class="btn btn-primary"> Add Rows </button>
     </div>
   </div>
   <div class="form-group">
-    <div class="table-responsive">
+    <div class="">
       <table formArrayName="allocations" class="table table-striped">
         <thead>
           <tr>
@@ -51,7 +51,7 @@
             <th scope="col">G&A</th>
             <th scope="col">Other</th>
             <th scope="col">Other Type</th>
-           
+           <th></th>
           </tr>
         </thead>
         <tbody>
@@ -111,7 +111,9 @@
               >
               </ng-select>
             </td>
-            <a [hidden]="hideMinusIcon" style="cursor:pointer;" (click)="removeAllocation(i)"> <i style="color:red" class="fa fa-minus-circle" aria-hidden="true"></i> </a>
+            <td>
+              <a [hidden]="hideMinusIcon" class="remove-icon" (click)="removeAllocation(i)"> <i style="color:red" class="fa fa-minus-circle" aria-hidden="true"></i> </a>
+            </td>
           </tr>
         </tbody>
       </table>
