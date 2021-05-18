@@ -323,7 +323,6 @@
 							placeholder="yyyy-mm-dd" name="startDate" formControlName="startDate" ngbDatepicker
 							#d1="ngbDatepicker" (dateSelect)="startDateChanged()" [ngClass]="{
                       'invalid-input':
-                        employeeForm.controls.startDate.touched &&
                         employeeForm.controls.startDate.errors?.required
                     }" />
 
@@ -343,7 +342,6 @@
 							placeholder="yyyy-mm-dd" name="terminationDate" formControlName="terminationDate"
 							ngbDatepicker #d2="ngbDatepicker" [ngClass]="{
                       'invalid-input':
-                        employeeForm.controls.terminationDate.touched &&
                         employeeForm.controls.terminationDate.errors?.required
                     }" />
 
