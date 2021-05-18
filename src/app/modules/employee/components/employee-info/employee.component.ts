@@ -76,6 +76,7 @@ export class EmployeeComponent implements OnInit {
   searchForm: FormGroup;
   EventValue: any = 'Save';
   public statusDefaultValue = 1;
+  public statusDefault =1;
 
   searchTypeId = new FormControl(null, [Validators.required]);
   //For Adding Search
@@ -130,7 +131,7 @@ export class EmployeeComponent implements OnInit {
     this.initializeemployeeForm();
     this.terminationValidation();
     this.statusDefaultValue = 1;
-
+    this.statusDefault=1;
 
     
   }
@@ -264,6 +265,7 @@ export class EmployeeComponent implements OnInit {
       (result) => {
         this.employeeStatusTypes = result;
         this.statusDefaultValue=1;
+        this.statusDefault=1;
       },
       () => console.error
     );
@@ -565,6 +567,7 @@ export class EmployeeComponent implements OnInit {
 
   resetSearch() {
     this.searchForm.reset();
+    this.statusDefault=1;
     this.ngOnInit();
   }
 

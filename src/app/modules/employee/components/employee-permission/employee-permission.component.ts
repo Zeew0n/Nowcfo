@@ -70,11 +70,9 @@ export class EmployeePermissionComponent implements OnInit {
 
 
   getLevelTwoOrganizations(id) {
-    debugger
-    this.levelTwoSelected=null;
+      this.levelTwoSelected=null;
     this.employeeService.getLevelOrganizations(id.value).subscribe(
       (result) => {
-       // this.levelTwoOrganizations.length=0;
         this.levelTwoOrganizations = result;
       },
       (error) => console.error
@@ -137,10 +135,9 @@ export class EmployeePermissionComponent implements OnInit {
   }
 
   private displayFormData(data: EmployeePermission, id: any) {
-
+  console.log(data);
 
     this.employeePermissionForm.patchValue({
-      
       employeeId: data.employeeId,
       levelOne:data.levelOne,
       levelTwo:data.levelTwo,
@@ -148,14 +145,14 @@ export class EmployeePermissionComponent implements OnInit {
       referenceId:data.referenceId
     });
   }
-
   getEmployeePermissonById(id: string, content) {
-    debugger
+    
     this.employeeService.getEmployeePermissionById(id).subscribe(
       (res: EmployeePermission) => {
         this.isEdit = true;
         this.EventValue = 'Update';
         this.displayFormData(res, id);
+        this.levelTwoSelected= res.levelThree;
         this.employeeService.getLevelOrganizations(res.levelOne).subscribe(
           (result) => {
             this.levelOrganizations = result;
@@ -274,6 +271,7 @@ export class EmployeePermissionComponent implements OnInit {
 
   resetFrom() {
     this.employeePermissionForm.reset();
+    this.levelTwoSelected=null;
     this.EventValue = 'Save';
   }
 

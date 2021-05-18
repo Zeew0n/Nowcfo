@@ -159,34 +159,8 @@
               </div>
             </div>
 
-            <div *ngIf="!isEdit" class="col-sm-6">
-              <div class="form-group">
-                <label>Market</label>
-                <ng-select
-                  [items]="levelTwoOrganizations"
-                  bindLabel="organizationName"
-                  bindValue="organizationId"
-                  placeholder="Select Level3"
-                  [(ngModel)]="levelTwoSelected"
-                  formControlName="levelThree"
-                  class="cfo-select"
-                  [ngClass]="{
-                    'invalid-input':
-                      employeePermissionForm.controls.levelThree.errors?.required
-                  }"
-                >
-                </ng-select>
 
-                <div
-                  *ngIf="employeePermissionForm.controls.levelThree.errors?.required"
-                  class="error-msg"
-                >
-                 Market is required!
-                </div>
-              </div>
-            </div>
-
-            <div *ngIf="isEdit" class="col-sm-6">
+            <div class="col-sm-6">
               <div class="form-group">
                 <label>Market</label>
                 <ng-select
@@ -213,6 +187,7 @@
               </div>
             </div>
 
+            
             
             
 
