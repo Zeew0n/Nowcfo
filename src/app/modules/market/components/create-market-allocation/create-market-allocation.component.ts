@@ -14,7 +14,7 @@ import { RolePermissionModel } from 'src/app/models/role-permission';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import {Location} from '@angular/common';
 import { RoleService } from 'src/app/modules/user-account/services/userrole.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MarketMasterModel } from 'src/app/models/Market/market-master.model';
 import { CreateMarketService } from '../../services/create-market.service';
 import { AllocationTypeModel } from 'src/app/models/Market/allocation.model';
@@ -22,7 +22,7 @@ import { CogsTypeModel } from 'src/app/models/Market/cogs.model';
 import { OtherTypeModel } from 'src/app/models/Market/other.model';
 import { MarketService } from '../../services/market.service';
 import { MarketAllocationModel } from 'src/app/models/Market/market-allocation.model';
-import { MarketModel } from 'src/app/models/Market/market.model';
+import { MarketModel, OrganizationAllocation } from 'src/app/models/Market/market.model';
 @Component({
   selector: 'app-create-market-allocation',
   templateUrl: './create-market-allocation.component.html',
@@ -35,7 +35,7 @@ export class CreateMarketAllocationComponent implements OnInit {
   role: RoleModel = new RoleModel();
   roles: RoleModel[];
 
-  markets: MarketModel[];
+  organizationAllocation:OrganizationAllocation;
   allocationTypes:AllocationTypeModel[];
   cogsTypes:CogsTypeModel[];
   otherTypes:OtherTypeModel[];
@@ -64,6 +64,7 @@ export class CreateMarketAllocationComponent implements OnInit {
     private roleService: RoleService,
     private ngxLoaderService: NgxUiLoaderService,
     private location: Location,
+    private router: Router,
     private _route: ActivatedRoute,
     private createMarketSerivce: CreateMarketService,
     private marketService: MarketService
@@ -71,13 +72,14 @@ export class CreateMarketAllocationComponent implements OnInit {
 
   /* Form Declarations */
   marketMasterForm: FormGroup;
+
   allocationtList: FormArray;
+
   get allocationFormGroup() {
     return this.marketMasterForm.get('allocations') as FormArray;
   }
-   // quantities() : FormArray {
-  //   return this.marketMasterForm.get("allocations") as FormArray
-  // }
+  
+
 
   roleForm: FormGroup;
   EventValue: any = 'Save';
@@ -96,6 +98,7 @@ export class CreateMarketAllocationComponent implements OnInit {
     // set contactlist to the form control containing contacts
     this.allocationtList = this.marketMasterForm.get('allocations') as FormArray;
 
+    this.getOrganiztionMarkets();
     this.getAllocationTypes();
     this.getCogsTypes();
     this.getOtherTypes();
@@ -118,6 +121,28 @@ export class CreateMarketAllocationComponent implements OnInit {
 
   backClicked() {
     this.location.back();
+  }
+  hideAllocationButton=false;
+  
+  getOrganiztionMarkets(){
+    this.createMarketSerivce.getAllMarketsByOrgId(this.parentOrganizationId)
+    .subscribe(
+      (data) => {
+        this.organizationAllocation = new OrganizationAllocation();
+        this.organizationAllocation.organizationName  =data.organizationName;
+        this.organizationAllocation.markets=data.markets
+        console.log(data)
+        console.log(this.organizationAllocation.markets);
+        console.table(this.organizationAllocation.markets);
+        this.hideAllocationButton = this.organizationAllocation.markets.length>0;
+        console.log(this.hideAllocationButton)
+
+      },
+      (err) => {
+        this.toastr.error('err', 'error!');
+      }
+    )
+
   }
 
   getAllocationTypes() {
@@ -205,25 +230,12 @@ export class CreateMarketAllocationComponent implements OnInit {
   initializeMarketAllocationModelForm() {
     this.marketMasterForm = this.fb.group ({
       organizationId:[''],
-      payperiod: ['', [Validators.required]],
+      payPeriod: [null, [Validators.required]],
       allocationTypeId:[null, [Validators.required]],
       allocations:  this.fb.array([this.createAllocation()])
     });
-    this.createMarketSerivce.getAllMarketsByOrgId(1)
-    .subscribe(
-      (data) => {
-        
-        this.markets  = Object.assign([], data);
-
-        console.log(this.markets);
-        console.table(this.markets);
-
-      },
-      (error) => {
-        this.toastr.error('err', 'error!');
-      }
-    )
   }
+
   hidePlusIcon=false;
   hideMinusIcon=true;
   addAllocation() {
@@ -235,11 +247,7 @@ export class CreateMarketAllocationComponent implements OnInit {
   removeAllocation(index) {
     this.allocationtList.removeAt(index);
   }
-  
 
-  // quantities() : FormArray {
-  //   return this.marketMasterForm.get("allocations") as FormArray
-  // }
 
   createAllocation(): FormGroup {
     return this.fb.group({
@@ -328,6 +336,7 @@ export class CreateMarketAllocationComponent implements OnInit {
     console.log(createForm);
     if (!this.isEdit) {
       if (true) {
+        debugger;
         const model = new MarketMasterModel();
         model.organizationId = createForm.organizationId;
         model.payPeriod = createForm.payPeriod;
@@ -335,9 +344,10 @@ export class CreateMarketAllocationComponent implements OnInit {
         model.marketAllocations = createForm.allocations;
         this.marketService.createMarketMaster(model).subscribe(
           (res) => {
-            this.toastr.success('Role Added Successfully.', 'Success!');
+            this.toastr.success('Allocation Created Successfully.', 'Success!');
             this.modalService.dismissAll();
             this.getRoles();
+            this.router.navigateByUrl('market/market-allocation');
             this.ngxLoaderService.stop();
           },
           (error) => {
@@ -356,7 +366,7 @@ export class CreateMarketAllocationComponent implements OnInit {
 
         this.roleService.updateRole(model).subscribe(
           (res) => {
-            this.toastr.success('Role Updated Successfully.', 'Success!');
+            this.toastr.success('Allocation Updated Successfully.', 'Success!');
             this.modalService.dismissAll();
             this.getRoles();
             this.ngxLoaderService.stop();
@@ -365,7 +375,7 @@ export class CreateMarketAllocationComponent implements OnInit {
             this.toastr.error(
               error.error.errorMessage !== undefined
                 ? error.error.errorMessage
-                : 'Role Update failed',
+                : 'Allocation Update failed',
               'Error!'
             );
             this.ngxLoaderService.stop();

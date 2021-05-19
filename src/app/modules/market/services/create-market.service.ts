@@ -5,6 +5,7 @@ import { AllocationTypeModel } from 'src/app/models/Market/allocation.model';
 import { CogsTypeModel } from 'src/app/models/Market/cogs.model';
 import { MarketAllocationModel } from 'src/app/models/Market/market-allocation.model';
 import { MarketMasterModel } from 'src/app/models/Market/market-master.model';
+import { MarketModel, OrganizationAllocation } from 'src/app/models/Market/market.model';
 import { OtherTypeModel } from 'src/app/models/Market/other.model';
 import { HttpGenericCrudService } from 'src/app/shared/http-generic-crud.service';
 import { environment } from 'src/environments/environment';
@@ -38,8 +39,8 @@ export class CreateMarketService extends HttpGenericCrudService<MarketMasterMode
     return this.httpClient.get<OtherTypeModel[]>(`MarketMaster/GetOtherTypes`);
   }
 
-  getAllMarketsByOrgId(id): Observable<MarketAllocationModel[]> {
-    return this.httpClient.get<MarketAllocationModel[]>(`MarketMaster/GetMarketAllocationList/${id}`);
+  getAllMarketsByOrgId(id): Observable<OrganizationAllocation> {
+    return this.httpClient.get<OrganizationAllocation>(`MarketMaster/GetMarketAllocationList/${id}`);
   }
 
   createMarketMaster(data) {
