@@ -1,7 +1,7 @@
 <form [formGroup]="marketMasterForm" >
   <!-- {{marketMasterForm.value|json}} -->
   <div class="form-row">
-    <div class="form-group col-md-3">
+    <div class="form-group col-md-2">
       <input
         type="hidden"
         [ngModel]="parentOrganizationId"
@@ -9,7 +9,7 @@
       />
       <h2>{{organizationAllocation.organizationName}}</h2>
     </div>
-    <div class="form-group col-md-3 search-form">
+    <div class="form-group col-md-4 search-form">
       <label for="payperiod">Pay Period</label>
       <input
       (click)="d1.toggle()"
@@ -20,7 +20,7 @@
       #d1="ngbDatepicker"
     />
     </div>
-    <div class="form-group col-md-3 search-form">
+    <div class="form-group col-md-4 search-form">
       <label>Type</label>
       <ng-select
         [items]="allocationTypes"
@@ -32,8 +32,8 @@
       >
       </ng-select>
     </div>
-    <div class="form-group col-md-3">
-      <button type="button" (click)="addAllocation()" class="btn btn-primary"> Add Rows </button>
+    <div class="form-group col-md-2">
+      <button type="button" (click)="addAllocation()" class="btn btn-primary float-right"> Add Rows </button>
     </div>
   </div>
   <div class="form-group">
