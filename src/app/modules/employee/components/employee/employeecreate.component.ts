@@ -109,7 +109,7 @@ export class EmployeeCreateComponent implements OnInit {
   payTypeCheck = new FormControl(false);
   pay = new FormControl('', [Validators.required,Validators.pattern(/^\s*-?(\d+(\.\d{1,2})?|\.\d{1,2})\s*$/
     )]);
-  employeeTypeId = new FormControl(null);
+  employeeTypeId = new FormControl(null,[Validators.required]);
   statusId= new FormControl(1, [Validators.required]);
   overTimeRate = new FormControl('', [Validators.required,Validators.pattern(/^\s*-?(\d+(\.\d{1,2})?|\.\d{1,2})\s*$/
     )]);
