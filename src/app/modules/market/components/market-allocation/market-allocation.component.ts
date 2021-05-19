@@ -173,8 +173,13 @@ export class MarketAllocationComponent implements OnInit {
 
   openAllocation() {
     this.ngxLoaderService.start();
+    setTimeout(() => 
+    {
     this.router.navigateByUrl(`market/create-market-allocation?id=${this.selectedMarket}`);
     this.ngxLoaderService.stop();
+    // this.router.navigate(['/']);
+    },
+    2000);
   }
 
   openDeleteModal(content, id) {
