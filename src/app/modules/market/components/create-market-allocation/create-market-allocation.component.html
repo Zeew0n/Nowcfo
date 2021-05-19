@@ -7,7 +7,7 @@
         [ngModel]="parentOrganizationId"
         formControlName="organizationId"
       />
-      <h2>Midwest Region</h2>
+      <h2>{{organizationAllocation.organizationName}}</h2>
     </div>
     <div class="form-group col-md-3 search-form">
       <label for="payperiod">Pay Period</label>
@@ -15,7 +15,7 @@
       (click)="d1.toggle()"
       class="form-control"
       placeholder="yyyy-mm-dd"
-      formControlName="payperiod"
+      formControlName="payPeriod"
       ngbDatepicker
       #d1="ngbDatepicker"
     />
@@ -60,7 +60,7 @@
             <td>{{ i + 1 }}</td>
             <td>
               <ng-select
-              [items]="markets"
+              [items]="organizationAllocation.markets"
               formControlName="marketId"
               placeholder="select"
               bindLabel="marketName"
