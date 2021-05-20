@@ -27,6 +27,7 @@
       (valueChange)="onValueChange($event)"
       [config]="config"
       [items]="items"
+      
     >
     </ngx-treeview>
 
@@ -41,7 +42,7 @@
           *ngIf="item.children"
           (click)="onCollapseExpand()"
           aria-hidden="true"
-          class="fa"
+          class="fa cfo-caret"
           [class.fa-caret-right]="item.collapsed"
           [class.fa-caret-down]="!item.collapsed"
         ></i>
