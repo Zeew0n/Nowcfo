@@ -423,7 +423,7 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
       this.modalService
         .open(content, {
           ariaLabelledBy: 'modal-basic-title',
-          windowClass: 'modal-cfo',
+          windowClass: 'modal-cfo forecast-modal',
           backdropClass: 'static',
           backdrop: false,
   
