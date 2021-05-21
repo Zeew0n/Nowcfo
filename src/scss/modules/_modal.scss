@@ -97,3 +97,13 @@
         justify-content: space-around;
     }
 }
+
+.forecast-modal {
+    .modal-dialog {
+        max-width: 550px;
+
+        .modal-content {
+            padding: 20px;
+        }
+    }
+}
