@@ -140,7 +140,7 @@
                   bindValue="organizationId"
                   placeholder="Select Level Two"
                   formControlName="levelTwo"
-                 
+                  [(ngModel)]="levelOneSelected"
                   (change)="getLevelTwoOrganizations(levelTwo)"
                   class="cfo-select"
                   [ngClass]="{

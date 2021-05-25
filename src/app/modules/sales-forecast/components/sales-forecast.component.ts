@@ -426,6 +426,7 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
           windowClass: 'modal-cfo',
           backdropClass: 'static',
           backdrop: false,
+          size:'md'
   
         })
         .result.then(

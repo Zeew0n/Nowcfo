@@ -10,6 +10,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { AllocationListsResolver } from 'src/app/shared/_resolver/allocationList';
 import { CreateMarketAllocationComponent } from './components/create-market-allocation/create-market-allocation.component';
 import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
+import { ViewMarketAllocationComponent } from './components/view-market-allocation/view-market-allocation.component';
 
 
 @NgModule({
@@ -25,7 +26,7 @@ import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
     NgxPaginationModule,
     NgbDatepickerModule
   ],
-  declarations: [MarketAllocationComponent, CreateMarketAllocationComponent],
+  declarations: [MarketAllocationComponent, CreateMarketAllocationComponent,ViewMarketAllocationComponent],
   providers: [AllocationListsResolver]
 })
 export class MarketModule { }

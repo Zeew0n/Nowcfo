@@ -1,4 +1,4 @@
-<form [formGroup]="marketMasterForm" >
+<form [formGroup]="marketMasterForm">
   <!-- {{marketMasterForm.value|json}} -->
   <div class="form-row">
     <div class="form-group col-md-3">
@@ -7,20 +7,34 @@
         [ngModel]="parentOrganizationId"
         formControlName="organizationId"
       />
-      <h2>{{organizationAllocation.organizationName}}</h2>
+      <h2>{{ organizationAllocation.organizationName }}</h2>
     </div>
-    <div class="form-group col-md-3 search-form">
+    <div class="form-group col-md-4 search-form">
       <label for="payperiod">Pay Period</label>
       <input
-      (click)="d1.toggle()"
-      class="form-control"
-      placeholder="yyyy-mm-dd"
-      formControlName="payPeriod"
-      ngbDatepicker
-      #d1="ngbDatepicker"
-    />
+        (click)="d1.toggle()"
+        class="form-control"
+        placeholder="yyyy-mm-dd"
+        formControlName="payPeriod"
+        ngbDatepicker
+        #d1="ngbDatepicker"
+        [ngClass]="{
+          'invalid-input':
+            marketMasterForm.controls.payPeriod.touched &&
+            marketMasterForm.controls.payPeriod.errors
+        }"
+      />
+      <div
+      *ngIf="
+      marketMasterForm.controls.payPeriod.touched &&
+      marketMasterForm.controls.payPeriod.errors?.required
+      "
+      class="error-msg"
+    >
+      Pay Period is Required!
     </div>
-    <div class="form-group col-md-3 search-form">
+    </div>
+    <div class="form-group col-md-4 search-form">
       <label>Type</label>
       <ng-select
         [items]="allocationTypes"
@@ -29,11 +43,26 @@
         bindLabel="name"
         bindValue="id"
         class="cfo-select"
+        [ngClass]="{
+          'invalid-input':
+          marketMasterForm.controls.allocationTypeId.errors?.required
+        }"
       >
+
+
       </ng-select>
+
+      <div
+      *ngIf="marketMasterForm.controls.allocationTypeId.errors?.required"
+      class="error-msg"
+    >
+      Allocation Type is required!
     </div>
-    <div class="form-group col-md-3">
-      <button type="button" (click)="addAllocation()" class="btn btn-primary"> Add Rows </button>
+    </div>
+    <div class="form-group col-md-1 float-right">
+      <a style="cursor: pointer" (click)="backClicked()" class="go-back"
+        ><i class="fa fa-arrow-left"></i>Back</a
+      >
     </div>
   </div>
   <div class="form-group">
@@ -51,32 +80,69 @@
             <th scope="col">G&A</th>
             <th scope="col">Other</th>
             <th scope="col">Other Type</th>
-           <th></th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let allocation of allocationFormGroup.controls; let i = index;" 
-               [formGroupName]="i">
+          <tr
+            *ngFor="
+              let allocation of organizationAllocation.markets;
+              let i = index
+            "
+            [formGroupName]="i"
+          >
             <td>{{ i + 1 }}</td>
             <td>
-              <ng-select
-              [items]="organizationAllocation.markets"
-              formControlName="marketId"
-              placeholder="select"
-              bindLabel="marketName"
-              bindValue="marketId"
-              class="cfo-select"
-            ></ng-select>
+              {{ allocation.marketName }}
+              <input
+                type="hidden"
+                [ngModel]="allocation.marketId"
+                formControlName="marketId"
+              />
             </td>
             <td>
               <input
                 type="text"
                 formControlName="revenue"
                 class="form-control"
-              />
+                [ngClass]="{
+                  'invalid-input':
+                    allocationtList.controls[i].get('revenue').touched &&
+                    allocationtList.controls[i].get('revenue').invalid
+                }">
+              <div
+                *ngIf="
+                  allocationtList.controls[i].get('revenue').touched &&
+                  allocationtList.controls[i].get('revenue').invalid
+                "
+                class="error-msg"
+              >
+                Invalid Input!
+              </div>
+
+              <!-- {{ allocationtList.controls[i].get("revenue").touched }} -->
             </td>
             <td>
-              <input type="text" formControlName="cogs" class="form-control" />
+              <input
+                type="text"
+                formControlName="cogs"
+                class="form-control"
+                [ngClass]="{
+                  'invalid-input':
+                    allocationtList.controls[i].get('cogs').touched &&
+                    allocationtList.controls[i].get('cogs').invalid
+                }"
+              />
+
+              <div
+                *ngIf="
+                  allocationtList.controls[i].get('cogs').touched &&
+                  allocationtList.controls[i].get('cogs').invalid
+                "
+                class="error-msg"
+              >
+                Invalid Input!
+              </div>
             </td>
             <td>
               <ng-select
@@ -86,19 +152,106 @@
                 bindLabel="name"
                 bindValue="id"
                 class="cfo-select"
+                [ngClass]="{
+                  'invalid-input':
+                    allocationtList.controls[i].get('cogsTypeId').errors
+                      ?.required
+                }"
               ></ng-select>
+
+              <div
+                *ngIf="
+                  allocationtList.controls[i].get('cogsTypeId').errors?.required
+                "
+                class="error-msg"
+              >
+                Required!
+              </div>
             </td>
             <td>
-              <input type="text" formControlName="se" class="form-control" />
+              <input
+                type="text"
+                formControlName="se"
+                class="form-control"
+                [ngClass]="{
+                  'invalid-input':
+                    allocationtList.controls[i].get('se').touched &&
+                    allocationtList.controls[i].get('se').invalid
+                }"
+              />
+
+              <div
+                *ngIf="
+                  allocationtList.controls[i].get('se').touched &&
+                  allocationtList.controls[i].get('se').invalid
+                "
+                class="error-msg"
+              >
+                Invalid Input!
+              </div>
             </td>
             <td>
-              <input type="text" formControlName="ee" class="form-control" />
+              <input
+                type="text"
+                formControlName="ee"
+                class="form-control"
+                [ngClass]="{
+                  'invalid-input':
+                    allocationtList.controls[i].get('ee').touched &&
+                    allocationtList.controls[i].get('ee').invalid
+                }"
+              />
+              <div
+                *ngIf="
+                  allocationtList.controls[i].get('ee').touched &&
+                  allocationtList.controls[i].get('ee').invalid
+                "
+                class="error-msg"
+              >
+                Invalid Input!
+              </div>
             </td>
             <td>
-              <input type="text" formControlName="ga" class="form-control" />
+              <input
+                type="text"
+                formControlName="ga"
+                class="form-control"
+                [ngClass]="{
+                  'invalid-input':
+                    allocationtList.controls[i].get('ga').touched &&
+                    allocationtList.controls[i].get('ga').invalid
+                }"
+              />
+              <div
+                *ngIf="
+                  allocationtList.controls[i].get('ga').touched &&
+                  allocationtList.controls[i].get('ga').invalid
+                "
+                class="error-msg"
+              >
+                Invalid Input!
+              </div>
             </td>
             <td>
-              <input type="text" formControlName="other" class="form-control" />
+              <input
+                type="text"
+                formControlName="other"
+                class="form-control"
+                [ngClass]="{
+                  'invalid-input':
+                    allocationtList.controls[i].get('other').touched &&
+                    allocationtList.controls[i].get('other').invalid
+                }"
+              />
+              <div
+                *ngIf="
+                  allocationtList.controls[i].get('other').touched &&
+                  allocationtList.controls[i].get('other').invalid
+                "
+                class="error-msg"
+              >
+                Invalid Input!
+              </div>
             </td>
             <td>
               <ng-select
@@ -108,11 +261,23 @@
                 bindLabel="name"
                 bindValue="id"
                 class="cfo-select"
+                [ngClass]="{
+                  'invalid-input':
+                    allocationtList.controls[i].get('otherTypeId').errors
+                      ?.required
+                }"
               >
               </ng-select>
-            </td>
-            <td>
-              <a [hidden]="hideMinusIcon" class="remove-icon" (click)="removeAllocation(i)"> <i style="color:red" class="fa fa-minus-circle" aria-hidden="true"></i> </a>
+
+              <div
+                *ngIf="
+                  allocationtList.controls[i].get('otherTypeId').errors
+                    ?.required
+                "
+                class="error-msg"
+              >
+                Required!
+              </div>
             </td>
           </tr>
         </tbody>
@@ -121,7 +286,12 @@
   </div>
 
   <div class="pull-right">
-    <button type="submit" (click)="submit()" class="btn btn-green mr-2">
+    <button
+      type="submit"
+      (click)="submit()"
+      class="btn btn-green mr-2"
+      [disabled]="marketMasterForm.invalid"
+    >
       Save
     </button>
     <a routerLink="/market/market-allocation" class="btn btn-gray">Cancel</a>

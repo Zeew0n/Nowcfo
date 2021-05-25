@@ -28,6 +28,7 @@ export class EmployeePermissionComponent implements OnInit {
   closeResult = '';
   selectedEmployeeId: string;
   levelTwoSelected:any;
+  levelOneSelected:any;
   permissionId='';
 
   constructor(
@@ -59,7 +60,10 @@ export class EmployeePermissionComponent implements OnInit {
 
 
   getLevelOrganizations(id) {
-    
+    this.levelOneSelected=null;
+    this.levelTwoSelected=null;
+    this.levelTwoOrganizations=null;
+    this.employeePermissionForm.value.levelThree=null;
     this.employeeService.getLevelOrganizations(id.value).subscribe(
       (result) => {
         this.levelOrganizations = result;
@@ -153,6 +157,7 @@ export class EmployeePermissionComponent implements OnInit {
         this.EventValue = 'Update';
         this.displayFormData(res, id);
         this.levelTwoSelected= res.levelThree;
+        this.levelOneSelected=res.levelTwo,
         this.employeeService.getLevelOrganizations(res.levelOne).subscribe(
           (result) => {
             this.levelOrganizations = result;
@@ -272,6 +277,7 @@ export class EmployeePermissionComponent implements OnInit {
   resetFrom() {
     this.employeePermissionForm.reset();
     this.levelTwoSelected=null;
+    this.levelOneSelected=null;
     this.EventValue = 'Save';
   }
 

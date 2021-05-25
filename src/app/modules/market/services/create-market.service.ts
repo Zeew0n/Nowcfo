@@ -14,6 +14,8 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root',
 })
 export class CreateMarketService extends HttpGenericCrudService<MarketMasterModel> {
+  orgId=null;
+  
   constructor(httpClient: HttpClient) {
     super(httpClient, environment.API_URL, '');
   }
@@ -46,5 +48,10 @@ export class CreateMarketService extends HttpGenericCrudService<MarketMasterMode
   createMarketMaster(data) {
     return this.httpClient.post('MarketMaster/MarketMaster', data);
   }
+
+  setOrganizationId(id:number){
+  this.orgId=id;
+  }
+
   
 }

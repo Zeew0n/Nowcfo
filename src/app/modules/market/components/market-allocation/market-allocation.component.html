@@ -1,7 +1,7 @@
 <div class="btn-container">
-  <form  [formGroup]="allocationForm"  class="select-org">
+  <form [formGroup]="allocationForm" class="select-org">
     <div class="form-group float-left select-org">
-        <ng-select
+      <ng-select
         [items]="organizations"
         formControlName="organizationId"
         placeholder="Select Organization"
@@ -13,90 +13,94 @@
       </ng-select>
     </div>
   </form>
-  <button (click)="openAllocation()" class="btn btn-green"  [disabled]="allocationForm.invalid">
+  <button
+    (click)="openAllocation()"
+    class="btn btn-green"
+    [disabled]="allocationForm.invalid"
+  >
     New Allocation
   </button>
+</div>
+
+<div class="content">
+  <div class="title-container">
+    <h1 class="page-title">Allocations</h1>
   </div>
+  <div class="table-responsive">
+    <table class="table table-harbor">
+      <thead>
+        <tr>
+          <th scope="col">S.N</th>
+          <th scope="col">Pay Period</th>
+          <th scope="col">Type</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
 
-  <div class="content">
-    <div class="title-container">
-      <h1 class="page-title">Allocations</h1>
-    </div>
-    <div class="table-responsive">
-      <table  class="table table-harbor">
-        <thead>
-          <tr>
-            <th scope="col">S.N</th>
-            <th scope="col">Pay Period</th>
-            <th scope="col">Type</th>
-            <th scope="col">Actions</th>
-          </tr>
-        </thead>
-        
-        <tbody *ngIf="isLoaded">
-          <tr *ngFor="let allocation of allocations; let i = index">
-            <td>{{ i + 1 }}</td>
+      <tbody *ngIf="isLoaded">
+        <tr *ngFor="let allocation of allocations; let i = index">
+          <td>{{ i + 1 }}</td>
 
-            <td data-th="PayPeriod">{{allocation.payPeriod}}</td>
-            <td data-th="Type">{{allocation.allocationName}}</td>
+          <td data-th="PayPeriod">{{ allocation.payPeriod }}</td>
+          <td data-th="Type">{{ allocation.allocationName }}</td>
 
-            <td data-th="Actions">
-              <a
+          <td data-th="Actions">
+            <a class="icon-holder" routerLink="market/view-marketAllocation" title="view"
+              ><i class="icon icon-eye"></i
+            ></a>
+
+            <span></span>
+
+            <a class="icon-holder" routerLink="market/view-market-Allocation" title="edit"
+              ><i class="icon icon-pencil-create"></i
+            ></a>
+            <span></span>
+            <a
               class="icon-holder"
-              (click)="
-                openDeleteModal(deletecontent,allocation.id)
-              "
+              (click)="openDeleteModal(deletecontent, allocation.id)"
               href="javascript:void(0)"
               title="delete"
               ><i class="icon icon-circle-block"></i
             ></a>
-              <span></span>
-             
-            </td>
-          </tr>
-        </tbody>
-      </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
 
-      <div *ngIf="isLoaded" class="pagination-nowcfo pagination">
-        <pagination
-          [boundaryLinks]="true"
-          [totalItems]="pagination.totalItems"
-          [itemsPerPage]="pagination.itemsPerPage"
-          [(ngModel)]="pagination.currentPage"
-          (pageChanged)="pageChanged($event)"
-          previousText="&lsaquo;"
-          nextText="&rsaquo;"
-          firstText="&laquo;"
-          lastText="&raquo;"
-        >
-        </pagination>
-      </div>
-      
-
-      
+    <div *ngIf="isLoaded" class="pagination-nowcfo pagination">
+      <pagination
+        [boundaryLinks]="true"
+        [totalItems]="pagination.totalItems"
+        [itemsPerPage]="pagination.itemsPerPage"
+        [(ngModel)]="pagination.currentPage"
+        (pageChanged)="pageChanged($event)"
+        previousText="&lsaquo;"
+        nextText="&rsaquo;"
+        firstText="&laquo;"
+        lastText="&raquo;"
+      >
+      </pagination>
     </div>
-
-
-    <ng-template #deletecontent let-modal>
-      <div class="container">
-        <h3 class="modal-title">
-          This action is permanent. Are you sure you want to delete this allocation?
-        </h3>
-        <div class="float-right">
-          <button type="submit" (click)="delete()" class="btn btn-green mr-3">
-            {{ EventValue }}
-          </button>
-          <button
-            type="button"
-            class="btn btn-gray"
-            (click)="modal.close('Close Button Clicked')"
-          >
-            Cancel
-          </button>
-        </div>
-      </div>
-    </ng-template>
-
-
   </div>
 
+  <ng-template #deletecontent let-modal>
+    <div class="container">
+      <h3 class="modal-title">
+        This action is permanent. Are you sure you want to delete this
+        allocation?
+      </h3>
+      <div class="float-right">
+        <button type="submit" (click)="delete()" class="btn btn-green mr-3">
+          {{ EventValue }}
+        </button>
+        <button
+          type="button"
+          class="btn btn-gray"
+          (click)="modal.close('Close Button Clicked')"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  </ng-template>
+</div>

@@ -1,0 +1,156 @@
+    <!-- {{marketMasterForm.value|json}} -->
+    <div class="form-row">
+      <div class="form-group col-md-4">
+        <input
+          type="hidden"
+          [ngModel]="parentOrganizationId"
+          formControlName="organizationId"
+        />
+        <h2>{{organizationAllocation.organizationName}}</h2>
+      </div>
+      <div class="form-group col-md-4 search-form">
+        <label for="payperiod">Pay Period</label>
+        <input
+        (click)="d1.toggle()"
+        class="form-control"
+        placeholder="yyyy-mm-dd"
+        formControlName="payPeriod"
+        ngbDatepicker
+        #d1="ngbDatepicker"
+        [ngClass]="{
+          'invalid-input':
+          marketMasterForm.controls.payPeriod.touched &&
+          marketMasterForm.controls.payPeriod.errors
+        }"
+      />
+      </div>
+      <div class="form-group col-md-4 search-form">
+        <label>Type</label>
+        <ng-select
+          [items]="allocationTypes"
+          formControlName="allocationTypeId"
+          placeholder="select"
+          bindLabel="name"
+          bindValue="id"
+          class="cfo-select"
+          [ngClass]="{
+            'invalid-input':
+            marketMasterForm.controls.allocationTypeId.touched &&
+            marketMasterForm.controls.allocationTypeId.errors
+          }"
+        >
+        </ng-select>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="">
+        <table formArrayName="allocations" class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Market</th>
+              <th scope="col">Revenue</th>
+              <th scope="col">COGS</th>
+              <th scope="col">COGS Type</th>
+              <th scope="col">SE</th>
+              <th scope="col">EE</th>
+              <th scope="col">G&A</th>
+              <th scope="col">Other</th>
+              <th scope="col">Other Type</th>
+             <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let allocation of organizationAllocation.markets; let i = index;" 
+                 [formGroupName]="i">
+              <td>{{ i + 1 }}</td>
+              <td>
+                {{allocation.marketName }}
+                <input type="hidden" [ngModel]="allocation.marketId" formControlName="marketId" />
+              </td>
+              <td>
+                <input
+                  type="text"
+                  formControlName="revenue"
+                  class="form-control"
+                  [ngClass]="{
+                    'invalid-input':
+                    marketMasterForm.controls.allocations[i].revenue.touched &&
+                    marketMasterForm.controls.allocations[i].revenue.errors
+                  }"
+                />
+              </td>
+              <td>
+                <input type="text" formControlName="cogs" class="form-control" />
+              </td>
+              <td>
+                <ng-select
+                  [items]="cogsTypes"
+                  formControlName="cogsTypeId"
+                  placeholder="select"
+                  bindLabel="name"
+                  bindValue="id"
+                  class="cfo-select"
+                  [ngClass]="{
+                    'invalid-input':
+                    marketMasterForm.controls.cogsTypeId.touched &&
+                    marketMasterForm.controls.cogsTypeId.errors
+                  }"
+                ></ng-select>
+              </td>
+              <td>
+                <input type="text" formControlName="se" class="form-control"
+                [ngClass]="{
+                  'invalid-input':
+                  marketMasterForm.controls.se.touched &&
+                  marketMasterForm.controls.se.errors
+                }" />
+              </td>
+              <td>
+                <input type="text" formControlName="ee" class="form-control" 
+                [ngClass]="{
+                  'invalid-input':
+                  marketMasterForm.controls.ee.touched &&
+                  marketMasterForm.controls.ee.errors
+                }"/>
+              </td>
+              <td>
+                <input type="text" formControlName="ga" class="form-control" 
+                [ngClass]="{
+                  'invalid-input':
+                  marketMasterForm.controls.ga.touched &&
+                  marketMasterForm.controls.ga.errors
+                }"/>
+              </td>
+              <td>
+                <input type="text" formControlName="other" class="form-control" 
+                [ngClass]="{
+                  'invalid-input':
+                  marketMasterForm.controls.other.touched &&
+                  marketMasterForm.controls.other.errors
+                }"/>
+              </td>
+              <td>
+                <ng-select
+                  [items]="otherTypes"
+                  formControlName="otherTypeId"
+                  placeholder="select"
+                  bindLabel="name"
+                  bindValue="id"
+                  class="cfo-select"
+                  [ngClass]="{
+                    'invalid-input':
+                    marketMasterForm.controls.otherTypeId.touched &&
+                    marketMasterForm.controls.otherTypeId.errors
+                  }"
+                >
+                </ng-select>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  
+    
+  

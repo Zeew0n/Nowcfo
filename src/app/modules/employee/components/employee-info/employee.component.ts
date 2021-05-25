@@ -45,6 +45,7 @@ export class EmployeeComponent implements OnInit {
   closeResult = ''; // close result for modal
   submitted = false;
   isEdit = false;
+  disableSearch=true;
   stateList: Array<any>;
   selectemployee;
   selectedEmployeeId: string;
@@ -78,12 +79,12 @@ export class EmployeeComponent implements OnInit {
   public statusDefaultValue = 1;
   public statusDefault =1;
 
-  searchTypeId = new FormControl(null, [Validators.required]);
+  searchTypeId = new FormControl(null);
   //For Adding Search
-  searchOrg = new FormControl(null, [Validators.required]);
-  searchStatus = new FormControl(null, [Validators.required]);
+  searchOrg = new FormControl(null);
+  searchStatus = new FormControl(null);
 
-  searchValue = new FormControl('', [Validators.required]);
+  searchValue = new FormControl('');
 
   employeeName = new FormControl('', [Validators.required]);
   email = new FormControl('', [Validators.required, Validators.email]);
@@ -196,6 +197,23 @@ export class EmployeeComponent implements OnInit {
 
   }
   }
+
+
+  searchValidation(){
+    const searchValue = this.searchForm.value.searchTypeId;
+    if(searchValue==1 || searchValue == 2){
+      this.disableSearch=false;
+      this.searchForm.controls.searchValue.setValidators(Validators.required);
+      this.searchForm.controls.searchValue.setErrors(this.searchForm.value.searchValue ? null : { required: true }       );
+    }else{
+      this.disableSearch=true;
+      this.searchForm.controls.searchValue.setValidators(null);
+      this.searchForm.controls.searchValue.setErrors(null);
+ 
+  
+    }
+    }
+
 
 
   getDesignations() {
@@ -567,6 +585,9 @@ export class EmployeeComponent implements OnInit {
 
   resetSearch() {
     this.searchForm.reset();
+    this.searchValidation();
+    this.disabled=false;
+    this.disableSearch=true;
     this.statusDefault=1;
     this.ngOnInit();
   }

@@ -49,6 +49,7 @@
             bindLabel="name"
             placeholder="Search Type"
             formControlName="searchTypeId"
+            (change)="searchValidation()"
             class="cfo-select"
           >
           </ng-select>
@@ -57,17 +58,16 @@
               type="search"
               id="form1"
               formControlName="searchValue"
+              [readonly]="disableSearch"
               class="form-control"
               placeholder="Search Value"
               [ngClass]="{
                 'invalid-input':
-                  searchForm.controls.searchValue.touched &&
-                  searchForm.controls.searchValue.errors
+                searchForm.controls.searchValue.errors?.required
               }"
             />
             <div
               *ngIf="
-                searchForm.controls.searchValue.touched &&
                 searchForm.controls.searchValue.errors?.required
               "
               class="error-msg"
@@ -75,7 +75,8 @@
               Search Value is Required!
             </div>
           </div>
-          <button type="submit" class="btn btn-primary">
+          <button type="submit" [disabled]="searchForm.invalid"
+          class="btn btn-primary">
             <i class="fa fa-search"></i>
           </button>
 

@@ -21,6 +21,7 @@ import { ActivatedRoute, Data, Router } from '@angular/router';
 
 import { PaginatedResult, Pagination } from 'src/app/models/Pagination/Pagination';
 import { MarketMasterModel } from 'src/app/models/Market/market-master.model';
+import { CreateMarketService } from '../../services/create-market.service';
 @Component({
   selector: 'app-market-allocation',
   templateUrl: './market-allocation.component.html',
@@ -48,9 +49,11 @@ export class MarketAllocationComponent implements OnInit {
     private modalService: NgbModal,
     private toastr: ToastrService,
     private marketService:MarketService,
+
     private ngxLoaderService: NgxUiLoaderService,
     private location: Location,
     private route: ActivatedRoute,
+    private createMarketSerivce: CreateMarketService,
     private router: Router,
 
   ) {}
@@ -65,6 +68,8 @@ export class MarketAllocationComponent implements OnInit {
   ngOnInit() {
     this.getHeadOrganizations();
     this.initializeAllocationForm();
+
+    this.restoreOrgId();
    
 
   }
@@ -72,7 +77,19 @@ export class MarketAllocationComponent implements OnInit {
     this.location.back();
   }
 
-  
+  restoreOrgId(){
+    
+const id = +this.createMarketSerivce.orgId;
+console.log('restoreid',id);
+if(id){
+  this.allocationForm.patchValue({
+   organizationId: id
+  })
+this.getAllocationPagination();
+}
+
+
+  }
   
     getAllocationPagination() {
       this.ngxLoaderService.start();
@@ -173,8 +190,13 @@ export class MarketAllocationComponent implements OnInit {
 
   openAllocation() {
     this.ngxLoaderService.start();
+    setTimeout(() => 
+    {
     this.router.navigateByUrl(`market/create-market-allocation?id=${this.selectedMarket}`);
     this.ngxLoaderService.stop();
+    // this.router.navigate(['/']);
+    },
+    2000);
   }
 
   openDeleteModal(content, id) {

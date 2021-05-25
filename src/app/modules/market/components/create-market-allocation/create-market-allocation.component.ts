@@ -23,6 +23,7 @@ import { OtherTypeModel } from 'src/app/models/Market/other.model';
 import { MarketService } from '../../services/market.service';
 import { MarketAllocationModel } from 'src/app/models/Market/market-allocation.model';
 import { MarketModel, OrganizationAllocation } from 'src/app/models/Market/market.model';
+import { Subscription } from 'rxjs/internal/Subscription';
 @Component({
   selector: 'app-create-market-allocation',
   templateUrl: './create-market-allocation.component.html',
@@ -75,9 +76,9 @@ export class CreateMarketAllocationComponent implements OnInit {
 
   allocationtList: FormArray;
 
-  get allocationFormGroup() {
-    return this.marketMasterForm.get('allocations') as FormArray;
-  }
+  // get allocationFormGroup() {
+  //   return this.marketMasterForm.get('allocations') as FormArray;
+  // }
   
 
 
@@ -92,6 +93,8 @@ export class CreateMarketAllocationComponent implements OnInit {
       if (queryParams.has('id')) {
         this.parentOrganizationId = queryParams.get('id');
       } 
+
+
     });
 
     this.initializeMarketAllocationModelForm();
@@ -102,8 +105,7 @@ export class CreateMarketAllocationComponent implements OnInit {
     this.getAllocationTypes();
     this.getCogsTypes();
     this.getOtherTypes();
-    // const id = +this._route.snapshot.paramMap.get('id');
-
+    this.storeOrgIdValue();
     this.getRoles();
     this.getMenusForPermission();
     this.initializeUserRoleForm();
@@ -131,11 +133,18 @@ export class CreateMarketAllocationComponent implements OnInit {
         this.organizationAllocation = new OrganizationAllocation();
         this.organizationAllocation.organizationName  =data.organizationName;
         this.organizationAllocation.markets=data.markets
+
         console.log(data)
         console.log(this.organizationAllocation.markets);
         console.table(this.organizationAllocation.markets);
+
         this.hideAllocationButton = this.organizationAllocation.markets.length>0;
         console.log(this.hideAllocationButton)
+
+        for (let i = 0; i < data.markets.length; i++) {
+          // this.allocationFormGroup.push(this.createAllocation());
+          (this.marketMasterForm.get('allocations') as FormArray).push(this.createAllocation());
+        }
 
       },
       (err) => {
@@ -154,6 +163,17 @@ export class CreateMarketAllocationComponent implements OnInit {
         console.log(err);
       }
     )
+  }
+
+  storeOrgIdValue(){
+   this._route.queryParams.subscribe(params => {
+      console.log('params',params) //log the entire params object
+      console.log('new id', params['id']) //log the value of id
+      const id = params['id'];
+      if(id)
+this.createMarketSerivce.setOrganizationId(id);
+    });
+
   }
 
   getCogsTypes() {
@@ -232,7 +252,7 @@ export class CreateMarketAllocationComponent implements OnInit {
       organizationId:[''],
       payPeriod: [null, [Validators.required]],
       allocationTypeId:[null, [Validators.required]],
-      allocations:  this.fb.array([this.createAllocation()])
+      allocations:  this.fb.array([],[Validators.required])
     });
   }
 
@@ -251,14 +271,20 @@ export class CreateMarketAllocationComponent implements OnInit {
 
   createAllocation(): FormGroup {
     return this.fb.group({
-        marketId: [null, [Validators.required]],
-        revenue:['', [Validators.required]],
-        cogs: ['', [Validators.required]],
+        marketId: [''],
+        revenue:['', [Validators.required,Validators.pattern(/^\s*-?(\d+(\.\d{1,2})?|\.\d{1,2})\s*$/
+          )]],
+        cogs: ['', [Validators.required,Validators.pattern(/^\s*-?(\d+(\.\d{1,2})?|\.\d{1,2})\s*$/
+          )]],
         cogsTypeId: [null, [Validators.required]],
-        se: ['', [Validators.required]],
-        ee: ['', [Validators.required]],
-        ga: ['', [Validators.required]],
-        other: ['', [Validators.required]],
+        se: ['', [Validators.required,Validators.pattern(/^\s*-?(\d+(\.\d{1,2})?|\.\d{1,2})\s*$/
+          )]],
+        ee: ['', [Validators.required,Validators.pattern(/^\s*-?(\d+(\.\d{1,2})?|\.\d{1,2})\s*$/
+          )]],
+        ga: ['', [Validators.required,Validators.pattern(/^\s*-?(\d+(\.\d{1,2})?|\.\d{1,2})\s*$/
+          )]],
+        other: ['', [Validators.required,Validators.pattern(/^\s*-?(\d+(\.\d{1,2})?|\.\d{1,2})\s*$/
+          )]],
         otherTypeId:[null, [Validators.required]],
     })
   }
@@ -329,6 +355,17 @@ export class CreateMarketAllocationComponent implements OnInit {
     this.role = null;
     this.openModal(content);
   }
+  setDate(date) {
+    // if (date) {
+    //   const parsedDate = date
+    //     ? new Date())
+    //     : null;
+    //   return parsedDate;
+     // const test = new Date(date.getFullYear(),date.getMonth(),date.getDay())
+      const d =  new Date(date.year,date.month+1,date.day).toLocaleDateString();
+      return d;
+    //}
+  }
 
   submit() {
     this.ngxLoaderService.start();
@@ -336,10 +373,10 @@ export class CreateMarketAllocationComponent implements OnInit {
     console.log(createForm);
     if (!this.isEdit) {
       if (true) {
-        debugger;
         const model = new MarketMasterModel();
         model.organizationId = createForm.organizationId;
-        model.payPeriod = createForm.payPeriod;
+        const today  = new Date();
+        model.payPeriod = new Date(createForm.payPeriod.year, createForm.payPeriod.month-1 , createForm.payPeriod.day,today.getHours(), today.getMinutes(), today.getSeconds(),today.getMilliseconds());
         model.allocationTypeId = createForm.allocationTypeId;
         model.marketAllocations = createForm.allocations;
         this.marketService.createMarketMaster(model).subscribe(
